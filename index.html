@@ -1,4 +1,291 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura | Non-Invasive Glucose Monitoring</title>
+    <style>
+        /* CSS Reset & Base Styles */
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background: #050505; 
+            color: #ffffff; 
+            scroll-behavior: smooth; 
+        }
+        * { box-sizing: border-box; }
+        
+        /* Typography */
+        h1, h2, h3 { margin: 0; padding: 0; font-weight: 600; letter-spacing: -0.02em; }
+        p { color: #888; line-height: 1.7; font-size: 1.1rem; }
+        
+        /* Layout Container */
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px; 
+        }
+        
+        /* Hero Section */
+        .hero { 
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        /* Background Glow Effect */
+        .hero::before { 
+            content: ''; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            width: 800px; 
+            height: 800px; 
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, rgba(0,0,0,0) 60%); 
+            z-index: -1; 
+        }
+        .hero h1 { 
+            font-size: 4.5rem; 
+            margin-bottom: 20px; 
+            background: linear-gradient(90deg, #fff, #00d4ff); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        .hero p { 
+            max-width: 600px; 
+            margin: 0 auto 40px auto; 
+        }
+        
+        /* Call to Action Button */
+        .btn { 
+            padding: 16px 36px; 
+            border: none; 
+            border-radius: 30px; 
+            background: #00d4ff; 
+            color: #000; 
+            font-size: 1rem; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: transform 0.3s, box-shadow 0.3s; 
+            text-decoration: none; 
+            display: inline-block; 
+        }
+        .btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.3); 
+        }
+
+        /* Abstract Device Visualization */
+        .wearable-showcase { padding: 100px 0; text-align: center; }
+        .device-mockup { 
+            width: 320px; 
+            height: 320px; 
+            margin: 60px auto; 
+            border-radius: 50%; 
+            border: 1px dashed rgba(255, 255, 255, 0.2); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative; 
+            animation: rotate 25s linear infinite; 
+        }
+        .device-mockup::after { 
+            content: ''; 
+            position: absolute; 
+            width: 250px; 
+            height: 250px; 
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.05), transparent); 
+            border-radius: 50%; 
+        }
+        /* Orbiting Nodes simulating SWIR and RF components */
+        .sensor-node { 
+            position: absolute; 
+            width: 16px; 
+            height: 16px; 
+            background: #00d4ff; 
+            border-radius: 50%; 
+            box-shadow: 0 0 20px #00d4ff; 
+        }
+        .node-1 { top: -8px; left: 152px; background: #ff007f; box-shadow: 0 0 20px #ff007f; }
+        .node-2 { bottom: 40px; right: 10px; }
+        .node-3 { bottom: 40px; left: 10px; background: #00ff88; box-shadow: 0 0 20px #00ff88; }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+
+        /* Features Section */
+        .features { padding: 80px 0; }
+        .features-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 30px; 
+            margin-top: 60px; 
+        }
+        .card { 
+            background: #0d0d0d; 
+            border: 1px solid #1a1a1a; 
+            border-radius: 24px; 
+            padding: 40px 30px; 
+            transition: transform 0.4s, border-color 0.4s; 
+        }
+        .card:hover { 
+            transform: translateY(-10px); 
+            border-color: rgba(0, 212, 255, 0.5); 
+        }
+        .card h3 { 
+            font-size: 1.4rem; 
+            margin-bottom: 15px; 
+            color: #fff; 
+        }
+
+        /* Technical Specifications */
+        .tech-specs { padding: 100px 0; }
+        .specs-list { 
+            list-style: none; 
+            padding: 0; 
+            max-width: 800px; 
+            margin: 60px auto 0 auto; 
+        }
+        .specs-list li { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 24px 0; 
+            border-bottom: 1px solid #1a1a1a; 
+        }
+        .specs-list li:last-child { border-bottom: none; }
+        .spec-title { font-weight: 500; color: #ccc; }
+        .spec-value { color: #00d4ff; font-weight: 600; text-align: right; max-width: 60%; }
+
+        /* Footer */
+        footer { 
+            text-align: center; 
+            padding: 40px 0; 
+            border-top: 1px solid #111; 
+            color: #444; 
+            font-size: 0.9rem; 
+        }
+
+        /* Utilities */
+        .text-center { text-align: center; }
+        .section-title { font-size: 2.5rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container fade-in">
+            <h1>Beyond the Needle.</h1>
+            <p>The world's first screenless wearable powered by hybrid SWIR and RF microwave spectroscopy. Experience continuous metabolic tracking without the pain.</p>
+            <a href="#technology" class="btn">Discover the Tech</a>
+        </div>
+    </section>
+
+    <!-- Interactive Abstract Showcase -->
+    <section class="wearable-showcase container" id="technology">
+        <div class="fade-in">
+            <h2 class="section-title">The Hybrid Sensor Node</h2>
+            <p>Seamlessly fusing optical and dielectric data to deliver clinical-grade accuracy while eliminating environmental noise.</p>
+            <div class="device-mockup">
+                <div class="sensor-node node-1" title="Primary SWIR Emitters"></div>
+                <div class="sensor-node node-2" title="RF Microwave Resonator"></div>
+                <div class="sensor-node node-3" title="Noise-Canceling Auxiliary Array"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Features -->
+    <section class="features container">
+        <div class="fade-in text-center">
+            <h2 class="section-title">Pioneering the Next Generation</h2>
+        </div>
+        <div class="features-grid">
+            <div class="card fade-in">
+                <h3>Optical SWIR Stack</h3>
+                <p>Multi-wavelength InP LEDs emitting at 850nm, 1550nm, and 2200nm to isolate glucose structures from dominant water absorption.</p>
+            </div>
+            <div class="card fade-in">
+                <h3>RF Microwave Sweep</h3>
+                <p>1.5 - 4.0 GHz split-ring resonator reading complex permittivity, continuously cross-correcting the dielectric environment.</p>
+            </div>
+            <div class="card fade-in">
+                <h3>Environmental Cancellation</h3>
+                <p>Onboard 6-axis IMU, GSR sweat sensors, and an NTC thermistor instantly filter out motion, temperature, and hydration artifacts.</p>
+            </div>
+            <div class="card fade-in">
+                <h3>Screenless Design</h3>
+                <p>No screens. No distractions. The device processes data in the background and transmits securely via BLE to your smartphone app.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Specifications Table -->
+    <section class="tech-specs container">
+        <h2 class="section-title text-center fade-in">Engineering Specifications</h2>
+        <ul class="specs-list fade-in">
+            <li>
+                <span class="spec-title">Optical Photodetector</span>
+                <span class="spec-value">Extended InGaAs (up to 2600nm)</span>
+            </li>
+            <li>
+                <span class="spec-title">Analog Front-End (AFE)</span>
+                <span class="spec-value">24-bit Delta-Sigma ADC (ADS1220)</span>
+            </li>
+            <li>
+                <span class="spec-title">RF Synthesizer</span>
+                <span class="spec-value">ADL5960 / AD9833 (Phase Detection)</span>
+            </li>
+            <li>
+                <span class="spec-title">Microcontroller</span>
+                <span class="spec-value">Dual-core ESP32-S3 / STM32WB55</span>
+            </li>
+            <li>
+                <span class="spec-title">Sensor Fusion Model</span>
+                <span class="spec-value">PLSR / 1D-CNN Regression</span>
+            </li>
+        </ul>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 NIBGM Technologies. Provisional Patent Pending.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript for Scroll Animations -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Intersection Observer for fade-in animations on scroll
+            const observerOptions = { 
+                root: null, 
+                threshold: 0.1, 
+                rootMargin: "0px 0px -50px 0px" 
+            };
+            
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = "translateY(0)";
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            // Apply initial hidden styles to all elements with the .fade-in class
+            document.querySelectorAll('.fade-in').forEach((el) => {
+                el.style.opacity = 0;
+                el.style.transform = "translateY(40px)";
+                el.style.transition = "opacity 0.8s ease-out, transform 0.8s ease-out";
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
 <html>
 <head>
     <title>My GitHub Pages Site</title>
