@@ -1,296 +1,1332 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura | Non-Invasive Glucose Monitoring</title>
-    <style>
-        /* CSS Reset & Base Styles */
-        body, html { 
-            margin: 0; 
-            padding: 0; 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            background: #050505; 
-            color: #ffffff; 
-            scroll-behavior: smooth; 
-        }
-        * { box-sizing: border-box; }
-        
-        /* Typography */
-        h1, h2, h3 { margin: 0; padding: 0; font-weight: 600; letter-spacing: -0.02em; }
-        p { color: #888; line-height: 1.7; font-size: 1.1rem; }
-        
-        /* Layout Container */
-        .container { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            padding: 0 20px; 
-        }
-        
-        /* Hero Section */
-        .hero { 
-            min-height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            text-align: center; 
-            position: relative; 
-            overflow: hidden; 
-        }
-        /* Background Glow Effect */
-        .hero::before { 
-            content: ''; 
-            position: absolute; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            width: 800px; 
-            height: 800px; 
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, rgba(0,0,0,0) 60%); 
-            z-index: -1; 
-        }
-        .hero h1 { 
-            font-size: 4.5rem; 
-            margin-bottom: 20px; 
-            background: linear-gradient(90deg, #fff, #00d4ff); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-        }
-        .hero p { 
-            max-width: 600px; 
-            margin: 0 auto 40px auto; 
-        }
-        
-        /* Call to Action Button */
-        .btn { 
-            padding: 16px 36px; 
-            border: none; 
-            border-radius: 30px; 
-            background: #00d4ff; 
-            color: #000; 
-            font-size: 1rem; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: transform 0.3s, box-shadow 0.3s; 
-            text-decoration: none; 
-            display: inline-block; 
-        }
-        .btn:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.3); 
-        }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Kepler-8 Observatory — A Living Map of Orbital Motion</title>
+<meta name="description" content="An interactive HTML5 Canvas model of the solar system. Eight planets on elliptical orbits, live orbit traces, and a speed multiplier instrument.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --canvas:#07090B;
+    --raised:#0D1216;
+    --deep:#151C22;
+    --grid:#253039;
+    --ink:#E7EEF0;
+    --muted:#82919A;
+    --faint:#46535B;
+    --amber:#F4B942;
+    --sun-core:#F6C85F;
+    --sun-edge:#E8943A;
+    --unit:8px;
+    --rail:1440px;
+    --gutter:32px;
+    --hdr:72px;
+    --mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --display:"Space Grotesk", Arial, sans-serif;
+    --body:"Inter", system-ui, -apple-system, sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--canvas);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,p,figure{margin:0}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--amber);color:#07090B}
 
-        /* Abstract Device Visualization */
-        .wearable-showcase { padding: 100px 0; text-align: center; }
-        .device-mockup { 
-            width: 320px; 
-            height: 320px; 
-            margin: 60px auto; 
-            border-radius: 50%; 
-            border: 1px dashed rgba(255, 255, 255, 0.2); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            position: relative; 
-            animation: rotate 25s linear infinite; 
-        }
-        .device-mockup::after { 
-            content: ''; 
-            position: absolute; 
-            width: 250px; 
-            height: 250px; 
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.05), transparent); 
-            border-radius: 50%; 
-        }
-        /* Orbiting Nodes simulating SWIR and RF components */
-        .sensor-node { 
-            position: absolute; 
-            width: 16px; 
-            height: 16px; 
-            background: #00d4ff; 
-            border-radius: 50%; 
-            box-shadow: 0 0 20px #00d4ff; 
-        }
-        .node-1 { top: -8px; left: 152px; background: #ff007f; box-shadow: 0 0 20px #ff007f; }
-        .node-2 { bottom: 40px; right: 10px; }
-        .node-3 { bottom: 40px; left: 10px; background: #00ff88; box-shadow: 0 0 20px #00ff88; }
-        @keyframes rotate { 100% { transform: rotate(360deg); } }
+  .sr-only{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+  }
 
-        /* Features Section */
-        .features { padding: 80px 0; }
-        .features-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 30px; 
-            margin-top: 60px; 
-        }
-        .card { 
-            background: #0d0d0d; 
-            border: 1px solid #1a1a1a; 
-            border-radius: 24px; 
-            padding: 40px 30px; 
-            transition: transform 0.4s, border-color 0.4s; 
-        }
-        .card:hover { 
-            transform: translateY(-10px); 
-            border-color: rgba(0, 212, 255, 0.5); 
-        }
-        .card h3 { 
-            font-size: 1.4rem; 
-            margin-bottom: 15px; 
-            color: #fff; 
-        }
+  /* ---------- type roles ---------- */
+  .overline{
+    font-family:var(--mono);font-size:11px;font-weight:600;line-height:1.2;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+  }
+  .overline--faint{color:var(--faint)}
+  .overline--amber{color:var(--amber)}
+  .readout{
+    font-family:var(--mono);font-size:24px;font-weight:500;line-height:1;
+    letter-spacing:-.01em;color:var(--ink);font-variant-numeric:tabular-nums;
+  }
+  .micro{
+    font-family:var(--mono);font-size:10px;font-weight:400;line-height:1.35;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--faint);
+    font-variant-numeric:tabular-nums;
+  }
+  .body{font-family:var(--body);font-size:16px;line-height:1.55;color:var(--muted)}
+  .num{font-family:var(--mono);font-size:14px;font-variant-numeric:tabular-nums;letter-spacing:.01em}
 
-        /* Technical Specifications */
-        .tech-specs { padding: 100px 0; }
-        .specs-list { 
-            list-style: none; 
-            padding: 0; 
-            max-width: 800px; 
-            margin: 60px auto 0 auto; 
-        }
-        .specs-list li { 
-            display: flex; 
-            justify-content: space-between; 
-            padding: 24px 0; 
-            border-bottom: 1px solid #1a1a1a; 
-        }
-        .specs-list li:last-child { border-bottom: none; }
-        .spec-title { font-weight: 500; color: #ccc; }
-        .spec-value { color: #00d4ff; font-weight: 600; text-align: right; max-width: 60%; }
+  .rail-wrap{max-width:var(--rail);margin:0 auto;padding:0 var(--gutter)}
 
-        /* Footer */
-        footer { 
-            text-align: center; 
-            padding: 40px 0; 
-            border-top: 1px solid #111; 
-            color: #444; 
-            font-size: 0.9rem; 
-        }
+  /* ---------- header ---------- */
+  .hdr{
+    position:relative;z-index:20;
+    height:var(--hdr);
+    border-bottom:1px solid var(--grid);
+    background:var(--canvas);
+  }
+  .hdr-in{
+    max-width:var(--rail);margin:0 auto;padding:0 var(--gutter);
+    height:100%;display:flex;align-items:center;gap:24px;
+  }
+  .mark{
+    font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink);
+  }
+  .mark span{color:var(--faint)}
+  .nav{margin-left:auto;display:flex;gap:28px;align-items:center}
+  .nav a{
+    font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--muted);padding-bottom:2px;
+    border-bottom:1px solid transparent;transition:color 120ms ease-out,border-color 120ms ease-out;
+  }
+  .nav a:hover,.nav a:focus-visible{color:var(--ink);border-bottom-color:var(--amber);outline:none}
 
-        /* Utilities */
-        .text-center { text-align: center; }
-        .section-title { font-size: 2.5rem; }
-    </style>
+  /* ---------- stage ---------- */
+  .stage{
+    position:relative;
+    min-height:calc(100svh - var(--hdr));
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:1fr auto;
+    column-gap:24px;
+    padding:48px var(--gutter);
+    max-width:var(--rail);
+    margin:0 auto;
+    isolation:isolate;
+  }
+  .canvas-layer{
+    position:absolute;inset:0;z-index:0;
+  }
+  #sky{display:block;width:100%;height:100%;touch-action:manipulation}
+
+  .title-block{grid-column:1/6;grid-row:1;align-self:start;z-index:2;position:relative}
+  .title-block .overline{margin-bottom:20px}
+  h1.display{
+    font-family:var(--display);font-weight:700;
+    font-size:clamp(48px,7vw,112px);line-height:.88;letter-spacing:-.03em;
+    color:var(--ink);
+  }
+  h1.display em{font-style:normal;display:block}
+  .lede{
+    margin-top:24px;max-width:34ch;
+    font-family:var(--body);font-size:16px;line-height:1.55;color:var(--muted);
+  }
+
+  .status-block{
+    grid-column:9/13;grid-row:1;align-self:start;z-index:2;
+    display:flex;flex-direction:column;align-items:flex-end;gap:10px;text-align:right;
+  }
+  .plate{
+    background:var(--canvas);padding:4px 8px;border:1px solid var(--grid);
+  }
+  .status-live{
+    display:flex;align-items:center;gap:8px;
+    background:var(--canvas);padding:6px 10px;border:1px solid var(--grid);
+    font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--amber);
+  }
+  .dot{width:6px;height:6px;background:var(--amber);flex:none}
+  .dot.is-paused{background:var(--faint)}
+  .dot.is-complete{background:var(--ink)}
+
+  .ledger{
+    grid-column:1/4;grid-row:2;align-self:end;z-index:2;
+    border-top:1px solid var(--grid);padding-top:16px;
+  }
+  .ledger-row{
+    display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+    padding:7px 0;border-bottom:1px solid var(--grid);
+  }
+  .ledger-row:last-child{border-bottom:0}
+  .ledger-row .val{
+    font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink);
+    font-variant-numeric:tabular-nums;
+  }
+
+  .rail{
+    grid-column:5/10;grid-row:2;align-self:end;z-index:3;
+    display:flex;flex-direction:column;align-items:center;gap:20px;
+  }
+  .controls{display:flex;align-items:center;gap:12px}
+  .ctrl{
+    width:40px;height:40px;border:1px solid var(--grid);background:var(--canvas);
+    display:grid;place-items:center;color:var(--ink);
+    transition:background-color 120ms ease-out,border-color 120ms ease-out,transform 120ms cubic-bezier(.2,.8,.2,1);
+  }
+  .ctrl:hover{background:var(--deep);border-color:var(--faint)}
+  .ctrl:active{transform:translateY(1px);background:var(--deep)}
+  .ctrl:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+  .ctrl[disabled]{color:var(--faint);cursor:default}
+  .ctrl svg{display:block}
+
+  .speed{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .speed-row{display:flex;gap:4px}
+  .spd{
+    width:36px;height:36px;border:1px solid var(--grid);background:transparent;
+    font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.04em;
+    color:var(--muted);border-bottom:2px solid transparent;
+    transition:background-color 120ms ease-out,color 120ms ease-out,border-color 120ms ease-out;
+  }
+  .spd:hover{background:var(--deep);color:var(--ink)}
+  .spd:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+  .spd[aria-pressed="true"]{
+    color:var(--ink);background:var(--deep);border-bottom-color:var(--amber);
+  }
+
+  .timeline{width:min(460px,100%)}
+  .tl-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+  .track{
+    position:relative;height:24px;cursor:pointer;
+    display:flex;align-items:center;
+  }
+  .track:focus-visible{outline:2px solid var(--amber);outline-offset:4px}
+  .track-line{position:absolute;left:0;right:0;height:1px;background:var(--grid)}
+  .track-fill{position:absolute;left:0;height:1px;background:var(--amber);opacity:.5}
+  .track-mark{
+    position:absolute;top:2px;width:2px;height:20px;background:var(--amber);
+    transform:translateX(-1px);
+  }
+  .ticks{position:relative;height:16px;margin-top:2px}
+  .tick{position:absolute;top:0;display:flex;flex-direction:column;align-items:center;gap:4px;transform:translateX(-50%)}
+  .tick i{display:block;width:1px;height:5px;background:var(--faint)}
+
+  .readout-block{
+    grid-column:10/13;grid-row:2;align-self:end;z-index:2;
+    border-top:1px solid var(--grid);padding-top:16px;
+  }
+  .ro-row{
+    display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+    padding:7px 0;border-bottom:1px solid var(--grid);
+  }
+  .ro-row:last-child{border-bottom:0}
+  .ro-row .val{
+    font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink);
+    font-variant-numeric:tabular-nums;
+  }
+  .ro-empty .val{color:var(--faint)}
+
+  .select-block{display:none}
+
+  /* ---------- section: motion model ---------- */
+  .model{background:var(--raised);border-top:1px solid var(--grid);padding:96px 0}
+  .model-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
+  .model-copy{grid-column:1/6}
+  h2{
+    font-family:var(--display);font-weight:600;font-size:32px;line-height:1.05;
+    letter-spacing:-.02em;color:var(--ink);margin:20px 0 24px;
+  }
+  .model-copy .body{max-width:44ch}
+  .model-diagrams{grid-column:7/13;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .diagram{
+    background:var(--canvas);border:1px solid var(--grid);padding:24px;
+    display:flex;flex-direction:column;gap:20px;
+  }
+  .diagram svg{display:block;width:100%;height:auto}
+  .diagram figcaption{
+    font-family:var(--body);font-size:14px;line-height:1.5;color:var(--muted);
+    border-top:1px solid var(--grid);padding-top:16px;
+  }
+
+  /* ---------- section: planet index ---------- */
+  .index{background:var(--raised);border-top:1px solid var(--grid);padding:0 0 96px}
+  .index-head{display:flex;align-items:baseline;justify-content:space-between;gap:24px;padding:64px 0 32px}
+  table{width:100%;border-collapse:collapse;table-layout:fixed}
+  thead th{
+    text-align:left;padding:0 16px 12px 0;border-bottom:1px solid var(--grid);
+    font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--faint);
+  }
+  thead th.r{text-align:right;padding-right:0}
+  tbody tr{
+    height:64px;border-bottom:1px solid var(--grid);cursor:pointer;
+    transition:background-color 150ms ease-out;
+  }
+  tbody tr:hover,tbody tr.is-active{background:var(--deep)}
+  tbody td{padding:0 16px 0 0;vertical-align:middle}
+  tbody td.r{text-align:right;padding-right:0}
+  .sw{display:block;width:10px;height:10px}
+  .pname{
+    font-family:var(--display);font-weight:600;font-size:18px;line-height:1.1;
+    letter-spacing:-.01em;color:var(--ink);display:block;
+  }
+  .pdesc{
+    display:block;font-family:var(--body);font-size:13px;line-height:1.4;
+    color:var(--muted);margin-top:3px;
+  }
+  .rowbtn{
+    font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--faint);
+    border:1px solid var(--grid);padding:8px 12px;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:color 120ms ease-out,border-color 120ms ease-out,background-color 120ms ease-out;
+  }
+  .rowbtn:hover{color:var(--ink);border-color:var(--faint);background:var(--canvas)}
+  .rowbtn:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+  tbody tr.is-active .rowbtn{color:var(--amber);border-color:var(--amber)}
+  .orb-disc{display:none}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--raised);border-top:1px solid var(--grid);padding:48px 0 0}
+  .foot-grid{
+    display:flex;justify-content:space-between;align-items:flex-start;gap:32px;flex-wrap:wrap;
+  }
+  .foot-strip{margin-top:48px;height:56px;overflow:hidden}
+  .foot-strip svg{display:block;width:100%;height:56px}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:1080px){
+    .stage{grid-template-columns:repeat(6,1fr)}
+    .title-block{grid-column:1/5}
+    .status-block{grid-column:5/7}
+    .ledger{grid-column:1/4}
+    .rail{grid-column:4/7}
+    .readout-block{grid-column:1/7;grid-row:3;margin-top:32px}
+    .model-copy{grid-column:1/13}
+    .model-diagrams{grid-column:1/13;margin-top:48px}
+    h1.display{font-size:clamp(42px,7vw,72px)}
+    .stage{grid-template-rows:1fr auto auto}
+  }
+  @media (max-width:768px){
+    :root{--gutter:16px;--hdr:104px}
+    .hdr-in{
+      height:100%;flex-direction:column;align-items:stretch;justify-content:center;gap:8px;
+    }
+    .nav{margin-left:0;gap:20px;overflow-x:auto;padding-bottom:4px}
+    .nav a{min-height:24px;display:flex;align-items:center}
+
+    .stage{
+      display:block;padding:24px var(--gutter) 48px;min-height:0;
+    }
+    .canvas-layer{position:relative;inset:auto;width:100%;aspect-ratio:1/1;margin:32px 0 0}
+    h1.display{font-size:clamp(42px,13vw,68px)}
+    .lede{max-width:44ch}
+    .status-block{
+      align-items:flex-start;text-align:left;margin-top:32px;
+    }
+    .ledger{
+      display:grid;grid-template-columns:1fr 1fr;column-gap:24px;margin-top:32px;
+    }
+    .ledger-row{border-bottom:1px solid var(--grid)}
+    .ledger-row:nth-child(odd){border-right:1px solid var(--grid);padding-right:16px}
+    .select-block{
+      display:block;margin-top:32px;border-top:1px solid var(--grid);padding-top:16px;
+    }
+    .select-block label{display:block;margin-bottom:10px}
+    .select-block select{
+      width:100%;height:44px;background:var(--canvas);color:var(--ink);
+      border:1px solid var(--grid);border-radius:0;padding:0 12px;
+      font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    }
+    .select-block select:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+    .rail{margin-top:32px;width:100%;align-items:stretch;gap:24px}
+    .controls{justify-content:space-between}
+    .ctrl{width:56px;height:44px}
+    .speed-row{width:100%}
+    .spd{flex:1;width:auto;height:44px}
+    .timeline{width:100%}
+    .readout-block{margin-top:32px}
+
+    .model{padding:64px 0}
+    .model-diagrams{grid-template-columns:1fr}
+    .index{padding-bottom:64px}
+    .index-head{padding:48px 0 24px}
+    thead{display:none}
+    table,tbody,tbody tr,tbody td{display:block;width:100%}
+    tbody tr{
+      height:auto;display:grid;
+      grid-template-columns:10px 1fr auto;
+      grid-template-areas:"sw name disc" "m1 m1 m2";
+      column-gap:16px;row-gap:12px;padding:20px 0;align-items:center;
+    }
+    tbody td{padding:0}
+    td.c-sw{grid-area:sw}
+    td.c-name{grid-area:name}
+    td.c-disc{grid-area:disc;display:block}
+    td.c-p{grid-area:m1;text-align:left}
+    td.c-v{grid-area:m2;text-align:right}
+    td.c-d{display:none}
+    .orb-disc{display:block;width:24px;height:24px;border-radius:50%;margin-left:auto}
+    .rowbtn{display:none}
+    .cell-label{display:block;margin-bottom:4px}
+  }
+  @media (max-width:480px){
+    .canvas-layer{aspect-ratio:1/1}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition-duration:1ms !important}
+  }
+</style>
 </head>
 <body>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="container fade-in">
-            <h1>Beyond the Needle.</h1>
-            <p>The world's first screenless wearable powered by hybrid SWIR and RF microwave spectroscopy. Experience continuous metabolic tracking without the pain.</p>
-            <a href="#technology" class="btn">Discover the Tech</a>
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="mark">KEPLER-8 <span>/</span> OBSERVATORY</div>
+    <nav class="nav" aria-label="Sections">
+      <a href="#planets">Planets</a>
+      <a href="#motion">Motion</a>
+      <a href="#about">About</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- ================= STAGE ================= -->
+  <section class="stage" id="stage" aria-label="Live orbital map">
+    <div class="canvas-layer">
+      <canvas id="sky" role="img"
+        aria-label="Animated orbital map of the solar system with eight planets moving around the Sun on elliptical orbits."></canvas>
+    </div>
+
+    <div class="title-block">
+      <p class="overline">Orbital Instrument / 01</p>
+      <h1 class="display"><em>The Solar</em><em>System</em></h1>
+      <p class="lede">A living map of planetary motion. Adjust time, observe the orbits, and compare the rhythm of eight worlds.</p>
+    </div>
+
+    <div class="status-block">
+      <div class="plate"><span class="micro" id="clock">2025.03.14 / 12:00:00 UTC</span></div>
+      <div class="status-live" id="statusLive">
+        <span class="dot" id="statusDot" aria-hidden="true"></span>
+        <span id="statusText">Simulation Running</span>
+      </div>
+    </div>
+
+    <div class="select-block">
+      <label class="overline" for="planetSelect">Select Planet</label>
+      <select id="planetSelect">
+        <option value="">— None —</option>
+      </select>
+    </div>
+
+    <div class="rail">
+      <div class="controls">
+        <button class="ctrl" id="btnMinus" aria-label="Decrease speed" title="Decrease speed">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M3 8h10"/></svg>
+        </button>
+        <button class="ctrl" id="btnPlay" aria-label="Pause simulation" title="Pause / play">
+          <svg id="iconPlay" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M6 3.5v9M10 3.5v9"/></svg>
+        </button>
+        <button class="ctrl" id="btnPlus" aria-label="Increase speed" title="Increase speed">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M8 3v10M3 8h10"/></svg>
+        </button>
+        <button class="ctrl" id="btnReset" aria-label="Reset view" title="Reset view">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.5V6h-3.5"/></svg>
+        </button>
+      </div>
+
+      <div class="speed">
+        <div class="speed-row" role="group" aria-label="Speed multiplier">
+          <button class="spd" data-speed="0.25" aria-pressed="false">0.25×</button>
+          <button class="spd" data-speed="0.5" aria-pressed="false">0.5×</button>
+          <button class="spd" data-speed="1" aria-pressed="true">1×</button>
+          <button class="spd" data-speed="2" aria-pressed="false">2×</button>
+          <button class="spd" data-speed="5" aria-pressed="false">5×</button>
         </div>
-    </section>
 
-    <!-- Interactive Abstract Showcase -->
-    <section class="wearable-showcase container" id="technology">
-        <div class="fade-in">
-            <h2 class="section-title">The Hybrid Sensor Node</h2>
-            <p>Seamlessly fusing optical and dielectric data to deliver clinical-grade accuracy while eliminating environmental noise.</p>
-            <div class="device-mockup">
-                <div class="sensor-node node-1" title="Primary SWIR Emitters"></div>
-                <div class="sensor-node node-2" title="RF Microwave Resonator"></div>
-                <div class="sensor-node node-3" title="Noise-Canceling Auxiliary Array"></div>
-            </div>
+        <div class="timeline">
+          <div class="tl-top">
+            <span class="overline overline--amber">Day <span id="dayLabel">000</span></span>
+            <span class="micro">Model year / 365.25 days</span>
+          </div>
+          <div class="track" id="track" role="slider" tabindex="0"
+               aria-label="Simulation date" aria-valuemin="0" aria-valuemax="365"
+               aria-valuenow="0" aria-valuetext="Day 0">
+            <span class="track-line"></span>
+            <span class="track-fill" id="trackFill"></span>
+            <span class="track-mark" id="trackMark"></span>
+          </div>
+          <div class="ticks" id="ticks"></div>
         </div>
-    </section>
+      </div>
+    </div>
 
-    <!-- Core Features -->
-    <section class="features container">
-        <div class="fade-in text-center">
-            <h2 class="section-title">Pioneering the Next Generation</h2>
+    <div class="ledger" aria-label="Simulation ledger">
+      <div class="ledger-row"><span class="overline">Simulation Date</span><span class="val" id="ledDate">Day 000</span></div>
+      <div class="ledger-row"><span class="overline">Speed Multiplier</span><span class="val" id="ledSpeed">1.00×</span></div>
+      <div class="ledger-row"><span class="overline">Inner System</span><span class="val">4 planets</span></div>
+      <div class="ledger-row"><span class="overline">Outer System</span><span class="val">4 planets</span></div>
+    </div>
+
+    <div class="readout-block" id="readoutBlock">
+      <div class="ro-row"><span class="overline">Selected Body</span><span class="val" id="roName">Select a planet</span></div>
+      <div class="ro-row"><span class="overline">Orbital Period</span><span class="val" id="roPeriod">—</span></div>
+      <div class="ro-row"><span class="overline">Relative Velocity</span><span class="val" id="roVel">—</span></div>
+      <div class="ro-row"><span class="overline">Distance From Sun</span><span class="val" id="roDist">—</span></div>
+      <p class="micro" id="roHint" style="margin-top:12px">Click a body in the orbital map.</p>
+    </div>
+  </section>
+
+  <!-- ================= MOTION MODEL ================= -->
+  <section class="model" id="motion">
+    <div class="rail-wrap">
+      <div class="model-grid">
+        <div class="model-copy">
+          <p class="overline">The Motion Model</p>
+          <h2>Motion becomes visible.</h2>
+          <p class="body">Each planet follows an elliptical path around the Sun. The closer a planet is to the Sun, the shorter its orbital period and the faster it appears to move across the model. The visualization is a simplified model of orbital motion: distances and planet sizes are adjusted for legibility.</p>
         </div>
-        <div class="features-grid">
-            <div class="card fade-in">
-                <h3>Optical SWIR Stack</h3>
-                <p>Multi-wavelength InP LEDs emitting at 850nm, 1550nm, and 2200nm to isolate glucose structures from dominant water absorption.</p>
-            </div>
-            <div class="card fade-in">
-                <h3>RF Microwave Sweep</h3>
-                <p>1.5 - 4.0 GHz split-ring resonator reading complex permittivity, continuously cross-correcting the dielectric environment.</p>
-            </div>
-            <div class="card fade-in">
-                <h3>Environmental Cancellation</h3>
-                <p>Onboard 6-axis IMU, GSR sweat sensors, and an NTC thermistor instantly filter out motion, temperature, and hydration artifacts.</p>
-            </div>
-            <div class="card fade-in">
-                <h3>Screenless Design</h3>
-                <p>No screens. No distractions. The device processes data in the background and transmits securely via BLE to your smartphone app.</p>
-            </div>
+
+        <div class="model-diagrams">
+          <figure class="diagram">
+            <p class="overline">Speed Controls</p>
+            <svg viewBox="0 0 320 120" fill="none" aria-hidden="true">
+              <line x1="8" y1="60" x2="312" y2="60" stroke="#253039" stroke-width="1"/>
+              <line x1="8" y1="60" x2="126" y2="60" stroke="#F4B942" stroke-width="1" opacity=".5"/>
+              <line x1="126" y1="34" x2="126" y2="86" stroke="#F4B942" stroke-width="2"/>
+              <g stroke="#46535B" stroke-width="1">
+                <line x1="8" y1="52" x2="8" y2="68"/><line x1="56" y1="55" x2="56" y2="65"/>
+                <line x1="104" y1="55" x2="104" y2="65"/><line x1="168" y1="55" x2="168" y2="65"/>
+                <line x1="228" y1="55" x2="228" y2="65"/><line x1="312" y1="52" x2="312" y2="68"/>
+              </g>
+              <g fill="#46535B" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">
+                <text x="8" y="102">0</text><text x="50" y="102">50</text><text x="98" y="102">100</text>
+                <text x="160" y="102">200</text><text x="220" y="102">300</text><text x="292" y="102">365</text>
+              </g>
+              <rect x="120" y="18" width="12" height="10" fill="#F4B942"/>
+            </svg>
+            <figcaption>Changes only the rate at which simulation time advances. The orbits themselves are never altered.</figcaption>
+          </figure>
+
+          <figure class="diagram">
+            <p class="overline">Orbit Lines</p>
+            <svg viewBox="0 0 320 120" fill="none" aria-hidden="true">
+              <ellipse cx="128" cy="60" rx="112" ry="38" stroke="#253039" stroke-width="1"/>
+              <ellipse cx="112" cy="60" rx="64" ry="22" stroke="#253039" stroke-width="1"/>
+              <path d="M48 60a64 22 0 0 1 44 -20" stroke="#4FA3C8" stroke-width="1.5"/>
+              <circle cx="16" cy="60" r="6" fill="#E8943A"/>
+              <circle cx="176" cy="60" r="4" fill="#9B958C"/>
+              <circle cx="48" cy="60" r="5" fill="#4FA3C8"/>
+              <circle cx="240" cy="60" r="5" fill="#C9A27A"/>
+              <g stroke="#253039" stroke-width="1">
+                <line x1="8" y1="52" x2="8" y2="68"/><line x1="232" y1="52" x2="232" y2="68"/>
+              </g>
+              <g fill="#46535B" font-family="IBM Plex Mono, monospace" font-size="8" letter-spacing="1">
+                <text x="150" y="24">PERIHELION</text><text x="228" y="90">APHELION</text>
+              </g>
+            </svg>
+            <figcaption>Each line represents the path of a planet around the Sun. Traces grow as a planet advances along its path.</figcaption>
+          </figure>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Specifications Table -->
-    <section class="tech-specs container">
-        <h2 class="section-title text-center fade-in">Engineering Specifications</h2>
-        <ul class="specs-list fade-in">
-            <li>
-                <span class="spec-title">Optical Photodetector</span>
-                <span class="spec-value">Extended InGaAs (up to 2600nm)</span>
-            </li>
-            <li>
-                <span class="spec-title">Analog Front-End (AFE)</span>
-                <span class="spec-value">24-bit Delta-Sigma ADC (ADS1220)</span>
-            </li>
-            <li>
-                <span class="spec-title">RF Synthesizer</span>
-                <span class="spec-value">ADL5960 / AD9833 (Phase Detection)</span>
-            </li>
-            <li>
-                <span class="spec-title">Microcontroller</span>
-                <span class="spec-value">Dual-core ESP32-S3 / STM32WB55</span>
-            </li>
-            <li>
-                <span class="spec-title">Sensor Fusion Model</span>
-                <span class="spec-value">PLSR / 1D-CNN Regression</span>
-            </li>
-        </ul>
-    </section>
+  <!-- ================= PLANET INDEX ================= -->
+  <section class="index" id="planets">
+    <div class="rail-wrap">
+      <div class="index-head">
+        <p class="overline">Planet Index / 08 Bodies</p>
+        <p class="micro">Observed values — model scale is adjusted for legibility</p>
+      </div>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2026 NIBGM Technologies. Provisional Patent Pending.</p>
+      <table id="planetTable">
+        <thead>
+          <tr>
+            <th style="width:56px">Color</th>
+            <th style="width:30%">Planet</th>
+            <th style="width:16%">Orbital Period</th>
+            <th style="width:16%">Relative Velocity</th>
+            <th style="width:16%">Observed Distance</th>
+            <th class="r" style="width:12%">Action</th>
+          </tr>
+        </thead>
+        <tbody id="planetRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer id="about">
+    <div class="rail-wrap">
+      <div class="foot-grid">
+        <div>
+          <p class="overline">The Solar System</p>
+          <p class="body" style="margin-top:8px;max-width:32ch">A simple model of orbital motion.</p>
         </div>
-    </footer>
+        <div style="text-align:right">
+          <p class="overline overline--faint">Data Mode</p>
+          <p class="body" style="margin-top:8px">Educational scale</p>
+        </div>
+      </div>
+      <div class="foot-strip" aria-hidden="true">
+        <svg viewBox="0 0 1200 56" preserveAspectRatio="none" fill="none">
+          <g stroke="#253039" stroke-width="1">
+            <path d="M0 52 A 620 44 0 0 1 1200 52"/>
+            <path d="M60 52 A 560 38 0 0 1 1140 52"/>
+            <path d="M120 52 A 500 32 0 0 1 1080 52"/>
+            <path d="M190 52 A 430 26 0 0 1 1010 52"/>
+            <path d="M270 52 A 350 21 0 0 1 930 52"/>
+            <path d="M350 52 A 270 16 0 0 1 850 52"/>
+            <path d="M430 52 A 190 11 0 0 1 770 52"/>
+            <path d="M510 52 A 110 7 0 0 1 690 52"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </footer>
+</main>
 
-    <!-- Interactive JavaScript for Scroll Animations -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // Intersection Observer for fade-in animations on scroll
-            const observerOptions = { 
-                root: null, 
-                threshold: 0.1, 
-                rootMargin: "0px 0px -50px 0px" 
-            };
-            
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = 1;
-                        entry.target.style.transform = "translateY(0)";
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
+<p class="sr-only" aria-live="polite" id="live"></p>
 
-            // Apply initial hidden styles to all elements with the .fade-in class
-            document.querySelectorAll('.fade-in').forEach((el) => {
-                el.style.opacity = 0;
-                el.style.transform = "translateY(40px)";
-                el.style.transition = "opacity 0.8s ease-out, transform 0.8s ease-out";
-                observer.observe(el);
-            });
+<script>
+(function () {
+  'use strict';
+
+  /* ============================================================
+     DATA
+     ============================================================ */
+  var PLANETS = [
+    { key:'mercury', name:'Mercury', color:'#9B958C', au:0.387, period:'88 days',
+      ecc:0.206, vel:'47.4 km/s', dist:'0.39 AU', desc:'Smallest planet / fastest visible orbit',
+      r:3.0, phase:0.55, labelSmall:true },
+    { key:'venus', name:'Venus', color:'#D9A45B', au:0.723, period:'224.7 days',
+      ecc:0.007, vel:'35.0 km/s', dist:'0.72 AU', desc:'Earth\u2019s bright inner neighbor',
+      r:3.9, phase:2.15, labelSmall:false },
+    { key:'earth', name:'Earth', color:'#4FA3C8', au:1.000, period:'365.25 days',
+      ecc:0.017, vel:'29.78 km/s', dist:'1.00 AU', desc:'Only known living world',
+      r:4.1, phase:3.70, labelSmall:true },
+    { key:'mars', name:'Mars', color:'#C86B52', au:1.524, period:'687 days',
+      ecc:0.093, vel:'24.1 km/s', dist:'1.52 AU', desc:'A cold desert with a familiar rhythm',
+      r:3.3, phase:5.20, labelSmall:false },
+    { key:'jupiter', name:'Jupiter', color:'#C9A27A', au:5.203, period:'11.9 years',
+      ecc:0.048, vel:'13.1 km/s', dist:'5.20 AU', desc:'The largest planet in the system',
+      r:9.4, phase:1.05, labelSmall:true },
+    { key:'saturn', name:'Saturn', color:'#D8C58E', au:9.537, period:'29.5 years',
+      ecc:0.056, vel:'9.7 km/s', dist:'9.54 AU', desc:'A ringed world of measured motion',
+      r:8.2, phase:2.95, labelSmall:true, rings:true },
+    { key:'uranus', name:'Uranus', color:'#75B7B2', au:19.19, period:'84 years',
+      ecc:0.046, vel:'6.8 km/s', dist:'19.19 AU', desc:'A pale ice giant on a slow path',
+      r:6.2, phase:4.35, labelSmall:false, faintRings:true },
+    { key:'neptune', name:'Neptune', color:'#6689C7', au:30.07, period:'164.8 years',
+      ecc:0.010, vel:'5.4 km/s', dist:'30.07 AU', desc:'The outermost visible orbit',
+      r:6.0, phase:5.85, labelSmall:false }
+  ];
+
+  var NEPTUNE_AU = 30.07;
+  var MERCURY_VIS_PERIOD = 14.8; // seconds per visual orbit at 1x
+  var SPEEDS = [0.25, 0.5, 1, 2, 5];
+  var YEAR = 365.25;
+
+  PLANETS.forEach(function (p) {
+    p.k = Math.sqrt(p.au / NEPTUNE_AU);                    // visual semi-major axis ratio
+    p.pvis = MERCURY_VIS_PERIOD * Math.pow(p.k / 0.11345, 1.6); // visual period in seconds at 1x
+  });
+
+  var EARTH_PVIS = PLANETS[2].pvis;
+  var DAYS_PER_SEC = YEAR / EARTH_PVIS; // model days per real second at 1x
+
+  /* ============================================================
+     STATE
+     ============================================================ */
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var state = {
+    t: 0,               // continuous simulation seconds at 1x
+    playing: true,
+    speed: 1,
+    speedIndex: 2,
+    selected: null,
+    hover: null,
+    animStart: reduced ? -9999 : 0,
+    flashUntil: 0
+  };
+
+  /* ============================================================
+     CANVAS
+     ============================================================ */
+  var canvas = document.getElementById('sky');
+  var ctx = canvas.getContext('2d');
+  var layer = canvas.parentNode;
+  var W = 0, H = 0, DPR = 1, S = 0, sun = { x: 0, y: 0 };
+  var stars = [];
+
+  function seededRandom(seed) {
+    var s = seed;
+    return function () {
+      s = (s * 1664525 + 1013904223) % 4294967296;
+      return s / 4294967296;
+    };
+  }
+
+  function buildStars() {
+    var rnd = seededRandom(20250314);
+    stars = [];
+    for (var i = 0; i < 92; i++) {
+      stars.push({ x: rnd(), y: rnd(), a: 0.12 + rnd() * 0.34, s: rnd() > 0.86 ? 1.6 : 1 });
+    }
+  }
+  buildStars();
+
+  function resize() {
+    var rect = layer.getBoundingClientRect();
+    W = Math.max(1, Math.round(rect.width));
+    H = Math.max(1, Math.round(rect.height));
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    S = Math.min(W, H) * 0.46;
+    sun.x = W * 0.52;
+    sun.y = H * 0.54;
+    var sc = Math.max(0.62, Math.min(1.3, Math.min(W, H) / 760));
+    PLANETS.forEach(function (p) { p.rad = p.r * sc; });
+  }
+
+  /* ============================================================
+     KEPLER SOLVER
+     ============================================================ */
+  function orbitPos(p, t) {
+    var M = (t / p.pvis) * Math.PI * 2 + p.phase;
+    var e = p.ecc;
+    var E = M;
+    for (var i = 0; i < 4; i++) {
+      E = E - (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+    }
+    var a = S * p.k;
+    var b = a * Math.sqrt(1 - e * e);
+    return {
+      x: a * (Math.cos(E) - e),
+      y: b * Math.sin(E),
+      E: E,
+      a: a,
+      b: b
+    };
+  }
+
+  /* ============================================================
+     DRAWING
+     ============================================================ */
+  function easeOutQuint(x) { return 1 - Math.pow(1 - x, 5); }
+
+  function drawStars() {
+    ctx.save();
+    for (var i = 0; i < stars.length; i++) {
+      var st = stars[i];
+      ctx.fillStyle = 'rgba(231,238,240,' + st.a + ')';
+      ctx.fillRect(Math.round(st.x * W), Math.round(st.y * H), st.s, st.s);
+    }
+    // registration marks — chart grid
+    ctx.strokeStyle = 'rgba(21,28,34,0.85)';
+    ctx.lineWidth = 1;
+    var cols = 6, rows = 4;
+    for (var c = 1; c < cols; c++) {
+      for (var r = 1; r < rows; r++) {
+        var x = Math.round(W * c / cols) + 0.5;
+        var y = Math.round(H * r / rows) + 0.5;
+        ctx.beginPath();
+        ctx.moveTo(x - 6, y); ctx.lineTo(x + 6, y);
+        ctx.moveTo(x, y - 6); ctx.lineTo(x, y + 6);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+
+  function orbitPath(p, from, to) {
+    var e = p.ecc;
+    var a = S * p.k;
+    var b = a * Math.sqrt(1 - e * e);
+    ctx.beginPath();
+    ctx.ellipse(-a * e, 0, a, b, 0, from, to);
+  }
+
+  function drawOrbits(now) {
+    PLANETS.forEach(function (p, i) {
+      var delay = state.animStart + i * 70;
+      var prog = reduced ? 1 : Math.max(0, Math.min(1, (now - delay) / 900));
+      if (prog <= 0) return;
+      var sweep = easeOutQuint(prog) * Math.PI * 2;
+
+      var isSel = state.selected === p.key;
+      var isHov = state.hover === p.key;
+
+      if (isSel || isHov) {
+        ctx.strokeStyle = p.color;
+        ctx.globalAlpha = isSel ? 1 : 0.85;
+        ctx.lineWidth = isSel ? 2 : 1.4;
+      } else {
+        ctx.strokeStyle = '#46535B';
+        ctx.globalAlpha = 0.42;
+        ctx.lineWidth = 1;
+      }
+      orbitPath(p, -Math.PI, -Math.PI + sweep);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // perihelion / aphelion registration ticks
+      if (prog >= 1) {
+        var a = S * p.k;
+        ctx.strokeStyle = '#253039';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(a * (1 - p.ecc) - 4, 0); ctx.lineTo(a * (1 - p.ecc) + 4, 0);
+        ctx.stroke();
+      }
+    });
+    ctx.lineWidth = 1;
+  }
+
+  function drawTrails(now) {
+    PLANETS.forEach(function (p, i) {
+      var grow = reduced ? 1 : Math.max(0, Math.min(1, (now - state.animStart - i * 70) / 2600));
+      if (grow <= 0) return;
+      var pos = orbitPos(p, state.t);
+      var span = 0.62 * grow;
+      var steps = 16;
+      var e = p.ecc;
+      var a = S * p.k;
+      var b = a * Math.sqrt(1 - e * e);
+      for (var s = 0; s < steps; s++) {
+        var e0 = pos.E - span * (s / steps);
+        var e1 = pos.E - span * ((s + 1) / steps);
+        var alpha = 0.42 * (1 - s / steps);
+        ctx.strokeStyle = p.color;
+        ctx.globalAlpha = alpha;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(a * (Math.cos(e0) - e), b * Math.sin(e0));
+        ctx.lineTo(a * (Math.cos(e1) - e), b * Math.sin(e1));
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      ctx.lineWidth = 1;
+    });
+  }
+
+  function drawSun() {
+    var r = Math.max(14, S * 0.062);
+    // glow
+    var glow = ctx.createRadialGradient(0, 0, r * 0.6, 0, 0, r * 5.2);
+    glow.addColorStop(0, 'rgba(244,185,66,0.12)');
+    glow.addColorStop(1, 'rgba(244,185,66,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(0, 0, r * 5.2, 0, Math.PI * 2);
+    ctx.fill();
+
+    var core = ctx.createRadialGradient(-r * 0.18, -r * 0.18, r * 0.12, 0, 0, r);
+    core.addColorStop(0, '#F6C85F');
+    core.addColorStop(0.72, '#F0AE4C');
+    core.addColorStop(1, '#E8943A');
+    ctx.fillStyle = core;
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = 'rgba(244,185,66,0.35)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(0, 0, r * 1.22, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  function drawPlanets() {
+    PLANETS.forEach(function (p) {
+      var pos = orbitPos(p, state.t);
+      var r = p.rad;
+      var sel = state.selected === p.key || state.hover === p.key;
+      if (sel) r *= 1.18;
+
+      if (p.rings) {
+        ctx.strokeStyle = 'rgba(231,238,240,0.28)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.ellipse(pos.x, pos.y, r * 2.1, r * 0.62, -0.32, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.ellipse(pos.x, pos.y, r * 1.65, r * 0.48, -0.32, 0, Math.PI * 2);
+        ctx.stroke();
+      } else if (p.faintRings) {
+        ctx.strokeStyle = 'rgba(231,238,240,0.16)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.ellipse(pos.x, pos.y, r * 1.7, r * 0.5, 1.15, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, r, 0, Math.PI * 2);
+      ctx.fill();
+
+      // secondary crescent for the four inner planets
+      if (p.au < 2) {
+        ctx.fillStyle = 'rgba(7,9,11,0.30)';
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, r, Math.PI * 0.28, Math.PI * 1.22);
+        ctx.arc(pos.x + r * 0.42, pos.y, r * 0.92, Math.PI * 1.22, Math.PI * 0.28, true);
+        ctx.fill();
+      }
+
+      if (sel) {
+        ctx.strokeStyle = p.color;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, r + 6, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      p._sx = sun.x + pos.x * cam;
+      p._sy = sun.y + pos.y * cam;
+    });
+    ctx.lineWidth = 1;
+  }
+
+  function drawLabels() {
+    var small = W < 481;
+    var placed = [];
+    var list = PLANETS.filter(function (p) { return !small || p.labelSmall; });
+
+    ctx.font = '400 10px "IBM Plex Mono", monospace';
+    ctx.textBaseline = 'middle';
+
+    list.forEach(function (p) {
+      var r = (p.rad || 4) * cam;
+      var label = p.name.toUpperCase();
+      var tw = ctx.measureText(label).width;
+      var side = (p._sx > sun.x) ? 1 : -1;
+      var offsets = [
+        { x: side * (r + 10), y: -(r + 10), align: side > 0 ? 'left' : 'right' },
+        { x: side * (r + 10), y: (r + 12), align: side > 0 ? 'left' : 'right' },
+        { x: 0, y: -(r + 16), align: 'center' },
+        { x: 0, y: (r + 18), align: 'center' }
+      ];
+
+      var chosen = null;
+      for (var i = 0; i < offsets.length; i++) {
+        var o = offsets[i];
+        var lx = p._sx + o.x;
+        var ly = p._sy + o.y;
+        var box = {
+          x: o.align === 'left' ? lx - 3 : (o.align === 'right' ? lx - tw - 3 : lx - tw / 2 - 3),
+          y: ly - 8,
+          w: tw + 6,
+          h: 16
+        };
+        var clash = placed.some(function (b) {
+          return !(box.x + box.w < b.x || b.x + b.w < box.x || box.y + box.h < b.y || b.y + b.h < box.y);
         });
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html>
-<head>
-    <title>My GitHub Pages Site</title>
-</head>
-<body>
-    <h1>Hello, world! My site is live.</h1>
+        if (!clash) { chosen = { o: o, box: box }; break; }
+      }
+      if (!chosen) return;
+      placed.push(chosen.box);
+
+      var isSel = state.selected === p.key;
+      var isHov = state.hover === p.key;
+
+      // leader line
+      ctx.strokeStyle = isSel ? p.color : 'rgba(70,83,91,0.9)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(p._sx, p._sy);
+      ctx.lineTo(p._sx + chosen.o.x * 0.72, p._sy + chosen.o.y * 0.72);
+      ctx.stroke();
+
+      ctx.fillStyle = isSel ? '#E7EEF0' : (isHov ? '#E7EEF0' : '#82919A');
+      ctx.textAlign = chosen.o.align;
+      ctx.fillText(label, p._sx + chosen.o.x, p._sy + chosen.o.y);
+    });
+    ctx.textAlign = 'left';
+    ctx.lineWidth = 1;
+  }
+
+  /* ============================================================
+     LOOP
+     ============================================================ */
+  var cam = 1;
+  var last = 0;
+
+  function frame(now) {
+    if (!last) last = now;
+    var dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+
+    if (state.playing) {
+      state.t += dt * state.speed;
+    }
+
+    // camera pull-back
+    if (!reduced) {
+      var cp = Math.max(0, Math.min(1, (now - state.animStart) / 1200));
+      cam = 1 + 0.42 * (1 - easeOutQuint(cp));
+    } else {
+      cam = 1;
+    }
+
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.fillStyle = '#07090B';
+    ctx.fillRect(0, 0, W, H);
+
+    drawStars();
+
+    ctx.save();
+    ctx.translate(sun.x, sun.y);
+    ctx.scale(cam, cam);
+    drawOrbits(now);
+    drawTrails(now);
+    drawPlanets();
+    drawSun();
+    ctx.restore();
+
+    drawLabels();
+
+    syncReadouts(now);
+    requestAnimationFrame(frame);
+  }
+
+  /* ============================================================
+     READOUTS
+     ============================================================ */
+  var elDay = document.getElementById('dayLabel');
+  var elLedDate = document.getElementById('ledDate');
+  var elLedSpeed = document.getElementById('ledSpeed');
+  var elFill = document.getElementById('trackFill');
+  var elMark = document.getElementById('trackMark');
+  var elTrack = document.getElementById('track');
+  var elStatusText = document.getElementById('statusText');
+  var elStatusDot = document.getElementById('statusDot');
+  var elLive = document.getElementById('live');
+
+  var lastDayShown = -1;
+  var lastStatus = '';
+
+  function syncReadouts(now) {
+    var days = (state.t * DAYS_PER_SEC) % YEAR;
+    if (days < 0) days += YEAR;
+
+    if (days < lastDayShown - 1) {
+      state.flashUntil = now + 1400;
+    }
+    lastDayShown = days;
+
+    var pct = (days / YEAR) * 100;
+    elFill.style.width = pct + '%';
+    elMark.style.left = pct + '%';
+
+    var dayInt = Math.floor(days);
+    if (dayInt !== lastDayShown) {
+      var str = String(dayInt).padStart(3, '0');
+      elDay.textContent = str;
+      elLedDate.textContent = 'Day ' + str;
+      elTrack.setAttribute('aria-valuenow', dayInt);
+      elTrack.setAttribute('aria-valuetext', 'Day ' + dayInt);
+      lastDayShown = dayInt;
+    }
+
+    var status, cls;
+    if (now < state.flashUntil) { status = 'Simulation Complete'; cls = 'is-complete'; }
+    else if (state.playing) { status = 'Simulation Running'; cls = ''; }
+    else { status = 'Simulation Paused'; cls = 'is-paused'; }
+
+    if (status !== lastStatus) {
+      elStatusText.textContent = status;
+      elStatusDot.className = 'dot ' + cls;
+      lastStatus = status;
+    }
+  }
+
+  /* ============================================================
+     CLOCK
+     ============================================================ */
+  var elClock = document.getElementById('clock');
+  function tickClock() {
+    var d = new Date();
+    function pad(n) { return String(n).padStart(2, '0'); }
+    elClock.textContent =
+      d.getUTCFullYear() + '.' + pad(d.getUTCMonth() + 1) + '.' + pad(d.getUTCDate()) +
+      ' / ' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds()) + ' UTC';
+  }
+  tickClock();
+  setInterval(tickClock, 1000);
+
+  /* ============================================================
+     CONTROLS
+     ============================================================ */
+  var btnPlay = document.getElementById('btnPlay');
+  var iconPlay = document.getElementById('iconPlay');
+  var btnPlus = document.getElementById('btnPlus');
+  var btnMinus = document.getElementById('btnMinus');
+  var btnReset = document.getElementById('btnReset');
+  var spdButtons = Array.prototype.slice.call(document.querySelectorAll('.spd'));
+
+  function setPlaying(v) {
+    state.playing = v;
+    iconPlay.innerHTML = v
+      ? '<path d="M6 3.5v9M10 3.5v9"/>'
+      : '<path d="M5 3.2 12.6 8 5 12.8Z"/>';
+    btnPlay.setAttribute('aria-label', v ? 'Pause simulation' : 'Play simulation');
+    elLive.textContent = v ? 'Simulation running' : 'Simulation paused';
+  }
+
+  function setSpeed(index) {
+    state.speedIndex = Math.max(0, Math.min(SPEEDS.length - 1, index));
+    state.speed = SPEEDS[state.speedIndex];
+    spdButtons.forEach(function (b, i) {
+      b.setAttribute('aria-pressed', i === state.speedIndex ? 'true' : 'false');
+    });
+    elLedSpeed.textContent = state.speed.toFixed(2) + '×';
+    elLive.textContent = 'Speed multiplier ' + state.speed + ' times';
+  }
+
+  btnPlay.addEventListener('click', function () { setPlaying(!state.playing); });
+  btnPlus.addEventListener('click', function () { setSpeed(state.speedIndex + 1); });
+  btnMinus.addEventListener('click', function () { setSpeed(state.speedIndex - 1); });
+  btnReset.addEventListener('click', resetView);
+
+  spdButtons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      setSpeed(SPEEDS.indexOf(parseFloat(b.dataset.speed)));
+    });
+  });
+
+  function resetView() {
+    state.t = 0;
+    state.selected = null;
+    state.hover = null;
+    state.speedIndex = 2;
+    state.speed = 1;
+    state.animStart = reduced ? -9999 : performance.now();
+    setSpeed(2);
+    setPlaying(true);
+    updateReadout();
+    updateSelect();
+    markRows();
+    elLive.textContent = 'View reset. Simulation running at 1 times.';
+  }
+
+  /* ============================================================
+     TIMELINE SCRUB
+     ============================================================ */
+  function seekTo(fraction) {
+    var target = fraction * YEAR;
+    var current = (state.t * DAYS_PER_SEC) % YEAR;
+    var delta = target - current;
+    if (delta > YEAR / 2) delta -= YEAR;
+    if (delta < -YEAR / 2) delta += YEAR;
+    state.t += delta / DAYS_PER_SEC;
+    lastDayShown = -1;
+  }
+
+  function trackFraction(clientX) {
+    var r = elTrack.getBoundingClientRect();
+    return Math.max(0, Math.min(1, (clientX - r.left) / r.width));
+  }
+
+  var dragging = false;
+  elTrack.addEventListener('pointerdown', function (e) {
+    dragging = true;
+    elTrack.setPointerCapture(e.pointerId);
+    seekTo(trackFraction(e.clientX));
+  });
+  elTrack.addEventListener('pointermove', function (e) {
+    if (dragging) seekTo(trackFraction(e.clientX));
+  });
+  elTrack.addEventListener('pointerup', function (e) {
+    dragging = false;
+    try { elTrack.releasePointerCapture(e.pointerId); } catch (err) {}
+  });
+  elTrack.addEventListener('keydown', function (e) {
+    var step = e.shiftKey ? 30 : 5;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+      e.preventDefault(); seekTo(Math.min(1, ((lastDayShown + step) / YEAR)));
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+      e.preventDefault(); seekTo(Math.max(0, ((lastDayShown - step) / YEAR)));
+    }
+  });
+
+  // tick marks
+  (function () {
+    var ticks = document.getElementById('ticks');
+    [0, 50, 100, 200, 300, 365].forEach(function (d) {
+      var el = document.createElement('span');
+      el.className = 'tick';
+      el.style.left = (d / 365 * 100) + '%';
+      el.innerHTML = '<i></i><span class="micro">' + d + '</span>';
+      ticks.appendChild(el);
+    });
+  })();
+
+  /* ============================================================
+     SELECTION + READOUT
+     ============================================================ */
+  var roName = document.getElementById('roName');
+  var roPeriod = document.getElementById('roPeriod');
+  var roVel = document.getElementById('roVel');
+  var roDist = document.getElementById('roDist');
+  var roHint = document.getElementById('roHint');
+
+  function updateReadout() {
+    var p = PLANETS.filter(function (x) { return x.key === state.selected; })[0];
+    if (!p) {
+      roName.textContent = 'Select a planet';
+      roPeriod.textContent = '—';
+      roVel.textContent = '—';
+      roDist.textContent = '—';
+      roHint.textContent = 'Click a body in the orbital map.';
+      document.getElementById('readoutBlock').classList.add('ro-empty');
+      return;
+    }
+    document.getElementById('readoutBlock').classList.remove('ro-empty');
+    roName.textContent = p.name;
+    roPeriod.textContent = p.period;
+    roVel.textContent = p.vel;
+    roDist.textContent = p.dist;
+    roHint.textContent = 'Distance becomes time.';
+    elLive.textContent = p.name + ' selected. Orbital period ' + p.period + '. Relative velocity ' + p.vel + '. Distance from Sun ' + p.dist + '.';
+  }
+
+  function selectPlanet(key) {
+    state.selected = key;
+    updateReadout();
+    updateSelect();
+    markRows();
+  }
+
+  /* ============================================================
+     TABLE
+     ============================================================ */
+  var tbody = document.getElementById('planetRows');
+  PLANETS.forEach(function (p) {
+    var tr = document.createElement('tr');
+    tr.dataset.key = p.key;
+    tr.innerHTML =
+      '<td class="c-sw"><span class="sw" style="background:' + p.color + '"></span></td>' +
+      '<td class="c-name"><span class="pname">' + p.name + '</span><span class="pdesc">' + p.desc + '</span></td>' +
+      '<td class="c-p num"><span class="overline overline--faint cell-label">Orbital Period</span>' + p.period + '</td>' +
+      '<td class="c-v num"><span class="overline overline--faint cell-label">Relative Velocity</span>' + p.vel + '</td>' +
+      '<td class="c-d num r"><span class="overline overline--faint cell-label">Observed Distance</span>' + p.dist + '</td>' +
+      '<td class="c-disc r">' +
+        '<button class="rowbtn" type="button">Select' +
+        '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M2 6h8M7 3l3 3-3 3"/></svg>' +
+        '</button>' +
+        '<span class="orb-disc" style="background:' + p.color + '"></span>' +
+      '</td>';
+    tbody.appendChild(tr);
+
+    tr.addEventListener('mouseenter', function () { state.hover = p.key; });
+    tr.addEventListener('mouseleave', function () { if (state.hover === p.key) state.hover = null; });
+    tr.addEventListener('click', function () { selectPlanet(p.key); });
+    tr.querySelector('.rowbtn').addEventListener('click', function (e) {
+      e.stopPropagation();
+      selectPlanet(p.key);
+    });
+    tr.querySelector('.orb-disc').addEventListener('click', function (e) {
+      e.stopPropagation();
+      selectPlanet(p.key);
+    });
+  });
+
+  function markRows() {
+    Array.prototype.forEach.call(tbody.children, function (tr) {
+      tr.classList.toggle('is-active', tr.dataset.key === state.selected);
+    });
+  }
+
+  /* ============================================================
+     MOBILE SELECT
+     ============================================================ */
+  var select = document.getElementById('planetSelect');
+  PLANETS.forEach(function (p) {
+    var o = document.createElement('option');
+    o.value = p.key;
+    o.textContent = p.name;
+    select.appendChild(o);
+  });
+  select.addEventListener('change', function () {
+    if (select.value) selectPlanet(select.value);
+    else { state.selected = null; updateReadout(); markRows(); }
+  });
+  function updateSelect() { select.value = state.selected || ''; }
+
+  /* ============================================================
+     CANVAS POINTER
+     ============================================================ */
+  function hitTest(x, y) {
+    var best = null, bestD = Infinity;
+    PLANETS.forEach(function (p) {
+      if (p._sx === undefined) return;
+      var d = Math.hypot(x - p._sx, y - p._sy);
+      var r = Math.max(12, (p.rad || 4) * cam + 10);
+      if (d < r && d < bestD) { bestD = d; best = p.key; }
+    });
+    return best;
+  }
+
+  canvas.addEventListener('pointermove', function (e) {
+    var r = canvas.getBoundingClientRect();
+    var k = hitTest(e.clientX - r.left, e.clientY - r.top);
+    state.hover = k;
+    canvas.style.cursor = k ? 'pointer' : 'default';
+  });
+  canvas.addEventListener('pointerleave', function () {
+    state.hover = null;
+    canvas.style.cursor = 'default';
+  });
+  canvas.addEventListener('click', function (e) {
+    var r = canvas.getBoundingClientRect();
+    var k = hitTest(e.clientX - r.left, e.clientY - r.top);
+    if (k) selectPlanet(k);
+    else { state.selected = null; updateReadout(); updateSelect(); markRows(); }
+  });
+
+  /* ============================================================
+     KEYBOARD
+     ============================================================ */
+  document.addEventListener('keydown', function (e) {
+    var tag = (document.activeElement && document.activeElement.tagName) || '';
+    if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+
+    if (e.code === 'Space') {
+      e.preventDefault();
+      setPlaying(!state.playing);
+    } else if (e.key === 'r' || e.key === 'R') {
+      resetView();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSpeed(state.speedIndex + 1);
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSpeed(state.speedIndex - 1);
+    } else if (/^[1-8]$/.test(e.key)) {
+      selectPlanet(PLANETS[parseInt(e.key, 10) - 1].key);
+    } else if (e.key === 'Escape') {
+      state.selected = null;
+      updateReadout();
+      updateSelect();
+      markRows();
+    }
+  });
+
+  /* ============================================================
+     INIT
+     ============================================================ */
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(resize).observe(layer);
+  } else {
+    window.addEventListener('resize', resize);
+  }
+  window.addEventListener('orientationchange', function () { setTimeout(resize, 120); });
+
+  resize();
+  setSpeed(2);
+  setPlaying(true);
+  updateReadout();
+  state.animStart = reduced ? -9999 : performance.now();
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
