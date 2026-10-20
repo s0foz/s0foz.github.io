@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WILDROOT v0.7 — FINAL</title>
+<title>WILDROOT v0.8 — Massive Trail · Legless Loafs · 62 Scentkin</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   html,body { width:100%; height:100%; overflow:hidden; background:#0d1a12;
@@ -12,14 +12,11 @@
   button { font-family:inherit; user-select:none; }
   .hidden { display:none !important; }
   :root { --spring: cubic-bezier(.34,1.8,.4,1); }
-
   #fadeOverlay { position:fixed; inset:0; background:#000; opacity:0; pointer-events:none;
                  z-index:100; transition:opacity .4s ease; }
   #lbTop,#lbBot { position:fixed; left:0; right:0; height:0; background:#000; z-index:90;
                   transition:height .5s ease; pointer-events:none; }
   #lbTop { top:0; } #lbBot { bottom:0; } #lbTop.on,#lbBot.on { height:11vh; }
-
-  /* ============ TITLE MENU ============ */
   #menuScreen { position:fixed; inset:0; z-index:22; display:flex; flex-direction:column;
                 align-items:center; justify-content:center; gap:32px; pointer-events:none; }
   #menuScreen > * { pointer-events:auto; }
@@ -35,8 +32,6 @@
              inset 0 2px 0 rgba(255,255,255,.22), 0 10px 30px rgba(76,175,80,.5); } }
   #menuFoot { position:absolute; bottom:16px; font-size:11px; color:rgba(230,245,225,.6);
               text-shadow:0 2px 0 rgba(0,0,0,.5); letter-spacing:1px; }
-
-  /* ============ SPRING BUTTON ENGINE ============ */
   @keyframes popIn { 0% { transform:scale(.5); opacity:0; } 60% { transform:scale(1.08); opacity:1; } 100% { transform:scale(1); } }
   @keyframes screenIn { from { opacity:0; transform:translateY(10px); } }
   .btn { border:none; border-radius:12px; color:#fff; font-weight:800; letter-spacing:.5px; cursor:pointer;
@@ -50,12 +45,10 @@
   .btn:disabled { filter:grayscale(.6) brightness(.7); cursor:default; }
   .btn.green { background:#4CAF50; } .btn.orange { background:#FF9800; }
   .btn.deep { background:#FF5722; } .btn.amber { background:#FFC107; color:#4a3800; text-shadow:0 1px 0 rgba(255,255,255,.3); }
-  .btn.blue { background:#42a5f5; } .btn.gray { background:#607060; }
-  .btn.big { font-size:15px; padding:16px 24px; border-radius:14px; }
+  .btn.gray { background:#607060; } .btn.big { font-size:15px; padding:16px 24px; border-radius:14px; }
   .btn.ico { width:52px; height:52px; padding:0; display:flex; align-items:center; justify-content:center;
              position:relative; border-radius:12px; }
   .btn.ico svg { width:24px; height:24px; }
-  .btn.ico.active { background:#FFC107; color:#4a3800; text-shadow:none; }
   .btn.icoXL { width:88px; height:88px; padding:0; border-radius:20px; display:flex; align-items:center;
                justify-content:center; }
   .btn.icoXL svg { width:44px; height:44px; }
@@ -72,8 +65,6 @@
            box-shadow:0 8px 24px rgba(0,0,0,.45); }
   .fbadge { position:absolute; top:8px; left:8px; width:12px; height:12px; transform:rotate(45deg);
             border-radius:3px; border:1px solid rgba(0,0,0,.45); box-shadow:0 1px 2px rgba(0,0,0,.5); z-index:2; }
-
-  /* ============ CAMP HUD (icon-first) ============ */
   #campHeader { position:fixed; top:0; left:0; right:0; display:flex; justify-content:space-between;
                 align-items:flex-start; padding:12px 14px; z-index:10; pointer-events:none; }
   #campHeader > * { pointer-events:auto; }
@@ -109,11 +100,12 @@
   .tcard.c0 { border:2px solid #FFC107; } .tcard.c1 { border:2px solid #4CAF50; } .tcard.c2 { border:2px solid #42a5f5; }
   .tcard.empty { border:2px dashed rgba(255,255,255,.25); display:flex; align-items:center; justify-content:center;
                  min-height:104px; font-size:26px; color:#7d9a74; }
-
-  /* ============ MAP SCREEN + TOOLTIP ============ */
   #mapScreen { position:fixed; inset:0; z-index:20; pointer-events:none; animation:screenIn .22s ease; }
   #mapScreen > * { pointer-events:auto; }
   #mapHead { position:fixed; top:0; left:0; right:0; display:flex; align-items:center; gap:12px; padding:12px 16px; }
+  #mapTitle { font-size:14px; font-weight:900; letter-spacing:1.5px; text-shadow:0 2px 0 rgba(0,0,0,.4); }
+  #mapTitle span { display:block; font-size:10px; color:#122217; letter-spacing:1px; font-weight:700;
+                   background:rgba(255,255,255,.55); border-radius:8px; padding:2px 8px; margin-top:3px; }
   #nodeTip { position:fixed; width:272px; padding:14px 16px; z-index:26; pointer-events:auto;
              animation:popIn .28s var(--spring); }
   #ntName { font-size:15px; font-weight:900; }
@@ -126,8 +118,6 @@
   #ntStart { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; margin-top:10px; }
   #ntStart svg { width:26px; height:26px; } #ntStart .vig { width:17px; height:17px; }
   #ntStart b { font-size:16px; }
-
-  /* ============ BATTLE HUD (icon-only controls) ============ */
   #battleHud { position:fixed; inset:0; z-index:10; pointer-events:none; }
   #battleHud > * { pointer-events:auto; }
   #battleTop { position:fixed; top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center;
@@ -194,8 +184,6 @@
     .pcard { flex-basis:138px; min-width:126px; grid-template-columns:38px minmax(44px,1fr) 38px; gap:5px; }
     .pskill { width:38px; height:38px; } .pskill svg.ic { width:17px; height:17px; margin-top:2px; }
     .pport img { width:38px; height:38px; } #battleBottom { gap:6px; padding:8px 6px 10px; } }
-
-  /* ============ world-space HUD ============ */
   #barLayer { position:fixed; inset:0; pointer-events:none; z-index:5; }
   .ubar { position:absolute; width:82px; transform:translate(-50%,-100%); text-align:center; }
   .uname { font-size:9.5px; font-weight:700; text-shadow:0 2px 0 #000; margin-bottom:2px; white-space:nowrap; }
@@ -217,8 +205,6 @@
            font-size:12.5px; font-weight:700; text-shadow:0 2px 0 rgba(0,0,0,.4); box-shadow:0 4px 12px rgba(0,0,0,.4);
            animation:popIn .3s var(--spring); }
   .toast.out { opacity:0; transition:opacity .5s; }
-
-  /* ============ overlays ============ */
   .screen { position:fixed; inset:0; z-index:25; background:rgba(6,12,8,.94); display:flex; flex-direction:column;
             animation:screenIn .22s ease; }
   .scrHead { display:flex; align-items:center; gap:12px; padding:13px 16px; border-bottom:1px solid rgba(255,255,255,.1); }
@@ -239,11 +225,6 @@
   .tslot img { width:72px; height:72px; }
   .tslot .tsl { font-size:11px; color:#a8c49c; font-weight:700; margin-top:2px; }
   .tslot .tsp { font-size:16px; font-weight:900; color:#ffd98a; text-shadow:0 2px 0 rgba(0,0,0,.4); }
-  .benchbtn { position:absolute; top:6px; right:6px; width:28px; height:28px; border-radius:9px; border:none;
-              background:#607060; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center;
-              box-shadow:inset 0 -3px 0 rgba(0,0,0,.3); transition:transform .2s var(--spring); }
-  .benchbtn svg { width:15px; height:15px; }
-  .benchbtn:hover { background:#FF9800; } .benchbtn:active { transform:scale(0.88); }
   #sortBar { display:flex; gap:8px; align-items:center; margin:14px 0 4px; }
   #famLabel { font-size:11px; color:#a8c49c; font-weight:800; letter-spacing:1px; }
   #collectionWrap { flex:1; overflow-y:auto; margin-top:4px; min-height:100px; }
@@ -256,8 +237,6 @@
   .ccard img { width:54px; height:54px; }
   .ccard .cs { font-size:10.5px; color:#a8c49c; font-weight:700; }
   .ccard .pwr { color:#ffd98a; font-weight:900; font-size:12px; }
-
-  /* ============ QUICK STAT slide-out ============ */
   #quickStat { position:fixed; top:0; right:0; bottom:0; width:min(330px,92vw); z-index:28; background:#0f1c13;
                border-left:2px solid #3c5638; box-shadow:-12px 0 32px rgba(0,0,0,.55);
                transform:translateX(112%); transition:transform .32s var(--spring); padding:16px; overflow-y:auto; }
@@ -277,8 +256,6 @@
   #quickStat .mv { display:inline-flex; align-items:center; gap:6px; background:#1a2e20; border-radius:10px;
                    padding:5px 11px; font-size:11.5px; font-weight:700; margin:3px; }
   .dot { width:10px; height:10px; border-radius:3px; display:inline-block; }
-
-  /* ============ stone / modals ============ */
   #stoneBody { flex:1; display:flex; gap:20px; padding:16px 20px; overflow:auto; flex-wrap:wrap; }
   #stoneLeft { width:190px; text-align:center; }
   #stoneLeft img { width:120px; height:120px; background:rgba(8,16,10,.8); border-radius:14px;
@@ -382,14 +359,12 @@
 <div id="fadeOverlay"></div>
 <div id="lbTop"></div><div id="lbBot"></div>
 
-<!-- ==================== TITLE MENU ==================== -->
 <div id="menuScreen">
   <div id="menuLogo">WILDROOT<span>ZONE INCURSIONS</span></div>
   <button class="btn green big" id="btnPlay">▶&nbsp; PLAY</button>
-  <div id="menuFoot">WILDROOT v0.7 · an original voxel auto-battler · every asset, name and line of code is original</div>
+  <div id="menuFoot">WILDROOT v0.8 · 62 original Scentkin · 12-incursion trail · every asset, name and line of code is original</div>
 </div>
 
-<!-- ==================== CAMP HUD (icon-first) ==================== -->
 <div id="campHud" class="hidden">
   <div id="campHeader">
     <div class="ch-left">
@@ -415,7 +390,7 @@
       <button class="btn orange ico" data-modal="codexModal" title="Scentkin Codex"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h13a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2zm2 4v2h11V7zm0 4v2h11v-2z"/></svg></button>
       <button class="btn orange ico" data-modal="bagModal" title="Bag — Provisions &amp; Core Cubes"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 7V6a3 3 0 016 0v1h2a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V9a2 2 0 012-2h2zm2 0h2V6a1 1 0 00-2 0v1zM8 12h8v2H8v-2z"/></svg></button>
       <button class="btn orange ico" data-modal="decoModal" title="Decorations"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.3L21 11l-6.8 2.7L12 20l-2.2-6.3L3 11l6.8-2.7z"/></svg></button>
-      <button class="btn orange ico" data-modal="crucibleModal" title="Cook — Essence Crucible"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 10h16a8.5 8.5 0 01-5 7.8V20h3v2H6v-2h3v-2.2A8.5 8.5 0 014 10zm4.2-6.6a1.4 1.4 0 110 2.8 1.4 1.4 0 010-2.8zM12 1a1.7 1.7 0 110 3.4A1.7 1.7 0 0112 1zm3.6 2.6a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/></svg></button>
+      <button class="btn orange ico" data-modal="crucibleModal" title="Cook — Essence Cauldron"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 10h16a8.5 8.5 0 01-5 7.8V20h3v2H6v-2h3v-2.2A8.5 8.5 0 014 10zm4.2-6.6a1.4 1.4 0 110 2.8 1.4 1.4 0 010-2.8zM12 1a1.7 1.7 0 110 3.4A1.7 1.7 0 0112 1zm3.6 2.6a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/></svg></button>
     </div>
     <div id="teamDock">
       <button class="btn amber ico" id="btnEditTeam" title="Edit Team"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.2V21h3.8L17.9 9.9l-3.7-3.7L3 17.2zM20.7 7.1a1 1 0 000-1.4l-2.3-2.3a1 1 0 00-1.4 0l-1.8 1.8 3.7 3.7 1.8-1.8z"/></svg></button>
@@ -427,15 +402,14 @@
   </div>
 </div>
 
-<!-- ==================== MAP SCREEN ==================== -->
 <div id="mapScreen" class="hidden">
   <div id="mapHead">
     <button class="btn gray iconbtn" id="mapBack" title="Back to Base Camp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 5l-7 7 7 7 2-2-5-5 5-5z"/></svg></button>
-    <div class="pill" title="Stages cleared"><svg viewBox="0 0 24 24" fill="#8fe07a"><path d="M4 12l5 5 11-11-2.5-2.5L9 12 6.5 9.5z"/></svg><b id="mapProgress">0/7</b></div>
+    <div id="mapTitle">WILDROOT TRAIL<span>12 INCURSIONS · 3 AREAS · follow the stone paths</span></div>
+    <div class="pill" title="Stages cleared"><svg viewBox="0 0 24 24" fill="#8fe07a"><path d="M4 12l5 5 11-11-2.5-2.5L9 12 6.5 9.5z"/></svg><b id="mapProgress">0/12</b></div>
   </div>
 </div>
 
-<!-- ==================== STAGE NODE TOOLTIP ==================== -->
 <div id="nodeTip" class="panel hidden">
   <div id="ntName"></div>
   <div id="ntSub"></div>
@@ -448,7 +422,6 @@
     <svg class="vig" viewBox="0 0 24 24" fill="#FFC107"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg><b>1</b></button>
 </div>
 
-<!-- ==================== BATTLE HUD ==================== -->
 <div id="battleHud" class="hidden">
   <div id="battleTop">
     <div class="bt-left">
@@ -475,7 +448,6 @@
 
 <div id="barLayer"></div><div id="fxLayer"></div><div id="toastLayer"></div>
 
-<!-- ==================== EDIT TEAM + QUICK STAT ==================== -->
 <div id="teamOverlay" class="screen hidden">
   <div class="scrHead">
     <button class="btn gray iconbtn" id="teamBack" title="Back"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 5l-7 7 7 7 2-2-5-5 5-5z"/></svg></button>
@@ -491,13 +463,12 @@
       <div id="famLabel">ALL KIN</div>
     </div>
     <div id="collectionWrap"><div id="collectionGrid"></div></div>
-    <div id="collEmpty" class="msub hidden">No reserve kin yet — attract more at the Essence Crucible (cauldron icon).</div>
+    <div id="collEmpty" class="msub hidden">No reserve kin yet — attract more at the Essence Cauldron (cauldron icon).</div>
   </div>
 </div>
 
 <div id="quickStat"><div id="quickStatBody"></div></div>
 
-<!-- ==================== CORE LATTICE ==================== -->
 <div id="stoneOverlay" class="screen hidden">
   <div class="scrHead">
     <button class="btn gray iconbtn" id="stoneBack" title="Back"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 5l-7 7 7 7 2-2-5-5 5-5z"/></svg></button>
@@ -516,9 +487,8 @@
   </div>
 </div>
 
-<!-- ==================== MODALS ==================== -->
 <div id="crucibleModal" class="modal hidden"><div class="mbox">
-  <div class="mtitle">Essence Crucible</div>
+  <div class="mtitle">Essence Cauldron</div>
   <div class="msub">Load 3–4 Provisions. Exact blends attract dedicated kin pools; unmatched loads brew Wild Broth.
     Rarer provisions raise Quality, which gates higher tiers. When the brew finishes, watch the cauldron!</div>
   <div class="cruc-label">Provision stores</div><div id="invRow"></div>
@@ -559,11 +529,10 @@
   <div class="cruc-label" style="margin-top:14px">Controls</div>
   <div class="msub" style="margin:4px 0 10px">
     <b>Base Camp:</b> drag = pan · wheel = zoom · tap cauldron (or cauldron icon) = brew · tap creature or team card = Core Lattice<br>
-    <b>World Map:</b> hover a floating stone for expedition details · click to pin · ▶ starts the Expedition<br>
+    <b>World Map:</b> 12 connected incursions across 3 areas · hover a node for details · click to pin · ▶ starts<br>
     <b>Battle:</b> [1][2][3] / [Q][W][E] skills · [SPACE] Scatter · [P] pause · wheel = zoom<br>
-    <b>Edit Team:</b> tap any card for its Quick Stat panel · drag cards to swap · sort/filter via the icon bar<br>
-    <b>Icons:</b> ⚙ Options · 📜 Quests · 📕 Codex · 🎒 Bag · ✦ Decor · 🍲 Cook · 📌 Expeditions · ✎ Edit Team</div>
-  <div class="msub">WILDROOT v0.7 — final build. All assets, names and code are original.</div>
+    <b>Model note:</b> 4-legged kin are legless loafs — they hop. 62 species in the Codex.</div>
+  <div class="msub">WILDROOT v0.8 — massive trail, loaf rigs, 9 new Scentkin. All assets original.</div>
   <div class="mrow"><button id="closeOptions" class="btn gray">Close</button></div>
 </div></div>
 
@@ -580,7 +549,6 @@
   <button id="endBtn" class="btn green big">Return to Base Camp</button>
 </div></div>
 
-<!-- ==================== COOKING REVEAL SPLASH ==================== -->
 <div id="revealOverlay" class="modal hidden"><div class="mbox" style="text-align:center">
   <div id="rvBanner" class="rv-banner">NEW CRITTER JOINED!</div><br>
   <img id="rvPortrait" alt=""><div id="rvName"></div>
@@ -591,7 +559,6 @@
   <button id="rvBtn" class="btn green big">Welcome to the Homestead!</button>
 </div></div>
 
-<!-- ==================== DATA: TECHNIQUES ==================== -->
 <script type="application/json" id="db-skills">
 { "schemaVersion": "3.0.0", "skills": [
   { "id":"vine_slam","name":"Vine Slam","category":"radial","targeting":{"mode":"selfCenter","radius":3.2},
@@ -632,7 +599,6 @@
 ] }
 </script>
 
-<!-- ==================== DATA: PROVISIONS ==================== -->
 <script type="application/json" id="db-crucible">
 { "schemaVersion": "4.0.0", "slotCount": 4, "minIngredients": 3, "brewSeconds": 3.0,
   "ingredients": [
@@ -658,13 +624,12 @@
 <script>
 'use strict';
 /* =====================================================================
-   WILDROOT v0.7 — FINAL BUILD
-   Rig v3 (ground-locked legs) · icon-first HUD · team edit overhaul
-   with Quick Stat slide-out · 70x70 collidable camp · clamped camera ·
-   social creature AI · 7-biome world map · title menu + intro cinematic.
+   WILDROOT v0.8
+   NEW: 12-incursion massive trail map with connecting stone paths ·
+   legless "loaf" quadruped rigs (4-legged kin de-legged per design) ·
+   9 new Scentkin (62 total) + manes/tusks/antennae/fins/petals parts.
    ===================================================================== */
 
-// ---------- core data ----------
 const DB_S = JSON.parse(document.getElementById('db-skills').textContent);
 const DB_X = JSON.parse(document.getElementById('db-crucible').textContent);
 const SKILL = {}; DB_S.skills.forEach(s => SKILL[s.id] = s);
@@ -676,7 +641,7 @@ const FAM_COLOR = { verdant:'#58c26a', ember:'#ff7a33', tide:'#57a0ff', loam:'#c
 const FAM_SKILL = { verdant:'vine_slam', ember:'flame_burst', tide:'tide_lash', loam:'boulder_roll',
                     volt:'volt_arc', glacier:'frost_nova', umbral:'shade_claw', aero:'gust_slash',
                     prism:'glimmer_lance' };
-const RIG_NAME = { quad:'quadruped', biped:'biped', float:'orbiter' };
+const RIG_NAME = { quad:'loaf', biped:'biped', float:'orbiter' };
 const CORE_TYPES = ['ferocity','bulwark','keen','leech','swift'];
 const CORE = {
   ferocity: { name:'Ferocity Core', color:'#ff6b57', desc:'+12% ATK' },
@@ -696,7 +661,8 @@ const SOCKET_BY_ROLE = {
 const UNLOCK_LV = [1,4,8,12,16,20,25,30,35];
 const GROWTH_RATES = { lin:{hp:3.2,atk:3.0}, early:{hp:2.8,atk:2.9}, late:{hp:3.6,atk:3.8} };
 
-// ---------- 53-species roster ----------
+/* ---------- 62-species roster (9 NEW: Bogling, Static Imp, Mothwisp, Barkhide,
+   Reedstalker, Gale Ram, Gravemold, Sapling Sentinel, Aurora Drake) ---------- */
 const ROSTER_RAW = [
  ['verdant_cub','Verdant Cub','verdant',1,'quad','bruiser',1.00,620, 74,3.4,'lin','#3fae5a','#2c7a3f','#a4e07a','#0f2415'],
  ['azure_paddler','Azure Paddler','tide',1,'quad','skirmisher',0.94,400,47,3.9,'early','#3f8fd8','#2b5fa8','#9adcf5','#0d1b2e'],
@@ -708,6 +674,10 @@ const ROSTER_RAW = [
  ['silt_mole','Silt Mole','loam',1,'biped','bruiser',0.92,560,68,3.0,'lin','#7a6448','#55452f','#b09a72','#241c10'],
  ['pebble_crab','Pebble Crab','tide',1,'float','warden',0.88,640,50,2.8,'lin','#e08a6a','#a85a44','#ffd4b8','#2a1810'],
  ['zephyr_chick','Zephyr Chick','aero',1,'biped','skirmisher',0.78,360,72,3.8,'early','#d8f5ff','#8ac4dd','#ffffff','#2a4a5a'],
+ ['bogling','Bogling','tide',1,'quad','warden',0.92,640,48,2.8,'lin','#5a8a6a','#3a5f4a','#9ad4b0','#16241c'],
+ ['static_imp','Static Imp','volt',1,'float','skirmisher',0.78,360,80,4.0,'early','#c4d44d','#8a9a2a','#f0ffb0','#2a2e10'],
+ ['mothwisp','Mothwisp','umbral',1,'float','mystic',0.84,390,85,3.6,'early','#8a7ab0','#5a4f7a','#d8ccf0','#ffe08a'],
+ ['barkhide','Barkhide','loam',1,'quad','bruiser',1.05,600,68,3.0,'lin','#6a5642','#4a3a2c','#a8946e','#1e160e'],
  ['brook_newt','Brook Newt','tide',1,'quad','mystic',0.85,390,84,3.5,'early','#5ad8c4','#2fa894','#c4fff2','#0f3a32'],
  ['cinder_pup','Cinder Pup','ember',1,'quad','bruiser',0.88,540,70,3.3,'lin','#e08a4f','#a85a2f','#ffd4a0','#4a2410'],
  ['thistle_hog','Thistle Hog','verdant',1,'quad','bruiser',0.95,600,66,3.1,'lin','#7aa04f','#557035','#c4e08a','#22300f'],
@@ -740,6 +710,10 @@ const ROSTER_RAW = [
  ['hoarfrost_warden','Hoarfrost Warden','glacier',2,'biped','warden',1.15,820,72,2.8,'lin','#d0e8f0','#8ab0c4','#ffffff','#122e40'],
  ['sunpetal_drone','Sunpetal Drone','verdant',2,'float','mystic',0.92,520,112,3.6,'lin','#e8d84f','#b0a028','#fff8b0','#3c340c'],
  ['storm_kestrel','Storm Kestrel','aero',2,'float','skirmisher',0.92,530,110,4.2,'lin','#8a9ae8','#5a68b0','#d0d8ff','#141c3c'],
+ ['reedstalker','Reedstalker','tide',2,'biped','skirmisher',1.00,540,106,3.8,'lin','#4fa08a','#2f7a64','#a8e8d8','#0c2a24'],
+ ['gale_ram','Gale Ram','aero',2,'quad','bruiser',1.08,660,94,3.3,'lin','#d8d8c8','#a8a898','#ffffff','#2a2a26'],
+ ['gravemold','Gravemold','umbral',2,'quad','warden',1.12,800,70,2.7,'lin','#4a4450','#2f2b38','#8a7fa0','#c4b890'],
+ ['sapling_sentinel','Sapling Sentinel','verdant',2,'biped','warden',1.14,820,72,2.8,'lin','#5a9a4f','#3a6a34','#c4e88a','#12240f'],
  ['prismoth','Prismoth','prism',3,'biped','mystic',0.98,620,128,3.6,'late','#9a6fd8','#6f46a8','#e3c2ff','#fff3ff'],
  ['frost_titan','Frost Titan','glacier',3,'biped','warden',1.45,980,108,2.9,'late','#a8d8f0','#6aa0c8','#eafaff','#0e2a40'],
  ['brableroot_leviathan','Brambleroot Leviathan','verdant',3,'quad','bruiser',1.50,920,132,3.2,'late','#3f8a4f','#2a5f36','#a0e08a','#0f2415'],
@@ -750,7 +724,8 @@ const ROSTER_RAW = [
  ['bedrock_warlord','Bedrock Warlord','loam',3,'biped','bruiser',1.45,940,130,3.0,'late','#7a7568','#4c483e','#c4bca0','#201c14'],
  ['gloom_revenant','Gloom Revenant','umbral',3,'biped','mystic',1.35,790,150,3.5,'late','#3f3659','#282040','#9a8ad8','#d0c4ff'],
  ['sky_tyrant','Sky Tyrant','aero',3,'float','skirmisher',1.35,810,152,4.0,'late','#9ab8e8','#5a7ab0','#f0f8ff','#122240'],
- ['prism_overlord','Prism Overlord','prism',3,'float','mystic',1.35,820,150,3.6,'late','#c49af0','#8a5ac4','#ffe0ff','#ffffff']
+ ['prism_overlord','Prism Overlord','prism',3,'float','mystic',1.35,820,150,3.6,'late','#c49af0','#8a5ac4','#ffe0ff','#ffffff'],
+ ['aurora_drake','Aurora Drake','prism',3,'float','mystic',1.35,840,152,3.7,'late','#7ad4c8','#4a9a90','#e8fff8','#ffffff']
 ];
 function hashStr(s) { let h = 7; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
 function affinityOf(fam, id) {
@@ -765,12 +740,17 @@ function featuresOf(def) {
   const n = def.name.toLowerCase();
   const has = (...ts) => ts.some(t => n.includes(t));
   return {
-    wings: has('bat','hawk','finch','owlet','chick','kestrel','sweeper','drone','tyrant','sovereign','moth','drakelet'),
-    shell: has('turtle','crab','snail'),
-    horns: has('hound','fox','pup','hog','bison','drakelet','titan','golem','behemoth','warlord','leviathan','colossus'),
+    wings: has('bat','hawk','finch','owlet','chick','kestrel','sweeper','drone','tyrant','sovereign','moth','drakelet','drake'),
+    shell: has('turtle','crab','snail','bogling','gravemold'),
+    horns: has('hound','fox','pup','hog','bison','drakelet','drake','titan','golem','behemoth','warlord','leviathan','colossus','ram'),
     spikes: has('golem','behemoth','titan','colossus','warlord','leviathan','overlord','monarch','revenant','tyrant','sovereign'),
-    ring: has('spore','wisp','mirrorling','chroma','coil','glow'),
-    segs: has('serpent','leviathan')
+    ring: has('spore','wisp','mirrorling','chroma','coil','glow','imp'),
+    segs: has('serpent','leviathan'),
+    mane: has('hound','fox','rimehowler'),                                   // NEW part
+    tusks: has('hog','bison','warlord','behemoth','barkhide'),               // NEW part
+    antennae: has('moth','wisp','drone','imp','drake'),                      // NEW part
+    fins: has('paddler','otter','drake','monarch'),                          // NEW part
+    petals: has('drone','sapling')                                           // NEW part
   };
 }
 const SPECIES = {};
@@ -778,7 +758,6 @@ ROSTER_RAW.forEach((r, i) => {
   const [id, name, family, tier, rig, role, scale, hp, atk, spd, growth, p, s, a, e] = r;
   SPECIES[id] = {
     id, name, family, tier, rig, role, scale, index: i,
-    rarity: tier === 1 ? 'common' : tier === 2 ? 'uncommon' : 'rare',
     baseStats: { hp, atk, moveSpeed: spd },
     growthCurve: { type: growth === 'lin' ? 'linear' : growth, hpRate60: GROWTH_RATES[growth].hp, atkRate60: GROWTH_RATES[growth].atk },
     socketPattern: SOCKET_BY_ROLE[role],
@@ -791,36 +770,56 @@ ROSTER_RAW.forEach((r, i) => {
 });
 const ROSTER = Object.values(SPECIES);
 
-// ---------- stages + biome drops ----------
+/* ---------- 12-incursion trail (3 Areas × 4 stages, 12 biomes) ---------- */
 const STAGES = [
   { id:'1-1', name:'Grassland Verge', biome:'grassland', recPower:1000, emberReward:20, waves:[
-    { label:'Wave 1', spawns:[['thistle_hog',6],['brook_newt',6]] },
-    { label:'Wave 2', spawns:[['verdant_cub',7],['thistle_hog',7],['gravel_snail',7]] },
-    { label:'Boss Wave', boss:true, spawns:[['cobblet',10,1],['cinder_pup',6]] } ] },
+    [['thistle_hog',6],['brook_newt',6]],
+    [['verdant_cub',7],['thistle_hog',7],['gravel_snail',7]],
+    [['cobblet',10,1],['cinder_pup',6]] ] },
   { id:'1-2', name:'Whisper Woods', biome:'forest', recPower:1700, emberReward:35, waves:[
-    { label:'Wave 1', spawns:[['glow_spore',9],['gloom_frog',9]] },
-    { label:'Wave 2', spawns:[['spore_mantis',10],['dusk_bat',10],['silt_mole',10]] },
-    { label:'Boss Wave', boss:true, spawns:[['mangrove_stomper',13,1],['gloom_frog',9]] } ] },
+    [['glow_spore',9],['gloom_frog',9]],
+    [['spore_mantis',10],['dusk_bat',10],['silt_mole',10]],
+    [['mangrove_stomper',13,1],['gloom_frog',9]] ] },
   { id:'1-3', name:'Glacial Shelf', biome:'glacial', recPower:2500, emberReward:50, waves:[
-    { label:'Wave 1', spawns:[['frost_cub',13],['sleet_owlet',13]] },
-    { label:'Wave 2', spawns:[['glacier_hound',14],['rimehowler',14],['volt_nibbler',12]] },
-    { label:'Boss Wave', boss:true, spawns:[['hoarfrost_warden',17,1],['frost_cub',12]] } ] },
+    [['frost_cub',13],['sleet_owlet',13]],
+    [['glacier_hound',14],['rimehowler',14],['volt_nibbler',12]],
+    [['hoarfrost_warden',17,1],['frost_cub',12]] ] },
   { id:'1-4', name:'Volcanic Crag · BOSS', biome:'volcanic', recPower:3600, emberReward:80, waves:[
-    { label:'Wave 1', spawns:[['cinder_pup',16],['dune_serpent',16]] },
-    { label:'Wave 2', spawns:[['char_drakelet',17],['basalt_bison',17],['ember_biped',16]] },
-    { label:'Boss Wave', boss:true, spawns:[['volcano_behemoth',20,1],['thunder_fox',15],['thunder_fox',15]] } ] },
+    [['cinder_pup',16],['dune_serpent',16]],
+    [['char_drakelet',17],['basalt_bison',17],['ember_biped',16]],
+    [['volcano_behemoth',20,1],['thunder_fox',15],['thunder_fox',15]] ] },
   { id:'2-1', name:'Mushroom Hollow', biome:'mushroom_hollow', recPower:4800, emberReward:90, waves:[
-    { label:'Wave 1', spawns:[['glow_spore',18],['gloom_frog',18]] },
-    { label:'Wave 2', spawns:[['dusk_bat',19],['spore_mantis',19],['glow_spore',18]] },
-    { label:'Boss Wave', boss:true, spawns:[['chroma_wisp',22,1],['dusk_bat',16]] } ] },
+    [['glow_spore',18],['mothwisp',18]],
+    [['spore_mantis',19],['dusk_bat',19],['gravemold',18]],
+    [['chroma_wisp',22,1],['dusk_bat',16]] ] },
   { id:'2-2', name:'Crystal Caverns', biome:'crystal_caverns', recPower:6200, emberReward:110, waves:[
-    { label:'Wave 1', spawns:[['sleet_owlet',21],['mirrorling',21]] },
-    { label:'Wave 2', spawns:[['rimehowler',22],['coil_caster',22],['sleet_owlet',20]] },
-    { label:'Boss Wave', boss:true, spawns:[['prismoth',25,1],['mirrorling',18],['mirrorling',18]] } ] },
-  { id:'2-3', name:'Volcanic Ridge · BOSS', biome:'volcanic_ridge', recPower:8000, emberReward:150, waves:[
-    { label:'Wave 1', spawns:[['cinder_pup',24],['dune_serpent',24]] },
-    { label:'Wave 2', spawns:[['char_drakelet',25],['basalt_bison',25],['ember_biped',24]] },
-    { label:'Boss Wave', boss:true, spawns:[['bedrock_warlord',28,1],['thunder_fox',18],['thunder_fox',18]] } ] }
+    [['sleet_owlet',21],['mirrorling',21]],
+    [['rimehowler',22],['coil_caster',22],['sleet_owlet',20]],
+    [['prismoth',25,1],['mirrorling',18],['mirrorling',18]] ] },
+  { id:'2-3', name:'Volcanic Ridge', biome:'volcanic_ridge', recPower:7800, emberReward:130, waves:[
+    [['cinder_pup',22],['dune_serpent',22]],
+    [['char_drakelet',23],['basalt_bison',23],['ember_biped',22]],
+    [['bedrock_warlord',26,1],['thunder_fox',18],['thunder_fox',18]] ] },
+  { id:'2-4', name:'Sunken Marsh · BOSS', biome:'sunken_marsh', recPower:9500, emberReward:180, waves:[
+    [['bogling',22],['reedstalker',22]],
+    [['tide_otter',23],['bogling',22],['azure_paddler',22]],
+    [['maelstrom_monarch',26,1],['reedstalker',18],['reedstalker',18]] ] },
+  { id:'3-1', name:'Storm Mesa', biome:'storm_mesa', recPower:11500, emberReward:220, waves:[
+    [['static_imp',24],['spark_flea',24]],
+    [['thunder_fox',25],['static_imp',24],['gale_ram',24]],
+    [['storm_kestrel',26,1],['coil_caster',20]] ] },
+  { id:'3-2', name:'Gloom Thicket', biome:'gloom_thicket', recPower:14000, emberReward:260, waves:[
+    [['mothwisp',26],['dusk_bat',26]],
+    [['night_prowler',27],['gravemold',26],['shadow_stalker',26]],
+    [['gloom_revenant',28,1],['night_prowler',20]] ] },
+  { id:'3-3', name:'Verdant Deeproot', biome:'verdant_deeproot', recPower:17000, emberReward:320, waves:[
+    [['barkhide',28],['sapling_sentinel',28]],
+    [['spore_mantis',29],['mangrove_stomper',29],['sapling_sentinel',28]],
+    [['brableroot_leviathan',30,1],['barkhide',22]] ] },
+  { id:'3-4', name:'Aurora Summit · FINAL', biome:'aurora_summit', recPower:21000, emberReward:400, waves:[
+    [['sleet_owlet',30],['mirrorling',30]],
+    [['frost_titan',31],['chroma_wisp',30],['gale_ram',30]],
+    [['aurora_drake',32,1],['prismoth',24],['prismoth',24]] ] }
 ];
 const BIOME_DROPS = {
   grassland:       [ ['crimson_berries',62], ['azure_moss',30], ['gilded_dust',8] ],
@@ -829,7 +828,12 @@ const BIOME_DROPS = {
   volcanic:        [ ['volcanic_rock',48], ['crimson_berries',36], ['gilded_dust',16] ],
   mushroom_hollow: [ ['crimson_berries',45], ['azure_moss',40], ['gilded_dust',15] ],
   crystal_caverns: [ ['icy_shards',45], ['azure_moss',35], ['gilded_dust',20] ],
-  volcanic_ridge:  [ ['volcanic_rock',50], ['crimson_berries',32], ['gilded_dust',18] ]
+  volcanic_ridge:  [ ['volcanic_rock',50], ['crimson_berries',32], ['gilded_dust',18] ],
+  sunken_marsh:    [ ['azure_moss',48], ['crimson_berries',34], ['gilded_dust',18] ],
+  storm_mesa:      [ ['icy_shards',42], ['azure_moss',36], ['gilded_dust',22] ],
+  gloom_thicket:   [ ['crimson_berries',44], ['azure_moss',38], ['gilded_dust',18] ],
+  verdant_deeproot:[ ['crimson_berries',50], ['azure_moss',34], ['gilded_dust',16] ],
+  aurora_summit:   [ ['icy_shards',40], ['azure_moss',30], ['gilded_dust',30] ]
 };
 STAGES.forEach(st => { st.loot = { ings: BIOME_DROPS[st.biome].slice(0, 2).map(e => e[0]) }; });
 function weightedPick(table) {
@@ -840,7 +844,6 @@ function weightedPick(table) {
 }
 const BOSS = { hpMult:2.4, atkMult:1.2, scale:1.5 };
 
-// ---------- attraction recipes ----------
 const RECIPES = [];
 (function buildRecipes() {
   const famPool = fams => ROSTER.filter(s => fams.includes(s.family))
@@ -859,21 +862,19 @@ const RECIPES = [];
   );
 })();
 
-// ---------- pacing & constants ----------
 const PACE = { moveScale:0.6, basicWindup:0.4, basicInterval:1.35, recoverTime:0.5, kbThreshold:2.0,
                hostileDmgMult:0.65, retarget:0.5, waveIntermission:1.6, waveHealPct:0.15,
                ingDropChance:0.24, ingBudgetPerRun:2, coreDropChance:0.20 };
 const SIM_DT = 1/60, ARENA_HALF = 9.3, CRIT_MULT = 1.6, BASIC_ATK_MULT = 1.0, BASIC_KNOCKBACK = 3.0;
 const ENERGY_MAX = 5, ENERGY_REGEN_MS = 90000, LEVEL_CAP = 60, COLLECTION_MAX = 50;
-const CAMP_ROAM = 24;                        // wander bounds on the 70x70 island
+const CAMP_ROAM = 24;
 const allySpawns = [[7,-1.9],[7,1.9],[8.6,0]];
 const hostileSpawns = [[-7,-4],[-7.5,0],[-7,4],[-5,-6.5],[-5,6.5]];
 
-// ---------- save ----------
-const SAVE_KEY = 'wildroot_save_v7';
+const SAVE_KEY = 'wildroot_save_v8';
 let SAVE;
 function defaultSave() {
-  return { v:7, embers:30, energy:ENERGY_MAX, lastEnergyTs:Date.now(), expeditionBonus:0, introSeen:false,
+  return { v:8, embers:30, energy:ENERGY_MAX, lastEnergyTs:Date.now(), expeditionBonus:0, introSeen:false,
     provisions:{ crimson_berries:3, azure_moss:3, icy_shards:1, volcanic_rock:1, gilded_dust:1 },
     coresInv:{ ferocity:1, bulwark:1, keen:0, leech:0, swift:0 },
     squad:[ { species:'verdant_cub', level:12, trait:1.0, sockets:['ferocity',null,null,null,null,null,null,null,null] },
@@ -891,23 +892,12 @@ function loadSave() {
 }
 function save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(SAVE)); } catch (e) {} }
 
-// stable entry UIDs (drag/drop + quick-stat actions survive sorting)
-let uidCounter = 0;
-function ensureUids() {
-  SAVE.squad.concat(SAVE.collection).forEach(e => {
-    if (!e.uid) e.uid = ++uidCounter;
-    else uidCounter = Math.max(uidCounter, e.uid);
-  });
-}
-
-// ---------- app state ----------
-let appState = 'menu';           // 'menu' | 'intro' | 'camp' | 'map' | 'battle'
+let appState = 'menu';
 let autoMode = true, paused = false, battle = null, intro = null, reveal = null;
 let menuAngle = 0.6;
 const units = [], vfxList = [];
 let acc = 0;
 
-// ---------- fade-to-black + letterbox ----------
 const TRANS = { active: false };
 function fadeTo(midFn) {
   if (TRANS.active) return;
@@ -926,7 +916,6 @@ function introFade(toBlack) {
   f.style.opacity = toBlack ? '1' : '0';
 }
 
-// ---------- helpers ----------
 const $ = id => document.getElementById(id);
 const clampN = (v, a, b) => Math.max(a, Math.min(b, v));
 function toast(msg) {
@@ -959,7 +948,7 @@ function growthMult(level, type, rate60) {
   return 1 + (rate60 - 1) * t;
 }
 function makeEntry(species, level, trait) {
-  return { species, level, trait: trait !== undefined ? trait : (0.95 + Math.random() * 0.12), uid: ++uidCounter,
+  return { species, level, trait: trait !== undefined ? trait : (0.95 + Math.random() * 0.12),
            sockets: [null,null,null,null,null,null,null,null,null] };
 }
 function coreCount(entry) {
@@ -980,7 +969,6 @@ function unitPower(entry) { const st = computeEntryStats(entry); return Math.rou
 function teamPower() { return SAVE.squad.reduce((s, e) => s + unitPower(e), 0); }
 function famBadge(fam) { return '<i class="fbadge" style="background:' + FAM_COLOR[fam] + '" title="' + fam + '"></i>'; }
 
-// ---------- renderer, scenes, clamped camera ----------
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.setSize(innerWidth, innerHeight);
@@ -991,7 +979,7 @@ document.body.appendChild(renderer.domElement);
 const campScene = new THREE.Scene(); campScene.background = new THREE.Color(0x14231a);
 const mapScene = new THREE.Scene(); mapScene.background = new THREE.Color(0x9fd0e8);
 const battleScene = new THREE.Scene();
-const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 140);
+const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 200);
 let viewSize = 11.5;
 function sizeCamera() {
   const a = innerWidth / innerHeight;
@@ -999,7 +987,6 @@ function sizeCamera() {
   camera.top = viewSize; camera.bottom = -viewSize;
   camera.updateProjectionMatrix();
 }
-// Camp clamps: dynamic zoom-out cap + hard pan boundary — the ocean/void edge is never frameable.
 const CAMP_OFF = new THREE.Vector3(10.5, 14, 10.5);
 const campLook = new THREE.Vector3(0, 0.4, 0);
 function campMaxView() { return Math.min(15, 37 / (Math.max(1, innerWidth / innerHeight) * 1.5)); }
@@ -1013,7 +1000,7 @@ function applyCampCamera() {
   camera.lookAt(campLook);
   sizeCamera();
 }
-function mapCamera() { viewSize = clampN(viewSize, 13, 19); camera.position.set(26, 34, 26); camera.lookAt(0, 0, 0); sizeCamera(); }
+function mapCamera() { viewSize = clampN(viewSize, 16, 30); camera.position.set(26, 34, 26); camera.lookAt(0, 0, 0); sizeCamera(); }
 function battleCamera() { viewSize = clampN(viewSize, 8, 14); camera.position.set(11, 15.56, 11); camera.lookAt(0, 1.2, 0); sizeCamera(); }
 function activeScene() { return appState === 'battle' ? battleScene : appState === 'map' ? mapScene : campScene; }
 addEventListener('resize', () => {
@@ -1032,9 +1019,9 @@ function addLights(scene) {
   const sun = new THREE.DirectionalLight(0xfff2d8, 0.95);
   sun.position.set(12, 18, 8); sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
-  sun.shadow.camera.left = -32; sun.shadow.camera.right = 32;
-  sun.shadow.camera.top = 32; sun.shadow.camera.bottom = -32;
-  sun.shadow.camera.near = 2; sun.shadow.camera.far = 90;
+  sun.shadow.camera.left = -46; sun.shadow.camera.right = 46;
+  sun.shadow.camera.top = 46; sun.shadow.camera.bottom = -46;
+  sun.shadow.camera.near = 2; sun.shadow.camera.far = 110;
   sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02;
   sun.shadow.camera.updateProjectionMatrix();
   scene.add(sun); scene.add(sun.target);
@@ -1042,37 +1029,22 @@ function addLights(scene) {
 addLights(campScene); addLights(mapScene); addLights(battleScene);
 
 /* =====================================================================
-   RIG v3 — ABSOLUTE GROUND-PLANE LIMB BINDING (final mandatory fix)
-   ────────────────────────────────────────────────────────────────────
-   Transformation chain (hard-coded, per RIG_SPEC):
-     root (world pos+yaw, at ground)
-      └ inner (breathing/attack SCALE only — origin at ground y=0;
-               zero vertical translation for grounded rigs)
-          └ limbPivot at HIP JOINT: local (x, hipY, z) — embedded
-             1.6–1.7 voxels INSIDE the torso AABB (quad torso spans
-             y[7,12] → hipY 8.6; biped torso y[6.1,13.1] → hipY 7.8),
-             so the leg's TOP is welded to the torso socket.
-              └ leg mesh in pivot-local space spanning EXACTLY
-                 [−hipY, 0]: mesh top = pivot (the joint),
-                 mesh bottom (sole) = local −hipY.
-   Ground proof (world units, V = voxel size):
-     pivotWorldY = hipY · V
-     soleWorldY  = pivotWorldY − hipY · V = 0        ← feet flush, always
-   Foot pads span local [−hipY, −hipY+1] → world [0, V]. Any swing
-   angle rotates about the hip; the sole traces an arc through y=0.
-   Root scale is clamped ≥ 1.0 and scales about the ground origin, so
-   scaling can never lift the soles. Float rigs hover at root by design.
+   RIG v4 — QUADRUPEDS ARE NOW LEGLESS "LOAFS" (per design update).
+   quad: body rests flush on the ground (belly bottom = y 0, no legs);
+         locomotion = bouncy hop + body wiggle; idle = breathing squash.
+   biped: unchanged two-legged rig (hips embedded, soles at y 0).
+   float: unchanged orbiter (hover at root by design).
+   All rigs now expose vis.hopY — callers position root at y = hopY.
    ===================================================================== */
 const VOX_BASE = 0.105;
+const TOP_Y = { quad: 10.5, biped: 20, float: 14 };   // bar/text anchor height per rig
 const RIG_SPEC = {
-  quad:  { hipY: 8.6, legW: 2.6, footW: 3.1,
-           sockets: [[-2.3, 2.9], [2.3, 2.9], [-2.3, -2.9], [2.3, -2.9]] },
-  biped: { hipY: 7.8, legW: 2.8, footW: 3.3, armY: 12.4, armX: 2.9 }
+  biped: { hipY: 7.8, legW: 2.8, footW: 3.3, armY: 12.4, armX: 2.9, torsoCy: 9.6 }
 };
 function buildCreatureModel(def) {
   const V = VOX_BASE * def.scale, P = def.palette, F = featuresOf(def);
   const root = new THREE.Group(), inner = new THREE.Group();
-  inner.position.y = 0;                                  // ground-plane origin — never translated
+  inner.position.y = 0;
   root.add(inner);
   const mats = [], matCache = {};
   function mat(hex) { if (!matCache[hex]) { matCache[hex] = new THREE.MeshLambertMaterial({ color: hex }); mats.push(matCache[hex]); } return matCache[hex]; }
@@ -1086,62 +1058,72 @@ function buildCreatureModel(def) {
   let tail = null, orbit = null;
 
   if (def.rig === 'quad') {
-    part(inner, 0, 9.5, 0, 7, 5, 9, P.primary);                       // torso y[7,12]
-    part(inner, 0, 12, 5.2, 6, 5, 5, P.primary);                      // head
-    part(inner, 0, 11, 7.6, 3, 2, 2.6, P.accent);                     // snout/beak
-    part(inner, -1.6, 13.2, 7.75, 1.2, 1.2, 0.7, P.eye);              // eyes
-    part(inner, 1.6, 13.2, 7.75, 1.2, 1.2, 0.7, P.eye);
-    if (F.horns) { part(inner, -2.2, 15.6, 4.6, 1.4, 2.6, 1.4, P.accent);
-                   part(inner, 2.2, 15.6, 4.6, 1.4, 2.6, 1.4, P.accent); }
-    else { part(inner, -2.5, 15, 4.2, 2, 2, 1.6, P.secondary);        // ears
-           part(inner, 2.5, 15, 4.2, 2, 2, 1.6, P.secondary); }
-    part(inner, 0, 12.6, -1.2, 3, 1.4, 5.5, P.accent);                // dorsal crest
-    if (F.shell) part(inner, 0, 13.4, -0.5, 7.6, 2.6, 8, P.secondary);
+    /* ── LEGLESS LOAF (v0.8): 4-legged kin rebuilt without legs ──
+       Body bottom = y 0 exactly (torso spans [0,5]); a wider belly
+       slab grounds the silhouette. NO limb pivots exist. */
+    part(inner, 0, 2.5, 0, 7, 5, 9, P.primary);                       // body y[0,5]
+    part(inner, 0, 0.55, -0.2, 7.8, 1.1, 9.6, P.secondary);           // belly base slab
+    part(inner, 0, 5.5, 4.6, 6, 5, 5, P.primary);                     // head y[3,8]
+    part(inner, 0, 4.4, 7.3, 3, 2, 2.4, P.accent);                    // snout
+    part(inner, -1.6, 6.7, 7.35, 1.2, 1.2, 0.7, P.eye);               // eyes
+    part(inner, 1.6, 6.7, 7.35, 1.2, 1.2, 0.7, P.eye);
+    if (F.horns) { part(inner, -2.2, 9.2, 3.8, 1.4, 2.4, 1.4, P.accent);
+                   part(inner, 2.2, 9.2, 3.8, 1.4, 2.4, 1.4, P.accent); }
+    else { part(inner, -2.4, 8.4, 3.6, 2, 2, 1.6, P.secondary);       // ears
+           part(inner, 2.4, 8.4, 3.6, 2, 2, 1.6, P.secondary); }
+    if (F.tusks) { part(inner, -2.0, 4.6, 7.9, 0.8, 1.6, 0.8, '#f0ead8');
+                   part(inner, 2.0, 4.6, 7.9, 0.8, 1.6, 0.8, '#f0ead8'); }
+    if (F.mane) part(inner, 0, 7.2, 2.2, 6.4, 1.8, 2.6, P.accent);    // neck mane
+    part(inner, 0, 5.6, -1.6, 3, 1.4, 5.5, P.accent);                 // dorsal crest
+    if (F.fins) { part(inner, -4.1, 2.6, 0.8, 1.2, 2.4, 4.2, P.accent);
+                  part(inner, 4.1, 2.6, 0.8, 1.2, 2.4, 4.2, P.accent); } // side fins
+    if (F.shell) part(inner, 0, 6.5, -0.8, 7.6, 2.6, 8, P.secondary);
     if (F.spikes) for (let i = 0; i < 3; i++)
-      part(inner, 0, 14.6, 2.2 - i * 2.2, 1.2, 1.8, 1.2, P.accent);
-    tail = new THREE.Group(); tail.position.set(0, 10.8, -4.4); inner.add(tail);
+      part(inner, 0, 7.8, 1.6 - i * 2.2, 1.2, 1.8, 1.2, P.accent);
+    tail = new THREE.Group(); tail.position.set(0, 3.4, -4.4); inner.add(tail);
     part(tail, 0, 0.6, -1.5, 2, 2, 3.2, P.accent);
-    const RF = RIG_SPEC.quad;
-    for (const lp of RF.sockets) {
-      const piv = new THREE.Group();
-      piv.position.set(lp[0], RF.hipY, lp[1]);                 // HARD-CODED hip joint
-      inner.add(piv);
-      part(piv, 0, -RF.hipY / 2, 0, RF.legW, RF.hipY, RF.legW, P.secondary);   // spans [−hipY,0]
-      part(piv, 0, -RF.hipY + 0.5, 0.5, RF.footW, 1.0, RF.footW + 0.4, P.secondary); // sole at y=0
-      legs.push(piv);
-    }
   } else if (def.rig === 'biped') {
     part(inner, 0, 9.6, 0, 6, 7, 5, P.primary);                       // torso y[6.1,13.1]
     part(inner, 0, 15.2, 0.6, 5, 4.6, 4.4, P.primary);                // head
     if (F.horns) { part(inner, -1.7, 18, 0.4, 1.6, 2.4, 1.6, P.accent);
                    part(inner, 1.7, 18, 0.4, 1.6, 2.4, 1.6, P.accent); }
+    if (F.antennae) { part(inner, -1.0, 18.6, 0.6, 0.5, 1.8, 0.5, P.accent);
+                      part(inner, 1.0, 18.6, 0.6, 0.5, 1.8, 0.5, P.accent); }
+    if (F.petals) { part(inner, 0, 18.4, 0.6, 1.7, 0.5, 1.7, P.accent);
+                    part(inner, 0, 18.9, 0.6, 0.7, 0.7, 0.7, '#ffe08a'); }
     part(inner, -1.35, 15.6, 2.85, 1.2, 1.2, 0.6, P.eye);
     part(inner, 1.35, 15.6, 2.85, 1.2, 1.2, 0.6, P.eye);
-    part(inner, 0, 15, 3, 1.8, 1, 0.8, P.accent);                     // beak/plate
-    part(inner, 0, 10.4, 2.6, 1.8, 1.8, 0.8, P.accent);               // chest core gem
+    part(inner, 0, 15, 3, 1.8, 1, 0.8, P.accent);                     // beak
+    part(inner, 0, 10.4, 2.6, 1.8, 1.8, 0.8, P.accent);               // chest gem
     if (F.spikes) for (let i = 0; i < 3; i++)
       part(inner, 0, 13.4 - i * 2.2, -2.6, 1.2, 1.6, 1.2, P.accent);
     const RF = RIG_SPEC.biped;
     for (let s = -1; s <= 1; s += 2) {
       const arm = new THREE.Group();
-      arm.position.set(s * RF.armX, RF.armY, 0);               // shoulder joint inside torso
+      arm.position.set(s * RF.armX, RF.armY, 0);
       inner.add(arm);
       part(arm, 0, -2.7, 0.4, 2.2, 5.4, 2.2, P.secondary);
       arms.push(arm);
       const leg = new THREE.Group();
-      leg.position.set(s * 1.7, RF.hipY, 0);                   // HARD-CODED hip joint
+      leg.position.set(s * 1.7, RF.hipY, 0);                          // hip joint inside torso
       inner.add(leg);
-      part(leg, 0, -RF.hipY / 2, 0, RF.legW, RF.hipY, RF.legW, P.secondary);
+      part(leg, 0, -RF.hipY / 2, 0, RF.legW, RF.hipY, RF.legW, P.secondary);   // sole at y=0
       part(leg, 0, -RF.hipY + 0.5, 0.4, RF.footW, 1.0, RF.footW, P.secondary);
       legs.push(leg);
     }
-  } else { // float — orbiter rig (no limbs; hover at root by design)
+  } else { // float — orbiter
     part(inner, 0, 10, 0, 6, 6, 6, P.primary);
     part(inner, 0, 10.6, 3.2, 4, 3, 0.8, P.secondary);
     part(inner, -1.4, 10.8, 3.7, 1.2, 1.2, 0.5, P.eye);
     part(inner, 1.4, 10.8, 3.7, 1.2, 1.2, 0.5, P.eye);
     part(inner, 0, 9, 3.5, 1.6, 0.8, 0.6, P.accent);
+    if (F.antennae) { part(inner, -1.0, 13.6, 2.2, 0.5, 1.8, 0.5, P.accent);
+                      part(inner, 1.0, 13.6, 2.2, 0.5, 1.8, 0.5, P.accent); }
+    if (F.petals) { part(inner, 0, 13.8, -0.4, 1.7, 0.6, 1.7, P.accent);
+                    part(inner, 0, 14.4, -0.4, 0.8, 0.8, 0.8, '#ffe08a'); }
     if (F.shell) part(inner, 0, 13.6, -0.4, 6.8, 2.4, 6.8, P.secondary);
+    if (F.fins) { part(inner, -4.0, 10, 0.4, 1.2, 2.2, 3.6, P.accent);
+                  part(inner, 4.0, 10, 0.4, 1.2, 2.2, 3.6, P.accent); }
     if (F.wings) for (let s = -1; s <= 1; s += 2) {
       const w = new THREE.Group(); w.position.set(s * 3.6, 10.4, 0); inner.add(w);
       part(w, s * 1.6, 0.6, 0, 3, 0.8, 4.4, P.accent); wings.push(w);
@@ -1162,42 +1144,48 @@ function buildCreatureModel(def) {
   const bubble = new THREE.Mesh(new THREE.SphereGeometry(1.15 * def.scale, 18, 12),
     new THREE.MeshBasicMaterial({ color: 0x4db8ff, transparent: true, opacity: 0.22, depthWrite: false }));
   bubble.position.y = 0.95 * def.scale; bubble.visible = false; root.add(bubble);
-  root.scale.setScalar(1.0 + (hashStr(def.id) % 100) / 100 * 0.06);   // ≥1.0 — soles never lifted
-  return { root, inner, legs, arms, wings, segs, tail, orbit, mats, bubble };
+  root.scale.setScalar(1.0 + (hashStr(def.id) % 100) / 100 * 0.06);
+  return { root, inner, legs, arms, wings, segs, tail, orbit, mats, bubble, hopY: 0 };
 }
-// Boot assertion: measure a leg's world AABB — the sole must sit at y≈0.
+// Boot assertion: loaf bodies (quad) and biped soles must measure y ≈ 0.
 function verifyGrounding() {
   let allOk = true;
-  for (const rig of ['verdant_cub', 'ember_biped', 'cobblet']) {
-    const vis = buildCreatureModel(SPECIES[rig]);
+  const checks = [['verdant_cub', 'body'], ['silt_mole', 'leg'], ['glow_spore', 'skip']];
+  for (const [id, mode] of checks) {
+    const def = SPECIES[id];
+    const vis = buildCreatureModel(def);
     vis.root.updateWorldMatrix(true, true);
-    const box = new THREE.Box3().setFromObject(vis.legs[0]);
-    const ok = Math.abs(box.min.y) < 0.02;
-    if (!ok) allOk = false;
-    console.assert(ok, 'WILDROOT rig check FAILED on ' + rig + ': sole must be y≈0, got ' + box.min.y);
+    if (mode !== 'skip') {
+      const target = mode === 'leg' ? vis.legs[0] : vis.inner.children[0];
+      const box = new THREE.Box3().setFromObject(target);
+      const ok = Math.abs(box.min.y) < 0.03;
+      if (!ok) allOk = false;
+      console.assert(ok, 'WILDROOT rig check FAILED on ' + id + ': ground contact must be y≈0, got ' + box.min.y);
+    }
     vis.root.traverse(o => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } });
   }
   return allOk;
 }
 
-/* ---------- universal animation tracks (ground-safe) ----------
-   idle breathing + attack squash are scale-only about the ground origin
-   (feet planted); locomotion rotates limbs about the embedded hips. */
+/* ---------- universal animation tracks ----------
+   Computes vis.hopY each frame: quad = hop while moving (0 at idle, body
+   flush); float = hover; biped = 0 (legs swing about embedded hips). */
 function animateCreature(vis, def, dt, moveAmt, walkPhase, atk, now) {
   const br = 1 + 0.02 * Math.sin(now * 0.004 + def.index);
   vis.inner.scale.set(br * (1 - 0.12 * atk), br * (1 - 0.06 * atk), br * (1 + 0.22 * atk));
   if (def.rig === 'quad') {
-    const swing = Math.min(1, moveAmt / Math.max(0.1, def.baseStats.moveSpeed)) * 0.65;
-    const lp = [0, Math.PI, Math.PI, 0];
-    for (let i = 0; i < vis.legs.length; i++) vis.legs[i].rotation.x = Math.sin(walkPhase + lp[i]) * swing;
+    const m = Math.min(1, moveAmt / 1.2);
+    vis.hopY = Math.abs(Math.sin(walkPhase * 0.9)) * 0.22 * m;          // bouncy hop locomotion
+    vis.inner.rotation.x = Math.sin(walkPhase * 1.8) * 0.05 * m;        // body wiggle while moving
     if (vis.tail) vis.tail.rotation.y = Math.sin(now * 0.004) * 0.5;
   } else if (def.rig === 'biped') {
+    vis.hopY = 0;
     const swing = Math.min(1, moveAmt / Math.max(0.1, def.baseStats.moveSpeed)) * 0.65;
     for (let i = 0; i < vis.legs.length; i++) vis.legs[i].rotation.x = Math.sin(walkPhase + (i ? Math.PI : 0)) * swing;
     for (let i = 0; i < vis.arms.length; i++) vis.arms[i].rotation.x = -Math.sin(walkPhase + (i ? 0 : Math.PI)) * swing * 0.8 - atk * 0.6;
   } else { // float
     const hop = Math.min(1, moveAmt / 2 + 0.25);
-    vis.root.position.y = 0.24 + Math.abs(Math.sin(walkPhase * 0.8)) * 0.26 * hop;
+    vis.hopY = 0.24 + Math.abs(Math.sin(walkPhase * 0.8)) * 0.26 * hop;
     if (vis.orbit) vis.orbit.rotation.y += dt * (1.4 + moveAmt * 0.8);
     for (let i = 0; i < vis.wings.length; i++)
       vis.wings[i].rotation.z = (i ? -1 : 1) * (0.35 + Math.sin(now * 0.018) * 0.45);
@@ -1206,7 +1194,6 @@ function animateCreature(vis, def, dt, moveAmt, walkPhase, atk, now) {
   }
 }
 
-// ---------- portraits ----------
 const PORTRAITS = {};
 function generatePortraits() {
   const pr = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
@@ -1215,11 +1202,13 @@ function generatePortraits() {
   sc.add(new THREE.HemisphereLight(0xffffff, 0x40503f, 0.95));
   const dl = new THREE.DirectionalLight(0xfff2d8, 0.9); dl.position.set(3, 5, 4); sc.add(dl);
   const cam = new THREE.PerspectiveCamera(28, 1, 0.1, 60);
-  cam.position.set(2.6, 2.3, 3.4); cam.lookAt(0, 1.05, 0);
+  cam.position.set(2.6, 2.3, 3.4);
   for (const id in SPECIES) {
+    const rig = SPECIES[id].rig;
+    cam.lookAt(0, rig === 'quad' ? 0.7 : 1.05, 0);           // loafs frame lower
     const vis = buildCreatureModel(SPECIES[id]);
     vis.root.rotation.y = Math.PI / 5;
-    if (SPECIES[id].rig === 'float') vis.root.position.y = -0.24;
+    if (rig === 'float') vis.root.position.y = -0.24;
     sc.add(vis.root);
     pr.render(sc, cam);
     PORTRAITS[id] = pr.domElement.toDataURL('image/png');
@@ -1228,7 +1217,6 @@ function generatePortraits() {
   pr.dispose();
 }
 
-// ---------- VFX ----------
 const geoRing = new THREE.RingGeometry(0.85, 1, 40);
 const geoParticle = new THREE.BoxGeometry(0.14, 0.14, 0.14);
 function spawnRing(scene, pos, color, radius, life) {
@@ -1295,7 +1283,6 @@ function clearVfx() {
   vfxList.length = 0;
 }
 
-// ---------- combat queries & world-space HUD ----------
 function nearestEnemy(u) {
   let best = null, bd = Infinity;
   for (const o of units) {
@@ -1336,7 +1323,6 @@ function updateBars() {
   }
 }
 
-// ---------- battle Unit ----------
 let unitIdCounter = 0;
 class Unit {
   constructor(entry, faction, x, z, opts = {}) {
@@ -1356,8 +1342,7 @@ class Unit {
     this.pos = new THREE.Vector3(x, 0, z);
     this.heading = faction === 'ally' ? -Math.PI / 2 : Math.PI / 2;
     this.radius = 0.55 * this.def.scale * (this.boss ? BOSS.scale : 1);
-    this.topY = (this.def.rig === 'biped' ? 20 : this.def.rig === 'float' ? 14 : 16.5)
-                * VOX_BASE * this.def.scale * (this.boss ? BOSS.scale : 1);
+    this.topY = TOP_Y[this.def.rig] * VOX_BASE * this.def.scale * (this.boss ? BOSS.scale : 1);
     this.kbVel = new THREE.Vector3();
     this.kbResist = this.boss ? 0.25 : 1;
     this.steadfast = this.boss;
@@ -1586,14 +1571,14 @@ function updateUnitVisual(u, dt, now) {
   const inst = dt > 0 ? Math.hypot(dx, dz) / dt : 0;
   u.moveAmt += (inst - u.moveAmt) * Math.min(1, dt * 10);
   u.walkPhase += dt * (1 + u.moveAmt * 3);
-  v.root.position.set(u.pos.x, 0, u.pos.z);
-  v.root.rotation.y = u.heading;
   let atk = 0;
   if (u.attackAnim > 0) {
     u.attackAnim = Math.max(0, u.attackAnim - dt);
     atk = Math.sin(Math.PI * (1 - u.attackAnim / PACE.basicWindup));
   }
   animateCreature(v, u.def, dt, u.moveAmt, u.walkPhase, atk, now);
+  v.root.position.set(u.pos.x, v.hopY || 0, u.pos.z);       // hopY drives loaf/float height
+  v.root.rotation.y = u.heading;
   if (u.recoverT > 0) v.inner.rotation.z = Math.sin(u.recoverT * 30) * 0.12 * u.recoverT * 2;
   else v.inner.rotation.z = 0;
   if (u.flashT > 0) {
@@ -1613,29 +1598,44 @@ function updateUnitVisual(u, dt, now) {
   } else v.bubble.visible = false;
 }
 
-// ---------- biome arenas ----------
+/* ---------- 12 biome arena themes (5 NEW: marsh/mesa/thicket/deeproot/aurora) ---------- */
 const BIOMES = {
   grassland: { bg:0x16351f, f1:'#2c3a2b', f2:'#314530', line:'rgba(200,235,180,0.15)', wall:'#46543f', post:'#57674f',
     trunk:'#5b4632', leaf:'#2f6a3d', leaf2:'#3d8a4d', trees:6, flowers:8, shroom:0, spikes:0, lava:0, ice:0,
-    mush:0, boulders:0, gems:0, basalt:0, pillars:0, lavaTrim:0 },
+    mush:0, boulders:0, gems:0, basalt:0, pillars:0, lavaTrim:0, reeds:0, pools:0, tesla:0, rootCols:0, spires:0 },
   forest: { bg:0x122a18, f1:'#24382a', f2:'#2a4230', line:'rgba(190,230,180,0.14)', wall:'#3c543f', post:'#4c664f',
     trunk:'#4a3a2c', leaf:'#245233', leaf2:'#2f6a3d', trees:11, flowers:2, shroom:6, spikes:0, lava:0, ice:0,
-    mush:0, boulders:0, gems:0, basalt:0, pillars:0, lavaTrim:0 },
+    mush:0, boulders:0, gems:0, basalt:0, pillars:0, lavaTrim:0, reeds:0, pools:0, tesla:0, rootCols:0, spires:0 },
   glacial: { bg:0x9ec4d8, f1:'#cfe4ee', f2:'#bcd8e6', line:'rgba(60,110,140,0.18)', wall:'#8ab4cc', post:'#a3c6da',
     trunk:'#6a7a84', leaf:'#d8ecf5', leaf2:'#ffffff', trees:5, flowers:0, shroom:0, spikes:7, lava:0, ice:1,
-    mush:0, boulders:0, gems:0, basalt:0, pillars:0, lavaTrim:0 },
+    mush:0, boulders:0, gems:0, basalt:0, pillars:0, lavaTrim:0, reeds:0, pools:0, tesla:0, rootCols:0, spires:0 },
   volcanic: { bg:0x2a1a16, f1:'#3a2a24', f2:'#443028', line:'rgba(255,160,90,0.14)', wall:'#4a342c', post:'#5a4038',
     trunk:'#3a2a24', leaf:'#6a3a28', leaf2:'#8a4a30', trees:4, flowers:0, shroom:0, spikes:0, lava:6, ice:0,
-    mush:0, boulders:0, gems:0, basalt:0, pillars:0, lavaTrim:0 },
+    mush:0, boulders:0, gems:0, basalt:0, pillars:0, lavaTrim:0, reeds:0, pools:0, tesla:0, rootCols:0, spires:0 },
   mushroom_hollow: { bg:0x1a2438, f1:'#232d3e', f2:'#293448', line:'rgba(160,225,255,0.14)', wall:'#3e4a5f', post:'#4e5a70',
     trunk:'#8a7a9a', leaf:'#b05fd8', leaf2:'#d88aff', trees:0, flowers:0, shroom:0, spikes:0, lava:0, ice:0,
-    mush:7, boulders:3, gems:0, basalt:0, pillars:0, lavaTrim:0 },
+    mush:7, boulders:3, gems:0, basalt:0, pillars:0, lavaTrim:0, reeds:0, pools:0, tesla:0, rootCols:0, spires:0 },
   crystal_caverns: { bg:0x131a2c, f1:'#20263c', f2:'#262e46', line:'rgba(150,210,255,0.16)', wall:'#38405c', post:'#48526e',
     trunk:'#3a3f52', leaf:'#7ac4e8', leaf2:'#9adcf5', trees:0, flowers:0, shroom:0, spikes:0, lava:0, ice:0,
-    mush:0, boulders:0, gems:8, basalt:4, pillars:0, lavaTrim:0 },
+    mush:0, boulders:0, gems:8, basalt:4, pillars:0, lavaTrim:0, reeds:0, pools:0, tesla:0, rootCols:0, spires:0 },
   volcanic_ridge: { bg:0x241412, f1:'#332020', f2:'#3c2622', line:'rgba(255,150,80,0.16)', wall:'#44302a', post:'#54403a',
     trunk:'#2a1c18', leaf:'#4a2a20', leaf2:'#6a3a28', trees:2, flowers:0, shroom:0, spikes:0, lava:7, ice:0,
-    mush:0, boulders:0, gems:0, basalt:0, pillars:5, lavaTrim:1 }
+    mush:0, boulders:0, gems:0, basalt:0, pillars:5, lavaTrim:1, reeds:0, pools:0, tesla:0, rootCols:0, spires:0 },
+  sunken_marsh: { bg:0x16281f, f1:'#20342a', f2:'#26402f', line:'rgba(160,230,200,0.15)', wall:'#33584a', post:'#416a5a',
+    trunk:'#4a5a3c', leaf:'#3f8a5f', leaf2:'#5aad78', trees:4, flowers:0, shroom:0, spikes:0, lava:0, ice:0,
+    mush:0, boulders:0, gems:0, basalt:0, pillars:0, lavaTrim:0, reeds:8, pools:3, tesla:0, rootCols:0, spires:0 },
+  storm_mesa: { bg:0x232a3a, f1:'#2e3648', f2:'#343e54', line:'rgba(200,220,255,0.16)', wall:'#465064', post:'#566074',
+    trunk:'#5a6070', leaf:'#8a9ab8', leaf2:'#b8c8e0', trees:3, flowers:0, shroom:0, spikes:0, lava:0, ice:0,
+    mush:0, boulders:2, gems:0, basalt:3, pillars:0, lavaTrim:0, reeds:0, pools:0, tesla:5, rootCols:0, spires:0 },
+  gloom_thicket: { bg:0x181226, f1:'#241c34', f2:'#2a2240', line:'rgba(180,150,220,0.14)', wall:'#382c50', post:'#483a64',
+    trunk:'#2a2038', leaf:'#3a2f52', leaf2:'#4a3c66', trees:10, flowers:0, shroom:5, spikes:0, lava:0, ice:0,
+    mush:0, boulders:0, gems:0, basalt:0, pillars:0, lavaTrim:0, reeds:0, pools:0, tesla:0, rootCols:0, spires:0 },
+  verdant_deeproot: { bg:0x12301c, f1:'#1c3c28', f2:'#224830', line:'rgba(180,255,200,0.14)', wall:'#2c5638', post:'#3a6a48',
+    trunk:'#4a3826', leaf:'#2f7a42', leaf2:'#44a058', trees:8, flowers:6, shroom:0, spikes:0, lava:0, ice:0,
+    mush:0, boulders:0, gems:0, basalt:0, pillars:0, lavaTrim:0, reeds:0, pools:0, tesla:0, rootCols:4, spires:0 },
+  aurora_summit: { bg:0x1a2440, f1:'#28324e', f2:'#2e3a5c', line:'rgba(160,200,255,0.18)', wall:'#3c4a6e', post:'#4c5a80',
+    trunk:'#6a7a84', leaf:'#d8ecf5', leaf2:'#ffffff', trees:3, flowers:0, shroom:0, spikes:5, lava:0, ice:1,
+    mush:0, boulders:0, gems:0, basalt:0, pillars:0, lavaTrim:0, reeds:0, pools:0, tesla:0, rootCols:0, spires:6 }
 };
 let arenaGroup = null;
 function makeGridTexture(b) {
@@ -1705,9 +1705,7 @@ function addObsidianPillar(parent, x, z, s) {
   propBox(parent, x, 1.6 * s, z, 0.8 * s, 3.2 * s, 0.8 * s, '#1c1a22', 0.15);
   propBox(parent, x, 3.35 * s, z, 0.5 * s, 0.35 * s, 0.5 * s, '#b05fd8', 0, 0x5a2a8a);
 }
-function addLavaTrim(parent, x, z, w, d) {
-  propBox(parent, x, 0.12, z, w, 0.2, d, '#ff7a33', 0, 0xb84a10);
-}
+function addLavaTrim(parent, x, z, w, d) { propBox(parent, x, 0.12, z, w, 0.2, d, '#ff7a33', 0, 0xb84a10); }
 function addIceSpike(parent, x, z, s) {
   propBox(parent, x, 0.7 * s, z, 0.8 * s, 1.4 * s, 0.8 * s, '#dceef8', 0.4);
   propBox(parent, x + 0.5 * s, 0.4 * s, z - 0.2 * s, 0.5 * s, 0.8 * s, 0.5 * s, '#eaf6ff', 0.9);
@@ -1719,6 +1717,34 @@ function addLavaRock(parent, x, z, s) {
 function addCrystal(parent, x, z, s) {
   propBox(parent, x, 0.8 * s, z, 0.7 * s, 1.6 * s, 0.7 * s, 0x7a5fd8, 0.5);
   propBox(parent, x + 0.7 * s, 0.5 * s, z + 0.3 * s, 0.4 * s, 1.0 * s, 0.4 * s, 0x9a7fe8, 1.1);
+}
+/* NEW biome props */
+function addReed(parent, x, z, s) {
+  propBox(parent, x, 0.6 * s, z, 0.14, 1.2 * s, 0.14, '#5a8a4f');
+  propBox(parent, x + 0.3 * s, 0.45 * s, z + 0.2 * s, 0.12, 0.9 * s, 0.12, '#6aa05a', 0.2);
+  propBox(parent, x - 0.25 * s, 0.5 * s, z - 0.15 * s, 0.12, 1.0 * s, 0.12, '#4f7a45', -0.15);
+}
+function addPool(parent, x, z, s) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(2.6 * s, 0.16, 2.0 * s),
+    new THREE.MeshLambertMaterial({ color: 0x3f8fb8, transparent: true, opacity: 0.75 }));
+  m.position.set(x, 0.06, z); m.receiveShadow = true; parent.add(m);
+  propBox(parent, x, 0.12, z + 1.1 * s, 0.9 * s, 0.2, 0.5 * s, '#4f8a50');  // lily pad
+}
+function addTeslaPillar(parent, x, z, s) {
+  propBox(parent, x, 1.1 * s, z, 0.7 * s, 2.2 * s, 0.7 * s, '#5a6070', 0.2);
+  propBox(parent, x, 2.4 * s, z, 0.5 * s, 0.4 * s, 0.5 * s, '#ffe14d', 0, 0x8a7a10);
+  propBox(parent, x, 2.75 * s, z, 0.3 * s, 0.3 * s, 0.3 * s, '#fff7c4', 0, 0xb8a830);
+}
+function addRootColumn(parent, x, z, s) {
+  propBox(parent, x, 1.6 * s, z, 1.4 * s, 3.2 * s, 1.4 * s, '#4a3826', 0.1);
+  propBox(parent, x, 3.5 * s, z, 2.6 * s, 1.0 * s, 2.6 * s, '#2f7a42');
+  propBox(parent, x, 4.3 * s, z, 1.8 * s, 0.8 * s, 1.8 * s, '#44a058');
+  propBox(parent, x + 0.9 * s, 0.5 * s, z + 0.7 * s, 0.5 * s, 1.0 * s, 0.5 * s, '#4a3826', 0.5);
+}
+function addAuroraSpire(parent, x, z, s) {
+  gemBox(parent, x, 1.1 * s, z, 0.7 * s, 2.2 * s, 0.7 * s, 0x7ad4c8, 0.2);
+  gemBox(parent, x + 0.5 * s, 0.7 * s, z + 0.3 * s, 0.45 * s, 1.4 * s, 0.45 * s, 0xb08aff, 0.8);
+  propBox(parent, x, 2.35 * s, z, 0.4 * s, 0.3 * s, 0.4 * s, '#e8fff8', 0, 0x4a9a90);
 }
 function disposeGroup(g) {
   g.traverse(o => { if (o.isMesh) { o.geometry.dispose(); if (o.material.map) o.material.map.dispose(); o.material.dispose(); } });
@@ -1759,10 +1785,15 @@ function buildArena(stage) {
   for (let i = 0; i < b.gems; i++) { const s = spots[(i + 2) % spots.length]; addGemCluster(arenaGroup, s[0], s[1] - 1, 1 + (i % 2) * 0.4); }
   for (let i = 0; i < b.basalt; i++) { const s = spots[(i + 7) % spots.length]; propBox(arenaGroup, s[0], 0.12, s[1], 2.0, 0.22, 1.4, '#262a36', 0.3); }
   for (let i = 0; i < b.pillars; i++) { const s = spots[(i + 3) % spots.length]; addObsidianPillar(arenaGroup, s[0] + 1.2, s[1], 1 + (i % 2) * 0.5); }
+  for (let i = 0; i < b.reeds; i++) { const s = spots[(i + 8) % spots.length]; addReed(arenaGroup, s[0] + 0.8, s[1], 1 + (i % 2) * 0.4); }
+  for (let i = 0; i < b.pools; i++) { const s = spots[(i + 9) % spots.length]; addPool(arenaGroup, s[0], s[1] - 0.5, 1 + (i % 2) * 0.5); }
+  for (let i = 0; i < b.tesla; i++) { const s = spots[(i + 2) % spots.length]; addTeslaPillar(arenaGroup, s[0] + 1, s[1] + 0.6, 1 + (i % 2) * 0.4); }
+  for (let i = 0; i < b.rootCols; i++) { const s = spots[(i + 5) % spots.length]; addRootColumn(arenaGroup, s[0], s[1], 1.1 + (i % 2) * 0.4); }
+  for (let i = 0; i < b.spires; i++) { const s = spots[(i + 3) % spots.length]; addAuroraSpire(arenaGroup, s[0] + 0.8, s[1], 1 + (i % 2) * 0.5); }
   battleScene.add(arenaGroup);
 }
 
-// ---------- battle flow: capped 3-wave stages ----------
+/* ---------- battle flow: fixed 3-wave stages ---------- */
 function startStageNow(stage) {
   SAVE.energy--; SAVE.lastEnergyTs = Date.now();
   battle = { stage, wave:0, clearedWaves:0, sub:'fighting', seqT:0, endShown:false,
@@ -1949,7 +1980,6 @@ function simStep(dt) {
   resolveSeparation();
 }
 
-// ---------- party dock (icon-only skill squares, fixed spacing) ----------
 function skillIcon(s) {
   const col = s.vfx.color;
   if (s.category === 'radial')
@@ -1970,7 +2000,7 @@ function buildPartyDock() {
     card.title = def.name + ' · Lv' + u.level;
     u.cardEl = card;
     [def.techniquePool[0], def.techniquePool[1] || null].forEach(sid => {
-      if (card.children.length === 1) {          // portrait column centered between skill squares
+      if (card.children.length === 1) {
         const pw = document.createElement('div');
         pw.className = 'pport';
         pw.innerHTML = '<span class="lvb">Lv' + u.level + '</span><img src="' + PORTRAITS[def.id] + '" alt="">' +
@@ -2014,14 +2044,12 @@ function updatePartyDock() {
   const sc = battle ? Math.max(0, battle.scatterCd) : 0;
   $('scatterMask').style.height = (sc / SKILL['swift_dash'].cooldown * 100) + '%';
 }
-// Auto icon toggle: Play = AI control, Cursor = manual
 const ICON = {
   play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
   cursor: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 3l11 9.5-4.9.7 2.7 5.1-2.6 1.3-2.7-5.2-3.5 3V3z"/></svg>',
   bolt: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg>',
   bars: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 20h3v-6H4v6zm6 0h3V9h-3v11zm6 0h3V4h-3v16z"/></svg>',
-  elems: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 3-3 3-3-3 3-3zM6 10l3 3-3 3-3-3 3-3zm12 0l3 3-3 3-3-3 3-3zM12 16l3 3-3 3-3-3 3-3z"/></svg>',
-  bench: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 3h2v8h3l-4 4-4-4h3V3zM4 17h16v4H4v-4z"/></svg>'
+  elems: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 3-3 3-3-3 3-3zM6 10l3 3-3 3-3-3 3-3zm12 0l3 3-3 3-3-3 3-3zM12 16l3 3-3 3-3-3 3-3z"/></svg>'
 };
 function updateAutoIcon() {
   $('autoIcon').innerHTML = autoMode ? ICON.play : ICON.cursor;
@@ -2030,10 +2058,7 @@ function updateAutoIcon() {
                                 : 'Manual control — tap skill icons to cast (click for auto)';
 }
 
-/* =====================================================================
-   BASE CAMP — 70x70 island · AABB colliders · clamped camera ·
-   social roaming AI · boiling cauldron.
-   ===================================================================== */
+/* ---------- base camp (unchanged systems: colliders, AI, cauldron) ---------- */
 const campCritters = [];
 let campIsShowcase = false;
 let cauldronGroup = null, cauldronGlow = null, campBubbleT = 0.6;
@@ -2054,7 +2079,7 @@ function pointBlocked(x, z, r) {
     if (x > c.x0 - r && x < c.x1 + r && z > c.z0 - r && z < c.z1 + r) return true;
   return false;
 }
-function resolveCampCollision(pos, r) {           // circle-vs-AABB push-out + island bounds
+function resolveCampCollision(pos, r) {
   for (const c of campColliders) {
     const nx = clampN(pos.x, c.x0, c.x1), nz = clampN(pos.z, c.z0, c.z1);
     const dx = pos.x - nx, dz = pos.z - nz, d2 = dx * dx + dz * dz;
@@ -2093,7 +2118,6 @@ function buildCamp() {
   water.rotation.x = -Math.PI / 2; water.position.y = -0.12;
   campScene.add(water);
   staticColliders = [];
-  // perimeter tree ring
   for (let i = 0; i < 22; i++) {
     const a = i / 22 * Math.PI * 2 + (i % 2) * 0.1;
     const r = 27 + (i % 3) * 1.6;
@@ -2101,7 +2125,6 @@ function buildCamp() {
     addTree(campScene, x, z, 1.2 + (i % 3) * 0.2, '#5b4632', '#2f6a3d', '#3d8a4d');
     addStaticCollider(x, z, 0.75, 0.75);
   }
-  // interior grove (collidable)
   [[15,13],[-16,-11],[19,-7],[-19,14],[11,-16],[-9,17],[17,4],[-14,3]].forEach(p => {
     addTree(campScene, p[0], p[1], 1.1 + (hashStr(''+p[0]) % 3) * 0.2, '#5b4632', '#2f6a3d', '#3d8a4d');
     addStaticCollider(p[0], p[1], 0.75, 0.75);
@@ -2118,7 +2141,6 @@ function buildCamp() {
     addFlower(campScene, Math.cos(a) * 6, Math.sin(a) * 6 + 1, ['#e86a8a','#e8d84f','#8a9ae8'][i % 3]);
   }
   for (let i = 0; i < 5; i++) propBox(campScene, 2.8 + i * 1.8, 0.06, 0, 1.5, 0.12, 1.2, '#8a7a5f', 0.1);
-  // centerpiece cauldron (collidable)
   cauldronGroup = new THREE.Group();
   cauldronGroup.position.copy(CAULDRON_POS);
   const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.72, 0.9, 12), new THREE.MeshLambertMaterial({ color: 0x23262e }));
@@ -2178,7 +2200,6 @@ function applyDecoProps() {
   rebuildCampColliders();
 }
 
-/* ---------- Camp creature AI: wander/idle + social interactions ---------- */
 class CampCritter {
   constructor(entry, idx) {
     this.entry = entry; this.def = SPECIES[entry.species]; this.idx = idx;
@@ -2211,7 +2232,7 @@ class CampCritter {
       this.t -= dt;
       this.moveAmt *= Math.max(0, 1 - dt * 5);
       if (this.hopT >= 0) { this.hopT += dt; if (this.hopT > 0.45) this.hopT = -1; }
-      else if (Math.random() < dt * 0.22) this.hopT = 0;          // happy hop
+      else if (Math.random() < dt * 0.22) this.hopT = 0;
       if (this.t <= 0) {
         this.state = 'walk'; this.target = this.openSpot();
         this.stuck = 0;
@@ -2224,11 +2245,11 @@ class CampCritter {
       else {
         _dir.set(dx, 0, dz).normalize();
         this.pos.addScaledVector(_dir, 1.15 * dt);
-        resolveCampCollision(this.pos, 0.55);                      // slide around obstacles
+        resolveCampCollision(this.pos, 0.55);
         this.heading = lerpAngle(this.heading, Math.atan2(dx, dz), 8 * dt);
         this.moveAmt = 1.15;
         const dNow = Math.hypot(this.target.x - this.pos.x, this.target.z - this.pos.z);
-        if (dNow > this.lastD - 0.02) {                            // stuck → re-target
+        if (dNow > this.lastD - 0.02) {
           this.stuck += dt;
           if (this.stuck > 1.1) { this.target = this.openSpot(); this.stuck = 0;
             this.lastD = Math.hypot(this.target.x - this.pos.x, this.target.z - this.pos.z); }
@@ -2237,11 +2258,11 @@ class CampCritter {
     }
     this.walkPhase += dt * (1 + this.moveAmt * 3.2);
     animateCreature(this.vis, this.def, dt, this.moveAmt, this.walkPhase, 0, now);
-    let y = this.def.rig === 'float' ? this.vis.root.position.y : 0;
+    let y = this.vis.hopY || 0;                     // loaf hop / float hover
     if (this.hopT >= 0) y += Math.sin(Math.PI * this.hopT / 0.45) * 0.32;
     this.vis.root.position.set(this.pos.x, y, this.pos.z);
     this.vis.root.rotation.y = this.heading;
-    if (this.state === 'idle')                                     // idle head-tilt micro-anim
+    if (this.state === 'idle')
       this.vis.inner.rotation.z = Math.sin(now * 0.0016 + this.idx * 2.1) * 0.07;
     else this.vis.inner.rotation.z *= 0.9;
   }
@@ -2251,10 +2272,10 @@ class CampCritter {
     this.faceToward(p.pos, dt);
     this.walkPhase += dt * 2;
     animateCreature(this.vis, this.def, dt, 0.3, this.walkPhase, 0, now);
-    let y = this.def.rig === 'float' ? this.vis.root.position.y : 0;
-    if (g.variant === 'nuzzle') this.vis.inner.rotation.x = Math.sin(g.t * 5) * 0.16;      // lean in
-    else if (g.variant === 'hopsync') y += Math.abs(Math.sin(g.t * Math.PI * 2.4)) * 0.3;  // synced hops
-    else this.vis.inner.rotation.z = Math.sin(g.t * 2.2) * 0.17 * (this.idx % 2 ? 1 : -1); // curiosity stare
+    let y = this.vis.hopY || 0;
+    if (g.variant === 'nuzzle') this.vis.inner.rotation.x = Math.sin(g.t * 5) * 0.16;
+    else if (g.variant === 'hopsync') y += Math.abs(Math.sin(g.t * Math.PI * 2.4)) * 0.3;
+    else this.vis.inner.rotation.z = Math.sin(g.t * 2.2) * 0.17 * (this.idx % 2 ? 1 : -1);
     if (!g.fx && g.t > 0.4) {
       g.fx = true;
       spawnBurst(campScene, { x: (this.pos.x + p.pos.x) / 2, z: (this.pos.z + p.pos.z) / 2 }, '#ffd1e8', 4, 0.6);
@@ -2286,8 +2307,8 @@ function spawnMenuCritters() {
   campCritters.forEach(c => c.dispose());
   campCritters.length = 0;
   campIsShowcase = true;
-  ['verdant_cub', 'azure_paddler', 'glow_spore', 'spark_flea', 'prismoth']
-    .forEach((sid, i) => campCritters.push(new CampCritter(makeEntry(sid, 12 + i * 4), i)));
+  ['verdant_cub', 'azure_paddler', 'glow_spore', 'spark_flea', 'prismoth', 'bogling', 'mothwisp']
+    .forEach((sid, i) => campCritters.push(new CampCritter(makeEntry(sid, 12 + i * 3), i)));
 }
 function updateSocialPairs() {
   for (let i = 0; i < campCritters.length; i++) {
@@ -2310,19 +2331,18 @@ function updateCamp(dt, now) {
   updateClouds(dt);
   const t = now * 0.003;
   if (cauldronGlow) cauldronGlow.material.opacity = 0.2 + 0.14 * Math.sin(t);
-  if (cauldronGroup) {                                    // gentle tilt-bob rotation
+  if (cauldronGroup) {
     cauldronGroup.rotation.z = Math.sin(t) * 0.045;
     cauldronGroup.rotation.x = Math.cos(t * 0.8) * 0.035;
     cauldronGroup.position.y = Math.sin(t * 1.3) * 0.04;
   }
-  campBubbleT -= dt;                                      // continuous boiling emitter
+  campBubbleT -= dt;
   if (campBubbleT <= 0) {
     campBubbleT = 0.35 + Math.random() * 0.4;
     spawnBurst(campScene, { x: CAULDRON_POS.x, z: CAULDRON_POS.z + 0.1 }, '#6ff0d0', 2, 0.85);
   }
 }
 
-// ---------- drifting voxel cloud layer ----------
 const clouds = [];
 function buildClouds() {
   for (let i = 0; i < 12; i++) {
@@ -2344,9 +2364,6 @@ function updateClouds(dt) {
   for (const c of clouds) { c.position.x += c.userData.speed * dt; if (c.position.x > 34) c.position.x = -34; }
 }
 
-/* =====================================================================
-   TITLE MENU + INTRO CINEMATIC
-   ===================================================================== */
 function updateMenu(dt, now) {
   menuAngle += dt * 0.09;
   for (const c of campCritters) c.update(dt, now);
@@ -2377,7 +2394,7 @@ function updateArrivals(dt, now) {
     if (a.done) {
       a.popT += dt;
       animateCreature(a.vis, a.def, dt, 0.4, now * 0.01, 0, now);
-      const y0 = a.def.rig === 'float' ? a.vis.root.position.y : 0;
+      const y0 = a.vis.hopY || 0;
       a.vis.root.position.y = y0 + Math.abs(Math.sin(a.popT * 8)) * 0.3 * Math.max(0, 1 - a.popT * 0.7);
       a.vis.root.rotation.y += dt * 3 * Math.max(0, 1 - a.popT);
       continue;
@@ -2388,7 +2405,7 @@ function updateArrivals(dt, now) {
     const pz = a.from.z + (a.to.z - a.from.z) * total;
     const py = Math.sin(Math.PI * kk) * 0.85;
     animateCreature(a.vis, a.def, dt, 2.4, now * 0.012, 0, now);
-    const baseY = a.def.rig === 'float' ? a.vis.root.position.y : 0;
+    const baseY = a.vis.hopY || 0;
     a.vis.root.position.set(px, baseY + py, pz);
     a.hopT += dt;
     if (kk >= 1) {
@@ -2407,7 +2424,7 @@ function updateIntro(dt, now) {
   updateClouds(dt);
   for (const c of campCritters) c.update(dt, now);
   updateSocialPairs();
-  if (I.phase === 'descend') {                            // sweep down through the cloud layer
+  if (I.phase === 'descend') {
     const k = easeInOutCubic(Math.min(1, I.t / 2.6));
     _look.set(0, 7 - 6.6 * k, 0);
     camera.position.set(24 - 13.5 * k, 42 - 28 * k, 24 - 13.5 * k);
@@ -2453,9 +2470,6 @@ function finishIntro() {
   SAVE.introSeen = true; save();
 }
 
-/* =====================================================================
-   COOKING REVEAL CUTSCENE
-   ===================================================================== */
 const REVEAL_CAM = { pos: new THREE.Vector3(3.0, 3.8, 3.0), look: new THREE.Vector3(0, 1.0, 0.5), view: 4.2 };
 function buildSilhouette(def) {
   const vis = buildCreatureModel(def);
@@ -2505,7 +2519,7 @@ function updateReveal(dt, now) {
     const pz = r.from.z + (r.to.z - r.from.z) * total;
     const py = Math.sin(Math.PI * kk) * 0.9;
     animateCreature(r.vis, r.def, dt, 2.4, now * 0.012, 0, now);
-    const baseY = r.def.rig === 'float' ? r.vis.root.position.y : 0;
+    const baseY = r.vis.hopY || 0;
     r.vis.root.position.set(px, baseY + py, pz);
     r.vis.root.rotation.y = Math.atan2(r.to.x - r.from.x, r.to.z - r.from.z);
     r.hopT += dt;
@@ -2523,7 +2537,7 @@ function updateReveal(dt, now) {
   } else if (r.phase === 'pop') {
     const k = Math.min(1, r.t / 0.55);
     animateCreature(r.vis, r.def, dt, 0.6, now * 0.008, 0, now);
-    const baseY = r.def.rig === 'float' ? r.vis.root.position.y : 0;
+    const baseY = r.vis.hopY || 0;
     r.vis.root.position.y = baseY + Math.abs(Math.sin(r.t * 9)) * 0.35 * (1 - k * 0.5);
     r.vis.root.rotation.y += dt * 4 * (1 - k);
     if (r.t >= 0.6) { r.phase = 'splash'; showRevealSplash(r); }
@@ -2582,11 +2596,23 @@ function showRevealSplash(r) {
 });
 
 /* =====================================================================
-   3D BLOCKY WORLD MAP + INTERACTIVE NODE TOOLTIP
+   MASSIVE WORLD MAP — 78×66 island · 12 biome plates · serpentine
+   stepping-stone PATHS connecting every consecutive node · area labels.
    ===================================================================== */
 const mapNodes = [];
-const NODE_POS = [[-18, 1.4, 8], [-6.5, 1.7, 8], [5, 2.0, 8], [16.5, 2.4, 8],
-                  [12, 2.0, -8], [0, 2.4, -8], [-12, 2.8, -8]];
+const NODE_POS = [
+  [-28, 1.4, 22], [-10, 1.6, 22], [8, 1.8, 22], [26, 2.2, 22],      // Area 1 →
+  [26, 2.4, 0], [8, 2.6, 0], [-10, 2.8, 0], [-28, 3.0, 0],          // Area 2 ←
+  [-28, 3.2, -22], [-10, 3.4, -22], [8, 3.6, -22], [26, 4.0, -22]   // Area 3 →
+];
+const MAP_BIOME = {
+  grassland: [0x5fae53, 0x6a4f38], forest: [0x2f6a3d, 0x5a4232],
+  glacial: [0xe8f4fa, 0x7fa8c0], volcanic: [0x5a4038, 0x443028],
+  mushroom_hollow: [0x4a3a6a, 0x352a4e], crystal_caverns: [0x3a4a7a, 0x2a365e],
+  volcanic_ridge: [0x4a2822, 0x361c18], sunken_marsh: [0x3f7a5f, 0x2a5a44],
+  storm_mesa: [0x5a6480, 0x424c66], gloom_thicket: [0x352a52, 0x241c3a],
+  verdant_deeproot: [0x2f7a42, 0x1e5230], aurora_summit: [0x7ad4c8, 0x4a8a90]
+};
 function regionPlate(x, z, w, d, topColor, sideColor) {
   const g = new THREE.Group();
   propBox(g, x, -0.25, z, w + 1, 0.5, d + 1, sideColor);
@@ -2605,44 +2631,73 @@ function textSprite(text, color) {
   sp.scale.set(2.6, 1.3, 1);
   return sp;
 }
+function dressRegion(biome, x, z) {          // biome props around each plate
+  const o = 8.6;
+  if (biome === 'grassland') { addTree(mapScene, x - o, z + o, 1.0, '#5b4632', '#3d8a4d', '#58c26a');
+    addFlower(mapScene, x + o * 0.7, z - o * 0.6, '#e86a8a'); }
+  else if (biome === 'forest') { addTree(mapScene, x - o, z + o, 1.15, '#4a3a2c', '#245233', '#2f6a3d');
+    addTree(mapScene, x + o, z - o * 0.7, 1.0, '#4a3a2c', '#245233', '#2f6a3d'); }
+  else if (biome === 'glacial') { addIceSpike(mapScene, x - o, z + o, 1.1); addIceSpike(mapScene, x + o, z - o * 0.7, 0.9); }
+  else if (biome === 'volcanic') { addLavaRock(mapScene, x - o, z + o, 1.1); addLavaRock(mapScene, x + o, z - o * 0.8, 0.9); }
+  else if (biome === 'mushroom_hollow') { addGlowMushroom(mapScene, x - o, z + o, 1.1); addGlowMushroom(mapScene, x + o * 0.9, z - o * 0.7, 0.9); }
+  else if (biome === 'crystal_caverns') { addGemCluster(mapScene, x - o, z + o, 1.1); addGemCluster(mapScene, x + o, z - o * 0.7, 0.9);
+    propBox(mapScene, x, 0.12, z + o, 2.2, 0.22, 1.4, '#262a36', 0.3); }
+  else if (biome === 'volcanic_ridge') { addLavaRock(mapScene, x - o, z + o, 1.1); addObsidianPillar(mapScene, x + o, z - o * 0.7, 1.0);
+    addLavaTrim(mapScene, x, z - o * 1.15, 8, 0.35); }
+  else if (biome === 'sunken_marsh') { addPool(mapScene, x - o * 0.8, z + o * 0.6, 1.0); addReed(mapScene, x + o, z - o * 0.6, 1.2);
+    addReed(mapScene, x + o * 0.7, z + o, 0.9); }
+  else if (biome === 'storm_mesa') { addTeslaPillar(mapScene, x - o, z + o, 1.1); addTeslaPillar(mapScene, x + o, z - o * 0.7, 0.9); }
+  else if (biome === 'gloom_thicket') { addTree(mapScene, x - o, z + o, 1.2, '#2a2038', '#3a2f52', '#4a3c66');
+    addTree(mapScene, x + o, z - o * 0.7, 1.0, '#2a2038', '#3a2f52', '#4a3c66'); addShroom(mapScene, x + o * 0.6, z + o * 0.8); }
+  else if (biome === 'verdant_deeproot') { addRootColumn(mapScene, x - o, z + o, 1.1); addFlower(mapScene, x + o, z - o * 0.6, '#e8d84f'); }
+  else if (biome === 'aurora_summit') { addAuroraSpire(mapScene, x - o, z + o, 1.2); addAuroraSpire(mapScene, x + o, z - o * 0.7, 0.9); }
+}
+function buildPathSeg(ax, az, bx, bz, bossApproach) {
+  const dx = bx - ax, dz = bz - az;
+  const dist = Math.hypot(dx, dz);
+  const n = Math.max(3, Math.round(dist / 3.3));
+  const px = -dz / dist, pz = dx / dist;
+  for (let k = 1; k < n; k++) {
+    const t = k / n;
+    const wob = Math.sin(k * 1.7) * 0.5;                      // organic path wobble
+    const x = ax + dx * t + px * wob;
+    const z = az + dz * t + pz * wob;
+    const big = k % 3 === 0;
+    propBox(mapScene, x, 0.26, z, big ? 2.0 : 1.55, 0.45, big ? 2.0 : 1.55,
+      bossApproach && big ? '#c46a3a' : '#8a8f7d', k * 0.4, bossApproach && big ? 0x6a2a10 : 0);
+  }
+}
 function buildMap() {
-  const water = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), new THREE.MeshLambertMaterial({ color: 0x4f8fb8 }));
+  const water = new THREE.Mesh(new THREE.PlaneGeometry(320, 320), new THREE.MeshLambertMaterial({ color: 0x4f8fb8 }));
   water.rotation.x = -Math.PI / 2; water.position.y = -0.7; water.receiveShadow = true;
   mapScene.add(water);
-  const island = new THREE.Mesh(new THREE.BoxGeometry(52, 1, 40), new THREE.MeshLambertMaterial({ color: 0x6a4f38 }));
+  const island = new THREE.Mesh(new THREE.BoxGeometry(78, 1, 66), new THREE.MeshLambertMaterial({ color: 0x6a4f38 }));
   island.position.y = -0.45; island.receiveShadow = true; island.castShadow = true;
   mapScene.add(island);
-  regionPlate(-18, 8, 9, 9, 0x5fae53, 0x6a4f38);
-  regionPlate(-6.5, 8, 9, 9, 0x2f6a3d, 0x5a4232);
-  regionPlate(5, 8, 9, 9, 0xe8f4fa, 0x7fa8c0);
-  regionPlate(16.5, 8, 9, 9, 0x5a4038, 0x443028);
-  regionPlate(12, -8, 9, 9, 0x4a3a6a, 0x352a4e);
-  regionPlate(0, -8, 9, 9, 0x3a4a7a, 0x2a365e);
-  regionPlate(-12, -8, 9, 9, 0x4a2822, 0x361c18);
-  addTree(mapScene, -20, 10.5, 1.1, '#5b4632', '#3d8a4d', '#58c26a');
-  addTree(mapScene, -16, 11.2, 1.0, '#5b4632', '#3d8a4d', '#58c26a');
-  addFlower(mapScene, -19, 6, '#e86a8a'); addFlower(mapScene, -15, 5.4, '#e8d84f');
-  addTree(mapScene, -8.5, 11, 1.25, '#4a3a2c', '#245233', '#2f6a3d');
-  addTree(mapScene, -4.5, 11, 1.15, '#4a3a2c', '#245233', '#2f6a3d');
-  addTree(mapScene, -6.5, 5, 1.1, '#4a3a2c', '#245233', '#2f6a3d');
-  addShroom(mapScene, -4.8, 6); addShroom(mapScene, -8.4, 5.2);
-  addIceSpike(mapScene, 3.4, 11, 1.2); addIceSpike(mapScene, 6.8, 11.2, 1.0);
-  addTree(mapScene, 5, 5, 1.2, '#6a7a84', '#d8ecf5', '#ffffff', true);
-  addLavaRock(mapScene, 15, 11, 1.2); addLavaRock(mapScene, 18, 10.6, 1.0);
-  propBox(mapScene, 16.5, 0.75, 8, 1.6, 0.9, 1.6, 0xff7a33, 0.4, 0x8a3a10);
-  addGlowMushroom(mapScene, 10.2, -10.4, 1.3); addGlowMushroom(mapScene, 13.8, -10.2, 1.1);
-  addMossBoulder(mapScene, 14.6, -6, 1.1);
-  addGemCluster(mapScene, -1.8, -10.6, 1.2); addGemCluster(mapScene, 1.9, -10.4, 1.0);
-  propBox(mapScene, 0, 0.12, -5.6, 2.4, 0.22, 1.5, '#262a36', 0.3);
-  addObsidianPillar(mapScene, -14.6, -10.2, 1.2); addObsidianPillar(mapScene, -9.6, -10.6, 0.9);
-  addLavaRock(mapScene, -10.4, -6, 1.1); addLavaRock(mapScene, -13.8, -5.8, 0.9);
-  addLavaTrim(mapScene, -12, -3.4, 9, 0.4);
-  addCrystal(mapScene, 0, 0, 1.4);
-  [[-6, 0], [0, 0.4], [6, 0]].forEach(p => propBox(mapScene, p[0], 0.3, p[1], 1.8, 0.5, 1.8, 0x8a8f7d, 0.4));
-  for (let i = 0; i < NODE_POS.length - 1; i++) {
-    const a = NODE_POS[i], b = NODE_POS[i + 1];
-    propBox(mapScene, (a[0] + b[0]) / 2, 0.3, (a[2] + b[2]) / 2, 1.6, 0.4, 1.6, 0x8a8f7d, 0.3);
+  // 12 biome plates + dressing
+  STAGES.forEach((st, i) => {
+    const [x, , z] = NODE_POS[i];
+    const cols = MAP_BIOME[st.biome];
+    regionPlate(x, z, 15, 15, cols[0], cols[1]);
+    dressRegion(st.biome, x, z);
+  });
+  // area labels
+  [['AREA 1', -38, 22], ['AREA 2', 38, 0], ['AREA 3', -38, -22]].forEach(a => {
+    const sp = textSprite(a[0], '#ffffff');
+    sp.position.set(a[1], 3.2, a[2]);
+    sp.scale.set(4.2, 2.1, 1);
+    mapScene.add(sp);
+  });
+  // central hub plaza + crystal
+  [[-1.6, 10.5], [0, 11.4], [1.6, 10.5]].forEach(p =>
+    propBox(mapScene, p[0], 0.28, p[1], 2.0, 0.5, 2.0, 0x8a8f7d, 0.4));
+  addCrystal(mapScene, 0, 11, 1.3);
+  // CONNECTING PATHS: node i → node i+1 (serpentine), ember-lit into boss stages
+  for (let i = 0; i < STAGES.length - 1; i++) {
+    const bossApproach = STAGES[i + 1].id.endsWith('-4');
+    buildPathSeg(NODE_POS[i][0], NODE_POS[i][2], NODE_POS[i + 1][0], NODE_POS[i + 1][2], bossApproach);
   }
+  // floating stage nodes
   STAGES.forEach((st, i) => {
     const g = new THREE.Group();
     g.position.set(NODE_POS[i][0], NODE_POS[i][1], NODE_POS[i][2]);
@@ -2689,7 +2744,6 @@ function updateMap(dt, now) {
   });
 }
 
-// ---------- map flow + node tooltip ----------
 let tipNode = -1, tipPinned = false, tipHover = false;
 function openMapNow() {
   refreshMapNodes();
@@ -2697,7 +2751,7 @@ function openMapNow() {
   $('campHud').classList.add('hidden');
   $('mapScreen').classList.remove('hidden');
   appState = 'map';
-  viewSize = 16; mapCamera();
+  viewSize = 24; mapCamera();
   refreshHeader();
 }
 function closeMapNow() {
@@ -2763,11 +2817,15 @@ function hideNodeTip(force) {
   fadeTo(() => startStageNow(st));
 });
 
-/* =====================================================================
-   EDIT TEAM — active dock + sort/filter bar + collection grid +
-   drag-and-drop + Quick Stat slide-out panel.
-   ===================================================================== */
+/* ---------- edit team (unchanged from v0.7: dock, sort/filter, quick stat, drag) ---------- */
 let teamSort = 'level', teamSortDir = -1, teamFamFilter = null, qsOpen = null;
+let uidCounter = 0;
+function ensureUids() {
+  SAVE.squad.concat(SAVE.collection).forEach(e => {
+    if (!e.uid) e.uid = ++uidCounter;
+    else uidCounter = Math.max(uidCounter, e.uid);
+  });
+}
 function entryByUid(uid) {
   let i = SAVE.squad.findIndex(e => e.uid === uid);
   if (i >= 0) return { source: 'squad', idx: i, entry: SAVE.squad[i] };
@@ -2795,7 +2853,6 @@ function updateSortBar() {
   pw.innerHTML = ICON.bolt + (teamSort === 'power' ? '<small class="sarr">' + (teamSortDir > 0 ? '▲' : '▼') + '</small>' : '');
   fam.innerHTML = ICON.elems;
   fam.style.background = teamFamFilter ? FAM_COLOR[teamFamFilter] : '';
-  fam.classList.toggle('active', false);
   $('famLabel').textContent = teamFamFilter ? teamFamFilter.toUpperCase() : 'ALL KIN';
 }
 function renderTeamOverlay() {
@@ -2811,7 +2868,7 @@ function renderTeamOverlay() {
         '<img src="' + PORTRAITS[entry.species] + '" alt="">' +
         '<div class="tsl">Lv ' + entry.level + '</div>' +
         '<div class="tsp">' + unitPower(entry) + '</div>';
-      slot.title = def.name + ' — ' + def.description + ' (tap for Quick Stat, drag to reorder)';
+      slot.title = def.name + ' — ' + def.description;
       slot.draggable = true;
       slot.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', 'uid:' + entry.uid));
       slot.addEventListener('click', () => openQuickStat('squad', entry.uid));
@@ -2833,7 +2890,7 @@ function renderTeamOverlay() {
     card.className = 'ccard';
     card.innerHTML = famBadge(def.family) + '<img src="' + PORTRAITS[entry.species] + '" alt="">' +
       '<div class="cs">Lv ' + entry.level + '</div><div class="pwr">' + unitPower(entry) + '</div>';
-    card.title = def.name + ' — ' + def.description + ' (tap for Quick Stat, drag to a slot)';
+    card.title = def.name + ' — ' + def.description;
     card.draggable = true;
     card.addEventListener('click', () => openQuickStat('coll', entry.uid));
     card.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', 'uid:' + entry.uid));
@@ -2871,21 +2928,7 @@ function moveUidToSlot(uid, slot) {
   else if (slot === SAVE.squad.length) SAVE.squad.push(SAVE.squad.splice(from, 1)[0]);
   persistTeam(); closeQuickStat();
 }
-function benchUid(uid) {
-  const i = SAVE.squad.findIndex(e => e.uid === uid);
-  if (i < 0) return;
-  if (SAVE.squad.length <= 1) { toast('The squad needs at least one member.'); return; }
-  if (SAVE.collection.length >= COLLECTION_MAX) { toast('Collection is full (50).'); return; }
-  SAVE.collection.push(SAVE.squad.splice(i, 1)[0]);
-  persistTeam(); closeQuickStat();
-  toast('Benched to reserve.');
-}
-// Quick Stat slide-out — stats, equipped cores, skills, placement actions
-function openQuickStat(source, uid) {
-  qsOpen = { source, uid };
-  renderQuickStat();
-  $('quickStat').classList.add('open');
-}
+function openQuickStat(source, uid) { qsOpen = { source, uid }; renderQuickStat(); $('quickStat').classList.add('open'); }
 function closeQuickStat() { qsOpen = null; $('quickStat').classList.remove('open'); }
 function renderQuickStat() {
   const ref = entryByUid(qsOpen.uid);
@@ -2920,12 +2963,10 @@ function renderQuickStat() {
       (valid ? '' : ' disabled') + '>' + (s + 1) + '</button>';
   }
   if (qsOpen.source === 'squad')
-    html += '<button class="btn gray iconbtn" id="qsBench" title="Bench to reserve">' + ICON.bench + '</button>';
-  html += '</div>';
-  if (qsOpen.source === 'coll')
-    html += '<div class="qsHint">Slot buttons place this kin — the slot\'s current member is benched to reserve automatically. Manage Core Cubes from its card in Base Camp.</div>';
-  else
-    html += '<div class="qsHint">Slot buttons reorder the squad. The bench icon moves this kin to reserve.</div>';
+    html += '<button class="btn gray iconbtn" id="qsBench" title="Bench to reserve"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 3h2v8h3l-4 4-4-4h3V3zM4 17h16v4H4v-4z"/></svg></button>';
+  html += '</div><div class="qsHint">' + (qsOpen.source === 'coll'
+    ? 'Slot buttons place this kin — the slot\'s current member is benched automatically.'
+    : 'Slot buttons reorder the squad. The bench icon moves this kin to reserve.') + '</div>';
   $('quickStatBody').innerHTML = html;
   document.querySelector('.qsClose').onclick = closeQuickStat;
   document.querySelectorAll('.qsSlotBtn').forEach(b => {
@@ -2936,7 +2977,15 @@ function renderQuickStat() {
     };
   });
   const qb = $('qsBench');
-  if (qb) qb.onclick = () => benchUid(qsOpen.uid);
+  if (qb) qb.onclick = () => {
+    const i = SAVE.squad.findIndex(e => e.uid === qsOpen.uid);
+    if (i < 0) return;
+    if (SAVE.squad.length <= 1) { toast('The squad needs at least one member.'); return; }
+    if (SAVE.collection.length >= COLLECTION_MAX) { toast('Collection is full (50).'); return; }
+    SAVE.collection.push(SAVE.squad.splice(i, 1)[0]);
+    persistTeam(); closeQuickStat();
+    toast('Benched to reserve.');
+  };
 }
  $('sortLv').addEventListener('click', () => {
   if (teamSort === 'level') teamSortDir *= -1;
@@ -2954,7 +3003,7 @@ function renderQuickStat() {
   renderTeamOverlay();
 });
 
-// ---------- core lattice ----------
+/* ---------- core lattice ---------- */
 let stoneIdx = -1;
 function openStone(i) {
   if (i < 0 || i >= SAVE.squad.length) return;
@@ -3042,7 +3091,7 @@ function unequipCore(i) {
   toast(CORE[type].name + ' removed.');
 }
 
-// ---------- essence crucible ----------
+/* ---------- crucible ---------- */
 const crucibleLoad = [];
 let brewing = false, brewInterval = null;
 function openCrucible() { refreshCrucible(); $('crucibleModal').classList.remove('hidden'); }
@@ -3098,6 +3147,7 @@ function ignite() {
 function completeBrew(load) {
   const res = computeAttraction(load);
   res.entry = makeEntry(res.pick.sp.id, res.level, res.prismatic ? 1.15 : undefined);
+  res.entry.uid = ++uidCounter;
   let joined = false, toSquad = false;
   if (SAVE.squad.length < 3) { SAVE.squad.push(res.entry); joined = true; toSquad = true; }
   else if (SAVE.collection.length < COLLECTION_MAX) { SAVE.collection.push(res.entry); joined = true; }
@@ -3150,7 +3200,7 @@ function computeAttraction(load) {
   return { recipe, rows, pick, prismatic, level, quality };
 }
 
-// ---------- bag / quests / codex / decor ----------
+/* ---------- quests / codex / decor / bag ---------- */
 function renderBag() {
   let h = '<div class="cruc-label" style="margin-top:0">Provisions</div><div class="bagGrid">';
   DB_X.ingredients.forEach(ing => {
@@ -3170,8 +3220,8 @@ function renderBag() {
 const QUESTS = [
   { id:'first', name:'First Incursion', desc:'Clear any Zone Incursion.', goal:1, reward:20, event:'stageCleared' },
   { id:'equip3', name:'Core Harmonics', desc:'Install 3 Aether Core Cubes.', goal:3, reward:15, event:'coreEquipped' },
-  { id:'attract', name:'New Kin', desc:'Attract a Scentkin at the Essence Crucible.', goal:1, reward:25, event:'attracted' },
-  { id:'allClear', name:'Trailblazer', desc:'Clear all 7 stages of the Wildroot Trail.', goal:7, reward:80, event:'allClear' },
+  { id:'attract', name:'New Kin', desc:'Attract a Scentkin at the Essence Cauldron.', goal:1, reward:25, event:'attracted' },
+  { id:'allClear', name:'Trailblazer', desc:'Clear all 12 stages of the Wildroot Trail.', goal:12, reward:100, event:'allClear' },
   { id:'dex10', name:'Field Notes', desc:'Discover 10 species.', goal:10, reward:30, event:'discover' }
 ];
 function questEvent(event, n) {
@@ -3262,7 +3312,6 @@ function renderDecos() {
   });
 }
 
-// ---------- HUD refresh ----------
 function refreshHeader() {
   $('energyLbl').textContent = SAVE.energy + '/' + ENERGY_MAX;
   $('embersLbl').textContent = String(SAVE.embers);
@@ -3286,7 +3335,7 @@ function refreshTeamBar() {
     card.className = 'tcard c' + Math.min(2, i);
     card.innerHTML = famBadge(def.family) + '<img src="' + PORTRAITS[entry.species] + '" alt="">' +
       '<div class="tp">' + unitPower(entry) + '</div><div class="tl">Lv ' + entry.level + '</div>';
-    card.title = def.name + ' — ' + def.description + ' (tap to manage Core Lattice)';
+    card.title = def.name + ' — ' + def.description;
     card.addEventListener('click', () => openStone(i));
     tc.appendChild(card);
   });
@@ -3294,13 +3343,13 @@ function refreshTeamBar() {
     const add = document.createElement('div');
     add.className = 'tcard empty';
     add.textContent = '+';
-    add.title = 'Brew at the Essence Crucible to attract a third Scentkin';
+    add.title = 'Brew at the Essence Cauldron to attract a third Scentkin';
     add.addEventListener('click', openCrucible);
     tc.appendChild(add);
   }
 }
 
-// ---------- unified pointer system ----------
+/* ---------- pointer system ---------- */
 const raycaster = new THREE.Raycaster(), mouseNDC = new THREE.Vector2();
 let ptr = null;
 function anyOverlayOpen() { return !!document.querySelector('.screen:not(.hidden), .modal:not(.hidden)'); }
@@ -3312,7 +3361,7 @@ function raycastTagged(objects, tag) {
   return o;
 }
 renderer.domElement.addEventListener('pointerdown', e => {
-  if (appState === 'intro') { finishIntro(); return; }          // skip cinematic
+  if (appState === 'intro') { finishIntro(); return; }
   if (TRANS.active || reveal || anyOverlayOpen() || paused) return;
   ptr = { x: e.clientX, y: e.clientY, moved: 0 };
   if (appState === 'camp') { ptr.look0 = campLook.clone(); ptr.panning = true; }
@@ -3322,7 +3371,7 @@ addEventListener('pointermove', e => {
   if (!ptr) return;
   const dx = e.clientX - ptr.x, dy = e.clientY - ptr.y;
   ptr.moved += Math.abs(dx) + Math.abs(dy);
-  if (ptr.panning && appState === 'camp' && !reveal) {          // ground-grab panning (clamped)
+  if (ptr.panning && appState === 'camp' && !reveal) {
     const k = viewSize * 2 / innerHeight;
     campLook.x = ptr.look0.x - (dx * 0.7071 - dy * 0.7071) * k;
     campLook.z = ptr.look0.z + (dx * 0.7071 + dy * 0.7071) * k;
@@ -3365,7 +3414,7 @@ function mapHover(e) {
   } else if (!tipPinned && !tipHover) hideNodeTip();
 }
 
-// ---------- wiring ----------
+/* ---------- wiring ---------- */
 function hideAllScreens() { document.querySelectorAll('.screen,.modal').forEach(el => el.classList.add('hidden')); }
  $('btnPlay').addEventListener('click', () => fadeTo(startIntro));
  $('btnExpeditions').addEventListener('click', () => fadeTo(openMapNow));
@@ -3444,7 +3493,7 @@ addEventListener('keydown', e => {
 });
 addEventListener('beforeunload', save);
 
-// ---------- main loop ----------
+/* ---------- main loop ---------- */
 let last = performance.now();
 function frame(now) {
   requestAnimationFrame(frame);
@@ -3452,7 +3501,7 @@ function frame(now) {
   last = now;
   if (dt > 0.1) dt = 0.1;
   if (dt < 0) dt = 0;
-  if (TRANS.active) { renderer.render(activeScene(), camera); return; }   // world frozen during holds
+  if (TRANS.active) { renderer.render(activeScene(), camera); return; }
   if (appState === 'menu') {
     updateMenu(dt, now);
   } else if (appState === 'intro') {
@@ -3491,7 +3540,7 @@ function frame(now) {
   } else if (appState === 'map') {
     updateMap(dt, now);
     updateVfx(dt);
-  } else {   // camp
+  } else {
     if (reveal) updateReveal(dt, now);
     else updateCamp(dt, now);
     updateVfx(dt);
@@ -3499,15 +3548,15 @@ function frame(now) {
   renderer.render(activeScene(), camera);
 }
 
-// ---------- boot ----------
+/* ---------- boot ---------- */
 SAVE = loadSave();
 ensureUids();
-verifyGrounding();          // rig assertion: soles must measure world y ≈ 0
-generatePortraits();
+verifyGrounding();          // loaf bodies & biped soles must measure y ≈ 0
+generatePortraits();         // 62 species rendered offscreen
 buildCamp();
 buildClouds();
-buildMap();
-spawnMenuCritters();        // showcase fauna for the title screen & intro descent
+buildMap();                  // massive 12-node trail with connecting paths
+spawnMenuCritters();
 refreshTeamBar();
 refreshHeader();
 autoMode = SAVE.autoDefault;
