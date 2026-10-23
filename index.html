@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WILDROOT v0.9 — Fixes + Original Soundtrack</title>
+<title>WILDROOT v1.0 — Shop · Quests · Cauldron Redo</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   html,body { width:100%; height:100%; overflow:hidden; background:#0d1a12;
@@ -46,7 +46,7 @@
   .btn.musOff { filter:grayscale(.75) brightness(.7); }
   .btn.green { background:#4CAF50; } .btn.orange { background:#FF9800; }
   .btn.deep { background:#FF5722; } .btn.amber { background:#FFC107; color:#4a3800; text-shadow:0 1px 0 rgba(255,255,255,.3); }
-  .btn.gray { background:#607060; } .btn.big { font-size:15px; padding:16px 24px; border-radius:14px; }
+  .btn.blue { background:#42a5f5; } .btn.gray { background:#607060; } .btn.big { font-size:15px; padding:16px 24px; border-radius:14px; }
   .btn.ico { width:52px; height:52px; padding:0; display:flex; align-items:center; justify-content:center;
              position:relative; border-radius:12px; }
   .btn.ico svg { width:24px; height:24px; }
@@ -314,20 +314,6 @@
   .cdx.undisc img { filter:brightness(0) drop-shadow(0 0 5px rgba(255,255,255,.18)); }
   .cdx .cn { font-size:10.5px; font-weight:800; margin-top:3px; }
   .cdx .cs { font-size:9.5px; color:#a8c49c; margin-top:2px; line-height:1.5; }
-  #invRow { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
-  .ingbtn { display:flex; align-items:center; gap:6px; background:#1a2e20; color:#eef7ea; border:none; border-radius:12px;
-            padding:7px 10px; font-size:12px; font-weight:700; cursor:pointer; box-shadow:inset 0 -4px 0 rgba(0,0,0,.3);
-            transition:transform .24s var(--spring); }
-  .ingbtn:hover:not(:disabled) { transform:translateY(-4px); } .ingbtn:active:not(:disabled) { transform:scale(0.88); }
-  .ingbtn:disabled { filter:grayscale(.7) brightness(.6); cursor:default; }
-  .ingbtn small { color:#a8c49c; font-size:9px; }
-  #slotRow { display:flex; gap:6px; min-height:34px; margin-bottom:10px; }
-  .slotbtn { width:32px; height:32px; border-radius:10px; background:#0e1c12; border:2px dashed #4e6a4a; cursor:pointer;
-             display:flex; align-items:center; justify-content:center; }
-  #brewBar { height:12px; background:#0a120c; border-radius:7px; overflow:hidden; margin:10px 0 4px;
-             box-shadow:inset 0 2px 4px rgba(0,0,0,.7); }
-  #brewFill { height:100%; width:0%; background:linear-gradient(90deg,#ffe082,#ff7a33); }
-  #brewCount { font-size:11px; color:#ffd98a; font-weight:800; text-align:center; }
   .optRow { display:flex; justify-content:space-between; align-items:center; padding:10px 0;
             border-bottom:1px solid rgba(255,255,255,.08); font-size:13px; font-weight:700; }
   .toggle { width:48px; height:25px; border-radius:14px; background:#3a4a3a; border:none; cursor:pointer; position:relative;
@@ -353,6 +339,79 @@
   #rvMoves .mv { display:inline-flex; align-items:center; gap:6px; background:#1a2e20; border-radius:10px;
                  padding:5px 11px; font-size:11.5px; font-weight:700; margin:3px; }
   #rvNote { font-size:12px; color:#ffd98a; font-weight:700; margin:8px 0 12px; }
+
+  /* ============ SHOP ============ */
+  #shopEmbers { color:#ffd98a; font-weight:900; }
+  #shopTabs { display:flex; gap:8px; flex-wrap:wrap; padding:12px 16px 0; }
+  .shopTab { padding:8px 14px; font-size:12px; }
+  .shopTab.active { background:#FFC107; color:#4a3800; text-shadow:0 1px 0 rgba(255,255,255,.3); }
+  #shopGrid { flex:1; overflow-y:auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(252px,1fr));
+              gap:10px; padding:14px 16px; align-content:start; }
+  .shopCard { background:#16251b; border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:12px;
+              display:flex; gap:12px; align-items:center; box-shadow:inset 0 -3px 0 rgba(0,0,0,.25);
+              transition:transform .24s var(--spring); }
+  .shopCard:hover { transform:translateY(-3px); }
+  .shopCard.owned { opacity:.55; }
+  .shopIcon { width:52px; height:52px; border-radius:12px; background:rgba(0,0,0,.30);
+              display:flex; align-items:center; justify-content:center; flex:none; }
+  .shopIcon .dot { width:22px; height:22px; border-radius:6px; }
+  .shopInfo { flex:1; min-width:0; }
+  .shopName { font-size:13px; font-weight:900; }
+  .shopDesc { font-size:11px; color:#a8c49c; margin-top:2px; }
+  .shopMeta { font-size:10.5px; color:#a8c49c; margin-top:4px; font-weight:700; }
+  .shopOwn { font-size:11px; font-weight:900; color:#8fe07a; }
+  .shopBuy { min-width:74px; text-align:center; }
+  .shopBuy b { font-size:14px; }
+
+  /* ============ CAULDRON REDO ============ */
+  .crucBox { width:min(680px,94vw); }
+  .crucGrid { display:flex; gap:18px; margin-top:6px; flex-wrap:wrap; }
+  .crucLeft { width:252px; flex:none; }
+  .cauldronArt { position:relative; width:220px; height:216px; margin:0 auto; }
+  .caulFire { position:absolute; bottom:-4px; left:50%; width:160px; height:30px; border-radius:50%;
+              background:radial-gradient(ellipse at center, rgba(255,150,60,.95), rgba(255,90,30,0) 70%);
+              transform:translateX(-50%); animation:fireFlick .9s infinite alternate; }
+  @keyframes fireFlick { from { opacity:.65; transform:translateX(-50%) scaleY(1); }
+                         to   { opacity:1;   transform:translateX(-50%) scaleY(1.18); } }
+  .caulPot { position:absolute; left:10px; top:46px; width:200px; height:120px; background:#23262e;
+             border-radius:0 0 100px 100px / 0 0 72px 72px; box-shadow:inset 0 -16px 0 rgba(0,0,0,.4); }
+  .caulLeg { position:absolute; bottom:8px; width:11px; height:30px; background:#1a1c22; border-radius:3px; }
+  .caulLeg.l1 { left:44px; } .caulLeg.l2 { left:105px; } .caulLeg.l3 { left:166px; }
+  .caulRim { position:absolute; left:0; top:36px; width:220px; height:32px; background:#3a3f4a; border-radius:50%;
+             box-shadow:inset 0 5px 0 rgba(255,255,255,.09); }
+  .caulLiquid { position:absolute; left:13px; top:43px; width:194px; height:19px; border-radius:50%;
+                background:#2a8f7a; box-shadow:0 0 20px rgba(42,143,122,.85); transition:background .45s; }
+  .cauldronArt.bubbling .caulLiquid { animation:liquidPulse .5s infinite; }
+  @keyframes liquidPulse { 50% { transform:scale(1.035); filter:brightness(1.18); } }
+  .steamPuff { position:absolute; top:-4px; width:18px; height:18px; border-radius:50%;
+               background:rgba(230,245,238,.55); filter:blur(3px); opacity:0; }
+  .steamPuff.p1 { left:62px; } .steamPuff.p2 { left:101px; } .steamPuff.p3 { left:140px; }
+  .cauldronArt.steaming .steamPuff { animation:steamUp 2.1s infinite; }
+  .cauldronArt.steaming .steamPuff.p2 { animation-delay:.7s; }
+  .cauldronArt.steaming .steamPuff.p3 { animation-delay:1.4s; }
+  @keyframes steamUp { 0% { transform:translateY(0) scale(.55); opacity:0; }
+                       25% { opacity:.75; } 100% { transform:translateY(-48px) scale(1.7); opacity:0; } }
+  .qMeter { margin-top:14px; }
+  .qBar { position:relative; height:14px; background:#0a120c; border-radius:7px;
+          box-shadow:inset 0 2px 4px rgba(0,0,0,.7); overflow:hidden; }
+  .qFill { display:block; height:100%; border-radius:7px; width:0%;
+           background:linear-gradient(90deg,#8fe07a,#ffd44d); transition:width .3s; }
+  .qMark { position:absolute; top:-2px; width:3px; height:18px; background:#fff; opacity:.75; border-radius:2px; }
+  .qTicks { position:relative; height:16px; margin-top:3px; font-size:9px; font-weight:800; color:#a8c49c; }
+  .qTicks span { position:absolute; top:0; }
+  .qLabel { font-size:11px; color:#cfe3c6; font-weight:800; margin-top:4px; }
+  .qLabel b { color:#ffd98a; }
+  .bChip { display:inline-flex; gap:6px; align-items:center; background:#2a1e12; border:1px solid #FF9800;
+           color:#ffd98a; padding:4px 10px; border-radius:10px; font-size:11px; font-weight:800; margin:8px 6px 0 0; }
+  .crucRight { flex:1; min-width:270px; }
+  #slotRow .slotbtn { width:56px; height:56px; border-radius:14px; }
+  #slotRow .slotbtn .dot { width:20px; height:20px; border-radius:6px; }
+  .poolRow { display:flex; align-items:center; gap:8px; padding:5px 10px; background:#1a2e20; border-radius:10px;
+             margin-bottom:6px; font-size:12px; font-weight:700; }
+  .poolRow .dot { width:12px; height:12px; border-radius:4px; flex:none; }
+  .poolRow b { margin-left:auto; color:#ffd98a; }
+  .poolMore { font-size:10.5px; color:#a8c49c; margin:2px 0 6px; font-weight:700; }
+  .poolHint { font-size:11.5px; color:#a8c49c; font-weight:700; padding:8px 2px; line-height:1.5; }
 </style>
 </head>
 <body>
@@ -363,7 +422,7 @@
 <div id="menuScreen">
   <div id="menuLogo">WILDROOT<span>ZONE INCURSIONS</span></div>
   <button class="btn green big" id="btnPlay">▶&nbsp; PLAY</button>
-  <div id="menuFoot">WILDROOT v0.9 · 62 original Scentkin · 12-incursion trail · original procedural soundtrack</div>
+  <div id="menuFoot">WILDROOT v1.0 · Shop · 13 Quests · Cauldron Redo · original procedural soundtrack</div>
 </div>
 
 <div id="campHud" class="hidden">
@@ -376,12 +435,12 @@
         <div class="bar"><i id="bonusFill"></i></div><b id="bonusPct">0%</b></div>
     </div>
     <div class="ch-right">
-      <div class="pill" title="Vigor — spent to begin Expeditions. Regenerates 1 per 90s.">
+      <div class="pill" title="Vigor — spent to begin Expeditions. Regenerates over time.">
         <svg viewBox="0 0 24 24" fill="#FFC107"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg><b id="energyLbl">5/5</b>
-        <button class="plus" id="buyEnergy" style="background:#4CAF50" title="Buy 1 Vigor for 30 Embers">+</button></div>
-      <div class="pill" title="Embers — currency from Expeditions and Quests">
+        <button class="plus" id="buyEnergy" style="background:#4CAF50" title="Shop — buy Vigor">+</button></div>
+      <div class="pill" title="Embers — currency from Expeditions, Quests and the Shop">
         <svg viewBox="0 0 24 24" fill="#ff9c5f"><path d="M12 2c1 4-3 5-3 9a3 3 0 006 0c0-2-1-3-1-3 3 1 5 4 5 7a7 7 0 11-14 0c0-6 5-8 7-13z"/></svg><b id="embersLbl">0</b>
-        <button class="plus" id="toShop" style="background:#FF9800" title="Decoration shop">+</button></div>
+        <button class="plus" id="toShop" style="background:#FF9800" title="Shop — Decorations, Provisions &amp; more">+</button></div>
       <button class="btn gray ico" id="btnMusicCamp" title="Music — on/off" style="width:36px;height:36px">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1014 17V7h4V3h-6z"/></svg></button>
     </div>
@@ -392,7 +451,7 @@
       <button class="btn orange ico" data-modal="questsModal" title="Quests"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 3h12a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2zm2 4v2h8V7zm0 4v2h8v-2zm0 4v2h5v-2z"/></svg></button>
       <button class="btn orange ico" data-modal="codexModal" title="Scentkin Codex"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h13a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2zm2 4v2h11V7zm0 4v2h11v-2z"/></svg></button>
       <button class="btn orange ico" data-modal="bagModal" title="Bag — Provisions &amp; Core Cubes"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 7V6a3 3 0 016 0v1h2a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V9a2 2 0 012-2h2zm2 0h2V6a1 1 0 00-2 0v1zM8 12h8v2H8v-2z"/></svg></button>
-      <button class="btn orange ico" data-modal="decoModal" title="Decorations"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.3L21 11l-6.8 2.7L12 20l-2.2-6.3L3 11l6.8-2.7z"/></svg></button>
+      <button class="btn orange ico" id="btnShop" title="Shop — Vigor, Decorations, Boosters &amp; more"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 18a2 2 0 100 4 2 2 0 000-4zm10 0a2 2 0 100 4 2 2 0 000-4zM3 3h2l.4 2H21l-2 9H8l-.4-2H19l1-5H6.4L5.7 5H3V3z"/></svg></button>
       <button class="btn orange ico" data-modal="crucibleModal" title="Cook — Essence Cauldron"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 10h16a8.5 8.5 0 01-5 7.8V20h3v2H6v-2h3v-2.2A8.5 8.5 0 014 10zm4.2-6.6a1.4 1.4 0 110 2.8 1.4 1.4 0 010-2.8zM12 1a1.7 1.7 0 110 3.4A1.7 1.7 0 0112 1zm3.6 2.6a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/></svg></button>
     </div>
     <div id="teamDock">
@@ -474,6 +533,19 @@
 
 <div id="quickStat"><div id="quickStatBody"></div></div>
 
+<!-- ==================== SHOP ==================== -->
+<div id="shopOverlay" class="screen hidden">
+  <div class="scrHead">
+    <button class="btn gray iconbtn" id="shopBack" title="Back"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 5l-7 7 7 7 2-2-5-5 5-5z"/></svg></button>
+    <div class="scrTitle">HOMESTEAD SHOP<span>VIGOR · PROVISIONS · CORE CUBES · DECORATIONS · BOOSTERS</span></div>
+    <div class="pill" style="margin-left:auto" title="Embers on hand">
+      <svg viewBox="0 0 24 24" fill="#ff9c5f"><path d="M12 2c1 4-3 5-3 9a3 3 0 006 0c0-2-1-3-1-3 3 1 5 4 5 7a7 7 0 11-14 0c0-6 5-8 7-13z"/></svg>
+      <b id="shopEmbers">0</b><span style="color:#a8c49c">✦</span></div>
+  </div>
+  <div id="shopTabs"></div>
+  <div id="shopGrid"></div>
+</div>
+
 <div id="stoneOverlay" class="screen hidden">
   <div class="scrHead">
     <button class="btn gray iconbtn" id="stoneBack" title="Back"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 5l-7 7 7 7 2-2-5-5 5-5z"/></svg></button>
@@ -492,14 +564,49 @@
   </div>
 </div>
 
-<div id="crucibleModal" class="modal hidden"><div class="mbox">
+<!-- ==================== CAULDRON (REDO) ==================== -->
+<div id="crucibleModal" class="modal hidden"><div class="mbox crucBox">
   <div class="mtitle">Essence Cauldron</div>
-  <div class="msub">Load 3–4 Provisions. Exact blends attract dedicated kin pools; unmatched loads brew Wild Broth.
-    Rarer provisions raise Quality, which gates higher tiers. When the brew finishes, watch the cauldron!</div>
-  <div class="cruc-label">Provision stores</div><div id="invRow"></div>
-  <div class="cruc-label">Crucible load (tap a slot to remove)</div><div id="slotRow"></div>
-  <div class="mrow"><button id="igniteBtn" class="btn green">Ignite Crucible</button>
-    <button id="closeCrucible" class="btn gray">Close</button></div>
+  <div class="msub">Blend 3–4 Provisions. Exact blends brew dedicated Lures; anything else simmers into Wild Broth.
+    Higher Quality gates rarer kin — the liquid shows your blend.</div>
+  <div class="crucGrid">
+    <div class="crucLeft">
+      <div class="cauldronArt" id="cauldronArt">
+        <div class="caulFire"></div>
+        <div class="caulPot"></div>
+        <div class="caulLeg l1"></div><div class="caulLeg l2"></div><div class="caulLeg l3"></div>
+        <div class="caulRim"></div>
+        <div class="caulLiquid" id="caulLiquid"></div>
+        <div class="steamPuff p1"></div><div class="steamPuff p2"></div><div class="steamPuff p3"></div>
+      </div>
+      <div class="qMeter">
+        <div class="qBar">
+          <i class="qFill" id="qFill"></i>
+          <span class="qMark" style="left:20%"></span><span class="qMark" style="left:40%"></span>
+        </div>
+        <div class="qTicks">
+          <span style="left:0">T1</span><span style="left:20%">T2</span>
+          <span style="left:40%">T3</span><span style="right:0">Q20</span>
+        </div>
+        <div class="qLabel" id="qLabel">Quality 0 · attracts up to <b>Tier 1</b></div>
+        <div class="qLabel" id="crucRecipe">Blend: —</div>
+        <div class="qLabel" id="crucAroma">Aroma leans: —</div>
+      </div>
+      <div id="crucBoost"></div>
+    </div>
+    <div class="crucRight">
+      <div class="cruc-label" style="margin-top:0">Kin drawn to this blend</div>
+      <div id="crucPool"></div>
+      <div class="cruc-label">Crucible load — tap a slot to remove</div>
+      <div id="slotRow"></div>
+      <div class="cruc-label">Provision store — tap to add</div>
+      <div id="invRow"></div>
+    </div>
+  </div>
+  <div class="mrow" style="margin-top:12px">
+    <button id="igniteBtn" class="btn green big">🔥 Ignite the Cauldron</button>
+    <button id="closeCrucible" class="btn gray">Close</button>
+  </div>
   <div id="brewWrap" class="hidden"><div id="brewBar"><div id="brewFill"></div></div><div id="brewCount"></div></div>
 </div></div>
 
@@ -521,12 +628,6 @@
   <div class="mrow" style="margin-top:10px"><button id="closeCodex" class="btn gray">Close</button></div>
 </div></div>
 
-<div id="decoModal" class="modal hidden"><div class="mbox">
-  <div class="mtitle">Homestead Decorations</div><div class="msub">Adornments grant passive bonuses and appear in camp.</div>
-  <div id="decoList"></div>
-  <div class="mrow" style="margin-top:10px"><button id="closeDeco" class="btn gray">Close</button></div>
-</div></div>
-
 <div id="optionsModal" class="modal hidden"><div class="mbox">
   <div class="mtitle">Options</div><div class="msub">Prototype settings — stored locally.</div>
   <div class="optRow"><span>Music</span><div class="toggle" id="optMusic"><i></i></div></div>
@@ -535,11 +636,11 @@
   <div class="optRow"><span>Reset all progress</span><button id="optReset" class="btn deep">Reset Save</button></div>
   <div class="cruc-label" style="margin-top:14px">Controls</div>
   <div class="msub" style="margin:4px 0 10px">
-    <b>Base Camp:</b> drag = pan · wheel = zoom · tap cauldron (or cauldron icon) = brew · tap creature or team card = Core Lattice<br>
-    <b>World Map:</b> 12 connected incursions across 3 areas · hover a node for details · click to pin · ▶ starts<br>
+    <b>Base Camp:</b> drag = pan · wheel = zoom · 🛒 Shop = Vigor/Provisions/Cores/Decorations/Boosters · 🍲 cauldron = brew<br>
+    <b>World Map:</b> 12 connected incursions across 3 areas · hover a node for details · ▶ starts<br>
     <b>Battle:</b> [1][2][3] / [Q][W][E] skills · [SPACE] Scatter · [P] pause · wheel = zoom<br>
-    <b>Audio:</b> ♪ button toggles music · all music &amp; SFX are original procedural synthesis (Web Audio)</div>
-  <div class="msub">WILDROOT v0.9 — bug fixes + original soundtrack. All assets original.</div>
+    <b>Audio:</b> ♪ toggles music · all music &amp; SFX are original procedural synthesis</div>
+  <div class="msub">WILDROOT v1.0 — Shop, 13 quests, cauldron redo. All assets original.</div>
   <div class="mrow"><button id="closeOptions" class="btn gray">Close</button></div>
 </div></div>
 
@@ -631,10 +732,8 @@
 <script>
 'use strict';
 /* =====================================================================
-   WILDROOT v0.9
-   FIXES: #collCount crash (team edit) · STAGES array-format crash in
-   showNodeTip/deployWave (expeditions & battles).
-   NEW: original procedural soundtrack (Web Audio) + SFX + toggles.
+   WILDROOT v1.0 — SHOP · 13 QUESTS · CAULDRON REDO
+   (all v0.9 systems retained: fixes, music, loaf rigs, 12-stage trail)
    ===================================================================== */
 
 const DB_S = JSON.parse(document.getElementById('db-skills').textContent);
@@ -642,6 +741,7 @@ const DB_X = JSON.parse(document.getElementById('db-crucible').textContent);
 const SKILL = {}; DB_S.skills.forEach(s => SKILL[s.id] = s);
 const ING = {}; DB_X.ingredients.forEach(i => ING[i.id] = i);
 const RARITY_NAME = { common:'Common', uncommon:'Uncommon', rare:'Rare' };
+const ING_PRICE = { common:15, uncommon:25, rare:60 };
 const FAMILIES = ['verdant','ember','tide','loam','volt','glacier','umbral','aero','prism'];
 const FAM_COLOR = { verdant:'#58c26a', ember:'#ff7a33', tide:'#57a0ff', loam:'#c9c39a', volt:'#ffe14d',
                     glacier:'#a8e8ff', umbral:'#9a8ad8', aero:'#b8e0f5', prism:'#d8b8ff' };
@@ -657,6 +757,7 @@ const CORE = {
   leech:    { name:'Leech Core',    color:'#b05fd8', desc:'+3% Lifesteal' },
   swift:    { name:'Swift Core',    color:'#57e6d9', desc:'+8% Move Speed' }
 };
+const CORE_PRICE = { ferocity:40, bulwark:40, keen:60, leech:70, swift:50 };
 const SOCKET_OK = { mighty:['ferocity'], tough:['bulwark'], multi:CORE_TYPES };
 const SOCKET_NAME = { mighty:'Mighty (ATK)', tough:'Tough (HP)', multi:'Multi (any)' };
 const SOCKET_BY_ROLE = {
@@ -875,11 +976,12 @@ const CAMP_ROAM = 24;
 const allySpawns = [[7,-1.9],[7,1.9],[8.6,0]];
 const hostileSpawns = [[-7,-4],[-7.5,0],[-7,4],[-5,-6.5],[-5,6.5]];
 
-const SAVE_KEY = 'wildroot_save_v8';   // kept: your v0.8 progress loads (music prefs auto-added)
+const SAVE_KEY = 'wildroot_save_v8';   // same key: existing progress carries over, new fields auto-added
 let SAVE;
 function defaultSave() {
   return { v:8, embers:30, energy:ENERGY_MAX, lastEnergyTs:Date.now(), expeditionBonus:0, introSeen:false,
     musicOn:true, sfxOn:true,
+    boosters:{ bounty:0, swift:0, prism:0 },
     provisions:{ crimson_berries:3, azure_moss:3, icy_shards:1, volcanic_rock:1, gilded_dust:1 },
     coresInv:{ ferocity:1, bulwark:1, keen:0, leech:0, swift:0 },
     squad:[ { species:'verdant_cub', level:12, trait:1.0, sockets:['ferocity',null,null,null,null,null,null,null,null] },
@@ -923,7 +1025,7 @@ function introFade(toBlack) {
 
 const $ = id => document.getElementById(id);
 const clampN = (v, a, b) => Math.max(a, Math.min(b, v));
-function setTxt(id, v) { const el = $(id); if (el) el.textContent = v; }   // null-safe HUD writes
+function setTxt(id, v) { const el = $(id); if (el) el.textContent = v; }
 function toast(msg) {
   const el = document.createElement('div'); el.className = 'toast'; el.textContent = msg;
   $('toastLayer').appendChild(el);
@@ -976,17 +1078,13 @@ function teamPower() { return SAVE.squad.reduce((s, e) => s + unitPower(e), 0); 
 function famBadge(fam) { return '<i class="fbadge" style="background:' + FAM_COLOR[fam] + '" title="' + fam + '"></i>'; }
 
 /* =====================================================================
-   SOUND — 100% original procedural audio (Web Audio API).
-   No audio files: every theme, jingle and SFX is synthesized at runtime,
-   so the soundtrack is copyright-clean by construction.
-   Themes: title (menu+map) · camp · battle. Jingles: victory/defeat/attract.
+   SOUND (unchanged from v0.9 — original procedural audio)
    ===================================================================== */
 const Sound = {
   ctx: null, master: null, musicBus: null, sfxBus: null, noiseBuf: null,
   musicOn: true, sfxOn: true,
   curTheme: null, stepIdx: 0, nextTime: 0, timer: null,
   _lastHit: 0, _lastHop: 0,
-
   init() {
     if (this.ctx) { this.ctx.resume && this.ctx.resume(); return; }
     const AC = window.AudioContext || window.webkitAudioContext;
@@ -1010,7 +1108,6 @@ const Sound = {
     }
     return this.noiseBuf;
   },
-  // Marimba-ish pluck: triangle fundamental + soft octave partial, exp decay
   pluck(freq, when, dur, vol, bus) {
     bus = bus || this.musicBus;
     const o = this.ctx.createOscillator(), g = this.ctx.createGain();
@@ -1026,7 +1123,6 @@ const Sound = {
     o2.connect(g2); g2.connect(bus);
     o2.start(when); o2.stop(when + dur * 0.6 + 0.03);
   },
-  // Warm detuned pad through a lowpass — chord bed
   padChord(midis, when, dur, vol) {
     for (const m of midis) {
       const f = this.note(m);
@@ -1079,20 +1175,17 @@ const Sound = {
     src.connect(f); f.connect(g); g.connect(this.musicBus);
     src.start(when); src.stop(when + 0.06);
   },
-  chirp(when) {  // camp birdsong: two tiny high plucks
+  chirp(when) {
     const f = 2100 + Math.random() * 900;
     this.pluck(f, when, 0.06, 0.028);
     this.pluck(f * 1.26, when + 0.07, 0.05, 0.022);
   },
-
-  /* ---- Themes: 16-step bars, original compositions ---- */
   themes: {
-    // Title / World Map — 88 BPM, C major, warm pads + bell melody
     title: {
       bpm: 88, len: 64,
       schedule(s, i, t, spb) {
         const bar = Math.floor(i / 16), st = i % 16;
-        const chords = [[48,55,60,64],[45,52,57,60],[41,48,53,57],[43,50,55,59]]; // C Am F G
+        const chords = [[48,55,60,64],[45,52,57,60],[41,48,53,57],[43,50,55,59]];
         if (st === 0) s.padChord(chords[bar], t, spb * 16, 0.04);
         if (st === 0 || st === 8) s.bassN(chords[bar][0] - 12, t, spb * 6, 0.10);
         const mel = [
@@ -1105,7 +1198,6 @@ const Sound = {
         if (st === 14 && bar === 3) s.pluck(s.note(79), t, 0.8, 0.045);
       }
     },
-    // Base Camp — 72 BPM, bucolic plucks + random birdsong
     camp: {
       bpm: 72, len: 64,
       schedule(s, i, t, spb) {
@@ -1123,7 +1215,6 @@ const Sound = {
         if (st % 4 === 2 && Math.random() < 0.16) s.chirp(t + Math.random() * spb);
       }
     },
-    // Battle — 150 BPM, A minor: drums + driving bass + climbing arp
     battle: {
       bpm: 150, len: 64,
       schedule(s, i, t, spb) {
@@ -1145,7 +1236,6 @@ const Sound = {
       }
     }
   },
-
   play(themeName) {
     this.init();
     if (!this.ctx) return;
@@ -1153,7 +1243,7 @@ const Sound = {
     this.curTheme = themeName;
     if (!themeName) return;
     const th = this.themes[themeName];
-    const spb = 60 / th.bpm / 4;                 // 16th-note step duration
+    const spb = 60 / th.bpm / 4;
     this.stepIdx = 0;
     this.nextTime = this.ctx.currentTime + 0.06;
     const snd = this;
@@ -1166,12 +1256,10 @@ const Sound = {
       }
     }, 60);
   },
-  duck(on) {  // lower music while paused
+  duck(on) {
     if (this.musicBus && this.ctx)
       this.musicBus.gain.setTargetAtTime(on ? 0.12 : 0.45, this.ctx.currentTime, 0.15);
   },
-
-  /* ---- Jingles (gated by musicOn) ---- */
   jingleVictory() {
     if (!this.ctx || !this.musicOn) return;
     const t0 = this.ctx.currentTime + 0.05;
@@ -1192,8 +1280,6 @@ const Sound = {
     [[72,0],[76,0.09],[79,0.18],[84,0.3],[88,0.42]].forEach(p =>
       this.pluck(this.note(p[0]), t0 + p[1], 0.5, 0.1));
   },
-
-  /* ---- SFX (gated by sfxOn, throttled) ---- */
   blip(type, f0, f1, dur, vol) {
     if (!this.ctx || !this.sfxOn) return;
     const t = this.ctx.currentTime;
@@ -1240,12 +1326,10 @@ const Sound = {
       setTimeout(() => this.ctx && this.pluck(this.note(n), this.ctx.currentTime, 0.5, 0.08, this.sfxBus), i * 90));
   }
 };
-// Audio unlock on first user gesture (browser autoplay policy)
 const unlockAudio = () => { Sound.init(); document.removeEventListener('pointerdown', unlockAudio); };
 document.addEventListener('pointerdown', unlockAudio);
-// Global click SFX for all tactile UI
 document.addEventListener('pointerdown', e => {
-  if (e.target.closest('.btn, .pskill, .ingbtn, .cinv, .tslot, .ccard, .slotbtn')) Sound.click();
+  if (e.target.closest('.btn, .pskill, .ingbtn, .cinv, .tslot, .ccard, .slotbtn, .shopTab, [data-buy]')) Sound.click();
 }, true);
 function themeForState() {
   if (appState === 'battle')
@@ -1313,7 +1397,7 @@ function addLights(scene) {
 }
 addLights(campScene); addLights(mapScene); addLights(battleScene);
 
-/* ---------- Rig v4: legless loaf quadrupeds / bipeds / float orbiters ---------- */
+/* ---------- Rig v4 (legless loafs / bipeds / float orbiters) ---------- */
 const VOX_BASE = 0.105;
 const TOP_Y = { quad: 10.5, biped: 20, float: 14 };
 const RIG_SPEC = { biped: { hipY: 7.8, legW: 2.8, footW: 3.3, armY: 12.4, armX: 2.9, torsoCy: 9.6 } };
@@ -1332,13 +1416,11 @@ function buildCreatureModel(def) {
   }
   const legs = [], arms = [], wings = [], segs = [];
   let tail = null, orbit = null;
-
   if (def.rig === 'quad') {
-    // LEGLESS LOAF: body bottom = y 0 exactly; no limb pivots exist
     part(inner, 0, 2.5, 0, 7, 5, 9, P.primary);
-    part(inner, 0, 0.55, -0.2, 7.8, 1.1, 9.6, P.secondary);           // belly base slab
-    part(inner, 0, 5.5, 4.6, 6, 5, 5, P.primary);                      // head
-    part(inner, 0, 4.4, 7.3, 3, 2, 2.4, P.accent);                     // snout
+    part(inner, 0, 0.55, -0.2, 7.8, 1.1, 9.6, P.secondary);
+    part(inner, 0, 5.5, 4.6, 6, 5, 5, P.primary);
+    part(inner, 0, 4.4, 7.3, 3, 2, 2.4, P.accent);
     part(inner, -1.6, 6.7, 7.35, 1.2, 1.2, 0.7, P.eye);
     part(inner, 1.6, 6.7, 7.35, 1.2, 1.2, 0.7, P.eye);
     if (F.horns) { part(inner, -2.2, 9.2, 3.8, 1.4, 2.4, 1.4, P.accent);
@@ -1379,13 +1461,13 @@ function buildCreatureModel(def) {
       part(arm, 0, -2.7, 0.4, 2.2, 5.4, 2.2, P.secondary);
       arms.push(arm);
       const leg = new THREE.Group();
-      leg.position.set(s * 1.7, RF.hipY, 0);                    // hip joint inside torso
+      leg.position.set(s * 1.7, RF.hipY, 0);
       inner.add(leg);
-      part(leg, 0, -RF.hipY / 2, 0, RF.legW, RF.hipY, RF.legW, P.secondary);  // sole at y=0
+      part(leg, 0, -RF.hipY / 2, 0, RF.legW, RF.hipY, RF.legW, P.secondary);
       part(leg, 0, -RF.hipY + 0.5, 0.4, RF.footW, 1.0, RF.footW, P.secondary);
       legs.push(leg);
     }
-  } else { // float — orbiter
+  } else {
     part(inner, 0, 10, 0, 6, 6, 6, P.primary);
     part(inner, 0, 10.6, 3.2, 4, 3, 0.8, P.secondary);
     part(inner, -1.4, 10.8, 3.7, 1.2, 1.2, 0.5, P.eye);
@@ -1433,7 +1515,6 @@ function verifyGrounding() {
       const box = new THREE.Box3().setFromObject(target);
       const ok = Math.abs(box.min.y) < 0.03;
       if (!ok) allOk = false;
-      console.assert(ok, 'WILDROOT rig check FAILED on ' + id + ': ground contact must be y≈0, got ' + box.min.y);
     }
     vis.root.traverse(o => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } });
   }
@@ -1444,7 +1525,7 @@ function animateCreature(vis, def, dt, moveAmt, walkPhase, atk, now) {
   vis.inner.scale.set(br * (1 - 0.12 * atk), br * (1 - 0.06 * atk), br * (1 + 0.22 * atk));
   if (def.rig === 'quad') {
     const m = Math.min(1, moveAmt / 1.2);
-    vis.hopY = Math.abs(Math.sin(walkPhase * 0.9)) * 0.22 * m;          // bouncy loaf hop
+    vis.hopY = Math.abs(Math.sin(walkPhase * 0.9)) * 0.22 * m;
     vis.inner.rotation.x = Math.sin(walkPhase * 1.8) * 0.05 * m;
     if (vis.tail) vis.tail.rotation.y = Math.sin(now * 0.004) * 0.5;
   } else if (def.rig === 'biped') {
@@ -1764,6 +1845,7 @@ function killUnit(u) {
   u.dead = true; u.deathT = 0; u.hp = 0;
   u.target = null; u.cast = null; u.windup = -1; u.windupTarget = null;
   spawnBurst(battleScene, u.pos, u.def.palette.primary, 12, 0.9);
+  if (u.boss) questEvent('bossKill', 1);          // NEW quest hook
   if (u.faction === 'hostile') rollDrops();
   checkWaveState();
 }
@@ -1869,7 +1951,7 @@ function updateUnitVisual(u, dt, now) {
   } else v.bubble.visible = false;
 }
 
-/* ---------- 12 biome arena themes ---------- */
+/* ---------- biome arena themes ---------- */
 const BIOMES = {
   grassland: { bg:0x16351f, f1:'#2c3a2b', f2:'#314530', line:'rgba(200,235,180,0.15)', wall:'#46543f', post:'#57674f',
     trunk:'#5b4632', leaf:'#2f6a3d', leaf2:'#3d8a4d', trees:6, flowers:8, shroom:0, spikes:0, lava:0, ice:0,
@@ -2063,13 +2145,14 @@ function buildArena(stage) {
   battleScene.add(arenaGroup);
 }
 
-/* ---------- battle flow: fixed 3-wave stages ---------- */
+/* ---------- battle flow (with new deco/booster hooks) ---------- */
 function startStageNow(stage) {
   SAVE.energy--; SAVE.lastEnergyTs = Date.now();
   battle = { stage, wave:0, clearedWaves:0, sub:'fighting', seqT:0, endShown:false,
     drops:{ cores:0, ings:0 }, loot:{ cores:{}, ings:{} },
-    ingBudget: PACE.ingBudgetPerRun,
-    bonus: SAVE.expeditionBonus >= 100, emberReward:0, scatterCd:0, unlockedNext:null, allies:[] };
+    ingBudget: PACE.ingBudgetPerRun + (SAVE.deco.trail_beacon ? 1 : 0),   // Trail Beacon
+    bonus: SAVE.expeditionBonus >= 100, emberReward:0, scatterCd:0, unlockedNext:null,
+    bountyUsed:false, brazier:false, allies:[] };
   if (battle.bonus) SAVE.expeditionBonus = 0;
   autoMode = SAVE.autoDefault;
   updateAutoIcon();
@@ -2094,7 +2177,7 @@ function startStageNow(stage) {
   deployWave(0);
 }
 function deployWave(i) {
-  const w = battle.stage.waves[i];          // FIXED: plain array format (v0.8 regression)
+  const w = battle.stage.waves[i];
   banner(i === 2 ? 'BOSS WAVE' : 'WAVE ' + (i + 1) + ' / 3', 1300);
   w.forEach((sp, k) => {
     const e = makeEntry(sp[0], sp[1], 1);
@@ -2134,15 +2217,25 @@ function victorySequence() {
   Sound.jingleVictory();
   const st = battle.stage;
   SAVE.squad.forEach(e => { e.level = Math.min(LEVEL_CAP, e.level + 2); });
-  battle.emberReward = Math.round(st.emberReward * (battle.bonus ? 1.5 : 1));
+  // Ember math: Expedition Bonus ×1.5 → Bounty Charm ×2 → Ember Brazier ×1.10
+  let mult = battle.bonus ? 1.5 : 1;
+  if (SAVE.boosters.bounty > 0) { mult *= 2; SAVE.boosters.bounty--; battle.bountyUsed = true; }
+  if (SAVE.deco.ember_brazier) { mult *= 1.10; battle.brazier = true; }
+  battle.emberReward = Math.round(st.emberReward * mult);
   SAVE.embers += battle.emberReward;
+  // Berry Trellis: +1 guaranteed berries (shown in loot)
+  if (SAVE.deco.berry_trellis) {
+    SAVE.provisions.crimson_berries = (SAVE.provisions.crimson_berries || 0) + 1;
+    battle.loot.ings.crimson_berries = (battle.loot.ings.crimson_berries || 0) + 1;
+    battle.drops.ings++;
+  }
   if (!SAVE.cleared.includes(st.id)) SAVE.cleared.push(st.id);
   const next = STAGES[STAGES.indexOf(st) + 1];
   if (next && !SAVE.unlocked.includes(next.id)) { SAVE.unlocked.push(next.id); battle.unlockedNext = next.name; }
   if (!battle.bonus) SAVE.expeditionBonus = Math.min(100, SAVE.expeditionBonus + 40);
   addBiomeProvision(weightedPick(BIOME_DROPS[battle.stage.biome]));
   questEvent('stageCleared', 1);
-  questEvent('allClear', SAVE.cleared.length);
+  questEvent('allClear', SAVE.cleared.length);       // absolute
   save();
 }
 function onDefeat() {
@@ -2219,8 +2312,11 @@ function showEndOverlay(won) {
     h += '<div class="lootRow"><svg viewBox="0 0 24 24" fill="#8fe07a"><path d="M12 2C7 7 5 13 6.5 19c1-3 3-5 5.5-6-2 2.5-2.5 5-2 7C15 18 19 12 12 2z"/></svg>Provisions: <b>&nbsp;' +
       itypes.reduce((s, k) => s + battle.loot.ings[k], 0) + '</b>&nbsp;<span style="color:#a8c49c;font-size:11px">(' +
       (itypes.map(k => ING[k].name).join(', ') || 'none') + ')</span></div>';
+    let emNote = battle.bonus ? ' <span style="color:#ffd98a;font-size:11px">Expedition Bonus ×1.5!</span>' : '';
+    if (battle.bountyUsed) emNote += ' <span style="color:#ffd44d;font-size:11px">⚡Bounty Charm ×2!</span>';
+    if (battle.brazier) emNote += ' <span style="color:#ff9c5f;font-size:11px">Ember Brazier +10%</span>';
     h += '<div class="lootRow"><svg viewBox="0 0 24 24" fill="#ff9c5f"><path d="M12 2c1 4-3 5-3 9a3 3 0 006 0c0-2-1-3-1-3 3 1 5 4 5 7a7 7 0 11-14 0c0-6 5-8 7-13z"/></svg>Embers: <b>&nbsp;' +
-      battle.emberReward + '</b>' + (battle.bonus ? '&nbsp;<span style="color:#ffd98a;font-size:11px">Expedition Bonus ×1.5!</span>' : '') + '</div>';
+      battle.emberReward + '</b>' + emNote + '</div>';
     h += '<div class="lootRow">Squad rallied: <b>&nbsp;+2 Lv</b></div>';
     if (battle.unlockedNext) h += '<div class="lootRow">New trail opened: <b>&nbsp;' + battle.unlockedNext + '</b></div>';
     body.innerHTML = h;
@@ -2339,20 +2435,24 @@ function updateAutoIcon() {
                                 : 'Manual control — tap skill icons to cast (click for auto)';
 }
 
-/* ---------- base camp ---------- */
+/* ---------- base camp (9 decoration props) ---------- */
 const campCritters = [];
 let campIsShowcase = false;
 let cauldronGroup = null, cauldronGlow = null, campBubbleT = 0.6;
 const CAULDRON_POS = new THREE.Vector3(0, 0, 0);
 let staticColliders = [], campColliders = [];
-const DECO_SPOTS = { parasol: [-6.5, 3.5], totem: [5.8, -4.6], shrine: [6.2, 4.2] };
+const DECO_SPOTS = {
+  parasol: [-6.5, 3.5], totem: [5.8, -4.6], shrine: [6.2, 4.2],
+  wind_chime: [-8.5, -2.5], berry_trellis: [-4.5, 9], ember_brazier: [3.5, -9.5],
+  spring: [-12.5, 4.5], trail_beacon: [11.5, 5.5], prism_fountain: [0, -8]
+};
 function addStaticCollider(x, z, hw, hd) { staticColliders.push({ x0: x - hw, x1: x + hw, z0: z - hd, z1: z + hd }); }
 function rebuildCampColliders() {
   campColliders = staticColliders.slice();
-  for (const id in SAVE.deco) {
+  for (const id in DECO_SPOTS) {
     if (!SAVE.deco[id]) continue;
     const s = DECO_SPOTS[id];
-    if (s) campColliders.push({ x0: s[0] - 1, x1: s[0] + 1, z0: s[1] - 1, z1: s[1] + 1 });
+    campColliders.push({ x0: s[0] - 1, x1: s[0] + 1, z0: s[1] - 1, z1: s[1] + 1 });
   }
 }
 function pointBlocked(x, z, r) {
@@ -2458,11 +2558,46 @@ function decoProp(id) {
     propBox(g, 0, 0.28, 0, 0.56, 0.56, 0.56, 0x6f4630);
     propBox(g, 0, 0.9, 0, 0.46, 0.64, 0.46, 0x8a5a3a);
     propBox(g, 0, 1.4, 0, 0.26, 0.26, 0.26, 0xff7a33, 0, 0x8a3a10);
-  } else {
+  } else if (id === 'shrine') {
     propBox(g, -0.5, 0.8, 0, 0.3, 1.6, 0.3, 0x7a8a99);
     propBox(g, 0.5, 0.8, 0, 0.3, 1.6, 0.3, 0x7a8a99);
     propBox(g, 0, 1.7, 0, 1.5, 0.25, 0.35, 0x8a9aa9);
     propBox(g, 0, 0.5, 0, 0.4, 0.7, 0.4, 0x9a7fe8, 0.6, 0x4a3588);
+  } else if (id === 'wind_chime') {
+    propBox(g, 0, 1.3, 0, 0.12, 2.6, 0.12, 0x8a8a99);
+    propBox(g, 0, 2.5, 0, 1.3, 0.18, 0.3, 0x8a8a99);
+    for (let i = 0; i < 3; i++)
+      propBox(g, -0.45 + i * 0.45, 2.05, 0, 0.22, 0.55, 0.22, 0xb8e0f5, i * 0.3);
+  } else if (id === 'berry_trellis') {
+    propBox(g, -0.9, 0.9, 0, 0.16, 1.8, 0.16, 0x6f5a3f);
+    propBox(g, 0.9, 0.9, 0, 0.16, 1.8, 0.16, 0x6f5a3f);
+    propBox(g, 0, 1.7, 0, 2.0, 0.16, 0.24, 0x6f5a3f);
+    propBox(g, 0, 1.1, 0, 1.5, 1.1, 0.35, 0x4f8a50);
+    for (let i = 0; i < 3; i++)
+      propBox(g, -0.5 + i * 0.5, 1.35 - (i % 2) * 0.25, 0.22, 0.3, 0.3, 0.3, 0xe85a6a);
+  } else if (id === 'ember_brazier') {
+    propBox(g, 0, 0.2, 0, 0.34, 0.44, 0.34, 0x1a1c22);
+    propBox(g, 0, 0.75, 0, 1.35, 0.72, 1.35, 0x3a3f4a);
+    propBox(g, 0, 1.2, 0, 0.85, 0.32, 0.85, 0xff7a33, 0, 0x8a3a10);
+  } else if (id === 'spring') {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.16, 2.2),
+      new THREE.MeshLambertMaterial({ color: 0x57a0ff, transparent: true, opacity: 0.75 }));
+    m.position.set(0, 0.06, 0); m.receiveShadow = true; g.add(m);
+    propBox(g, -1.3, 0.3, -1.0, 0.5, 0.6, 0.5, 0x6a7068, 0.2);
+    propBox(g, 1.3, 0.3, 1.0, 0.5, 0.6, 0.5, 0x6a7068, 0.5);
+    propBox(g, 1.25, 0.28, -1.0, 0.45, 0.55, 0.45, 0x7a8a7d, 0.35);
+  } else if (id === 'trail_beacon') {
+    propBox(g, 0, 0.2, 0, 1.05, 0.4, 1.05, 0x5f6a5f);
+    propBox(g, 0, 1.45, 0, 0.18, 2.3, 0.18, 0x5a6070, 0.1);
+    propBox(g, 0, 2.75, 0, 0.55, 0.55, 0.55, 0xffd44d, 0.25, 0x6a5500);
+    propBox(g, 0.35, 2.0, 0, 0.5, 0.28, 0.12, 0x8a8f7d, 0.4);
+    propBox(g, -0.35, 1.7, 0, 0.5, 0.28, 0.12, 0x8a8f7d, -0.3);
+  } else if (id === 'prism_fountain') {
+    propBox(g, 0, 0.24, 0, 2.3, 0.48, 2.3, 0x6a6a72);
+    propBox(g, 0, 0.95, 0, 0.9, 0.9, 0.9, 0x7a7568);
+    gemBox(g, 0, 1.9, 0, 0.75, 1.3, 0.75, 0xd8b8ff, 0.3);
+    propBox(g, 0, 2.7, 0, 0.35, 0.35, 0.35, 0xe8fff8, 0, 0x4a3588);
+    propBox(g, 0.7, 1.5, 0.5, 0.4, 0.8, 0.4, 0xb08aff, 0.8, 0x4a3588);
   }
   return g;
 }
@@ -2490,7 +2625,8 @@ class CampCritter {
     this.heading = Math.random() * Math.PI * 2;
     this.state = 'idle'; this.t = 0.5 + Math.random() * 2;
     this.walkPhase = Math.random() * 6; this.moveAmt = 0;
-    this.target = null; this.socialCd = 2 + Math.random() * 6;
+    this.target = null;
+    this.socialCd = (2 + Math.random() * 6) * (SAVE.deco.spring ? 0.6 : 1);  // Bathing Spring
     this.greet = null; this.hopT = -1; this.stuck = 0; this.lastD = 0;
     this.vis.root.position.copy(this.pos);
     this.vis.root.rotation.y = this.heading;
@@ -2565,7 +2701,7 @@ class CampCritter {
     this.vis.root.rotation.y = this.heading;
     if (g.t >= g.dur) {
       this.greet = null; this.state = 'idle'; this.t = 1 + Math.random() * 2;
-      this.socialCd = 10 + Math.random() * 8;
+      this.socialCd = (10 + Math.random() * 8) * (SAVE.deco.spring ? 0.6 : 1);
       this.vis.inner.rotation.x = 0;
     }
   }
@@ -2880,7 +3016,7 @@ function showRevealSplash(r) {
   reveal.t = 0;
 });
 
-/* ---------- massive world map with connecting paths ---------- */
+/* ---------- world map ---------- */
 const mapNodes = [];
 const NODE_POS = [
   [-28, 1.4, 22], [-10, 1.6, 22], [8, 1.8, 22], [26, 2.2, 22],
@@ -3045,7 +3181,6 @@ function showNodeTip(i, pin) {
   const st = STAGES[i];
   const unlocked = SAVE.unlocked.includes(st.id);
   const cleared = SAVE.cleared.includes(st.id);
-  // FIXED: waves are plain arrays (v0.8 regression) — find the boss entry safely
   const bossWave = st.waves[2];
   const bossSpawn = bossWave.find(s => s[2]) || bossWave[0];
   $('ntName').innerHTML = st.id + ' · ' + st.name + (cleared ? ' <span style="color:#8fe07a">✓</span>' : '');
@@ -3177,7 +3312,6 @@ function renderTeamOverlay() {
     card.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', 'uid:' + entry.uid));
     grid.appendChild(card);
   });
-  // FIXED: null-safe (v0.8 crashed here on a missing element and killed the whole overlay)
   setTxt('collCount', SAVE.collection.length + ' / ' + COLLECTION_MAX);
   const ce = $('collEmpty');
   if (ce) ce.classList.toggle('hidden', SAVE.collection.length > 0);
@@ -3375,76 +3509,10 @@ function unequipCore(i) {
   toast(CORE[type].name + ' removed.');
 }
 
-/* ---------- crucible ---------- */
-const crucibleLoad = [];
-let brewing = false, brewInterval = null;
-function openCrucible() { refreshCrucible(); $('crucibleModal').classList.remove('hidden'); }
-function refreshCrucible() {
-  const invRow = $('invRow');
-  invRow.innerHTML = '';
-  DB_X.ingredients.forEach(ing => {
-    const n = SAVE.provisions[ing.id] || 0;
-    const b = document.createElement('button');
-    b.className = 'ingbtn';
-    b.disabled = n <= 0 || crucibleLoad.length >= DB_X.slotCount;
-    b.innerHTML = '<span class="dot" style="background:' + ing.color + '"></span>' + ing.name +
-      '<small>(' + RARITY_NAME[ing.rarity] + ')</small> <b>x' + n + '</b>';
-    b.addEventListener('click', () => {
-      if ((SAVE.provisions[ing.id] || 0) <= 0 || crucibleLoad.length >= DB_X.slotCount) return;
-      SAVE.provisions[ing.id]--; crucibleLoad.push(ing.id); refreshCrucible();
-    });
-    invRow.appendChild(b);
-  });
-  const slotRow = $('slotRow');
-  slotRow.innerHTML = '';
-  crucibleLoad.forEach((id, i) => {
-    const s = document.createElement('button');
-    s.className = 'slotbtn';
-    s.title = 'Remove ' + ING[id].name;
-    s.innerHTML = '<span class="dot" style="background:' + ING[id].color + '"></span>';
-    s.addEventListener('click', () => { SAVE.provisions[id]++; crucibleLoad.splice(i, 1); refreshCrucible(); });
-    slotRow.appendChild(s);
-  });
-  $('igniteBtn').disabled = brewing || crucibleLoad.length < DB_X.minIngredients;
-}
-function ignite() {
-  if (brewing || crucibleLoad.length < DB_X.minIngredients) return;
-  brewing = true;
-  const load = crucibleLoad.slice();
-  crucibleLoad.length = 0;
-  refreshCrucible();
-  Sound.brew();
-  $('brewWrap').classList.remove('hidden');
-  const bf = $('brewFill');
-  bf.style.transition = 'none'; bf.style.width = '0%';
-  void bf.offsetWidth;
-  bf.style.transition = 'width ' + DB_X.brewSeconds + 's linear';
-  bf.style.width = '100%';
-  let left = DB_X.brewSeconds;
-  $('brewCount').textContent = 'Brewing… ' + left.toFixed(1) + 's';
-  if (brewInterval) clearInterval(brewInterval);
-  brewInterval = setInterval(() => {
-    left -= 0.1;
-    $('brewCount').textContent = left > 0 ? 'Brewing… ' + Math.max(0, left).toFixed(1) + 's' : 'Attraction complete!';
-  }, 100);
-  setTimeout(() => { brewing = false; clearInterval(brewInterval); completeBrew(load); }, DB_X.brewSeconds * 1000 + 60);
-}
-function completeBrew(load) {
-  const res = computeAttraction(load);
-  res.entry = makeEntry(res.pick.sp.id, res.level, res.prismatic ? 1.15 : undefined);
-  res.entry.uid = ++uidCounter;
-  let joined = false, toSquad = false;
-  if (SAVE.squad.length < 3) { SAVE.squad.push(res.entry); joined = true; toSquad = true; }
-  else if (SAVE.collection.length < COLLECTION_MAX) { SAVE.collection.push(res.entry); joined = true; }
-  if (joined) {
-    if (!SAVE.discovered.includes(res.pick.sp.id)) SAVE.discovered.push(res.pick.sp.id);
-    questEvent('attracted', 1);
-  }
-  save();
-  refreshCrucible();
-  startCookingReveal(res, joined, toSquad);
-}
-function computeAttraction(load) {
+/* =====================================================================
+   CAULDRON — buildPool refactor + live preview UI
+   ===================================================================== */
+function buildPool(load) {
   const aroma = {};
   FAMILIES.forEach(f => aroma[f] = 0);
   let quality = 0;
@@ -3452,7 +3520,9 @@ function computeAttraction(load) {
     quality += ING[id].quality;
     FAMILIES.forEach(f => aroma[f] += ING[id].aroma[f]);
   }
-  FAMILIES.forEach(f => aroma[f] /= load.length);
+  if (load.length) FAMILIES.forEach(f => aroma[f] /= load.length);
+  let majority = '—', mv = -1;
+  FAMILIES.forEach(f => { if (aroma[f] > mv) { mv = aroma[f]; majority = f; } });
   const counts = {};
   load.forEach(id => counts[id] = (counts[id] || 0) + 1);
   let recipe = null;
@@ -3466,56 +3536,347 @@ function computeAttraction(load) {
   if (!recipe) recipe = RECIPES.find(r => r.fallback);
   const rules = DB_X.attractionRules;
   const rows = [];
-  recipe.pool.forEach(p => {
-    const sp = SPECIES[p.species];
-    if ((rules.qualityGates[String(sp.tier)] || 0) > quality) return;
-    let aff = 0;
-    FAMILIES.forEach(f => aff += aroma[f] * sp.coreAffinity[f]);
-    if (aff < rules.minAffinity) return;
-    rows.push({ sp, w: p.weight * (0.5 + aff) * rules.rarityPriors[String(sp.tier)] });
-  });
-  if (!rows.length) rows.push({ sp: SPECIES['verdant_cub'], w: 1 });
-  const total = rows.reduce((s, r) => s + r.w, 0);
-  rows.forEach(r => r.p = r.w / total);
+  if (load.length >= 3) {
+    recipe.pool.forEach(p => {
+      const sp = SPECIES[p.species];
+      if ((rules.qualityGates[String(sp.tier)] || 0) > quality) return;
+      let aff = 0;
+      FAMILIES.forEach(f => aff += aroma[f] * sp.coreAffinity[f]);
+      if (aff < rules.minAffinity) return;
+      rows.push({ sp, w: p.weight * (0.5 + aff) * rules.rarityPriors[String(sp.tier)] });
+    });
+    if (rows.length) {
+      const total = rows.reduce((s, r) => s + r.w, 0);
+      rows.forEach(r => r.p = r.w / total);
+    }
+  }
+  return { recipe, quality, rows, majority };
+}
+function computeAttraction(load, prismMult) {
+  prismMult = prismMult || 1;
+  const bp = buildPool(load);
+  let rows = bp.rows;
+  if (!rows.length) rows = [{ sp: SPECIES['verdant_cub'], p: 1 }];
   let roll = Math.random(), pick = rows[0];
   for (const r of rows) { roll -= r.p; if (roll <= 0) { pick = r; break; } }
-  const prismatic = Math.random() < rules.prismaticChance * (SAVE.deco.shrine ? 1.5 : 1);
-  const level = Math.max(recipe.levelRange[0], Math.min(recipe.levelRange[1],
-    Math.round(rules.levelBase + quality * rules.levelPerQuality + Math.random() * rules.levelJitter)));
-  return { recipe, rows, pick, prismatic, level, quality };
+  const prismatic = Math.random() < DB_X.attractionRules.prismaticChance * (SAVE.deco.shrine ? 1.5 : 1) * prismMult;
+  const level = Math.max(bp.recipe.levelRange[0], Math.min(bp.recipe.levelRange[1],
+    Math.round(DB_X.attractionRules.levelBase + bp.quality * DB_X.attractionRules.levelPerQuality +
+      Math.random() * DB_X.attractionRules.levelJitter)));
+  return { recipe: bp.recipe, rows, pick, prismatic, level, quality: bp.quality };
 }
 
-/* ---------- quests / codex / decor / bag ---------- */
-function renderBag() {
-  let h = '<div class="cruc-label" style="margin-top:0">Provisions</div><div class="bagGrid">';
-  DB_X.ingredients.forEach(ing => {
-    h += '<div class="bagItem"><span class="dot" style="background:' + ing.color + '"></span>' +
-      '<div><b>' + ing.name + '</b><br><small>' + RARITY_NAME[ing.rarity] + '</small></div>' +
-      '<span class="bx">' + (SAVE.provisions[ing.id] || 0) + '</span></div>';
-  });
-  h += '</div><div class="cruc-label">Aether Core Cubes</div><div class="bagGrid">';
-  CORE_TYPES.forEach(t => {
-    h += '<div class="bagItem">' + coreDiamond(t, 18) +
-      '<div><b>' + CORE[t].name + '</b><br><small>' + CORE[t].desc + '</small></div>' +
-      '<span class="bx">' + (SAVE.coresInv[t] || 0) + '</span></div>';
-  });
-  h += '</div>';
-  $('bagBody').innerHTML = h;
+const crucibleLoad = [];
+let brewing = false, brewInterval = null;
+function openCrucible() { refreshCrucible(); $('crucibleModal').classList.remove('hidden'); }
+function hexToRgb(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  return [((n >> 16) & 255), ((n >> 8) & 255), (n & 255)];
 }
+function rgbToHex(r, g, b) {
+  return '#' + [r, g, b].map(v => Math.round(clampN(v, 0, 255)).toString(16).padStart(2, '0')).join('');
+}
+function refreshCrucible() {
+  // Store tiles
+  const invRow = $('invRow');
+  invRow.innerHTML = '';
+  DB_X.ingredients.forEach(ing => {
+    const n = SAVE.provisions[ing.id] || 0;
+    const b = document.createElement('button');
+    b.className = 'ingbtn';
+    b.disabled = n <= 0 || crucibleLoad.length >= DB_X.slotCount;
+    b.innerHTML = '<span class="dot" style="background:' + ing.color + '"></span>' + ing.name +
+      '<small>(' + RARITY_NAME[ing.rarity] + ' · Q' + ing.quality + ')</small> <b>x' + n + '</b>';
+    b.title = ing.name + ' — ' + RARITY_NAME[ing.rarity] + ', quality ' + ing.quality;
+    b.addEventListener('click', () => {
+      if ((SAVE.provisions[ing.id] || 0) <= 0 || crucibleLoad.length >= DB_X.slotCount) return;
+      SAVE.provisions[ing.id]--; crucibleLoad.push(ing.id); refreshCrucible();
+    });
+    invRow.appendChild(b);
+  });
+  // Load slots
+  const slotRow = $('slotRow');
+  slotRow.innerHTML = '';
+  crucibleLoad.forEach((id, i) => {
+    const s = document.createElement('button');
+    s.className = 'slotbtn';
+    s.title = 'Remove ' + ING[id].name;
+    s.innerHTML = '<span class="dot" style="background:' + ING[id].color + '"></span>';
+    s.addEventListener('click', () => { SAVE.provisions[id]++; crucibleLoad.splice(i, 1); refreshCrucible(); });
+    slotRow.appendChild(s);
+  });
+  updateCrucVisual();
+  const ig = $('igniteBtn');
+  ig.disabled = brewing || crucibleLoad.length < DB_X.minIngredients;
+  ig.textContent = brewing ? 'Brewing…' : '🔥 Ignite the Cauldron';
+}
+function updateCrucVisual() {
+  const load = crucibleLoad;
+  // Liquid = average of loaded ingredient colors (empty → murky teal)
+  let hex = '#2a8f7a';
+  if (load.length) {
+    let r = 0, g = 0, b = 0;
+    load.forEach(id => { const c = hexToRgb(ING[id].color); r += c[0]; g += c[1]; b += c[2]; });
+    hex = rgbToHex(r / load.length, g / load.length, b / load.length);
+  }
+  const liq = $('caulLiquid');
+  if (liq) liq.style.background = hex;
+  // Quality meter + tier
+  const q = load.reduce((s, id) => s + ING[id].quality, 0);
+  const tier = q >= 8 ? 3 : q >= 4 ? 2 : 1;
+  setTxt('qFill') || null;                    // no-op guard (qFill uses width)
+  const qf = $('qFill'); if (qf) qf.style.width = (q / 20 * 100) + '%';
+  $('qLabel').innerHTML = 'Quality ' + q + ' · attracts up to <b>Tier ' + tier + '</b>';
+  // Recipe / aroma / pool preview
+  if (load.length >= 3) {
+    const bp = buildPool(load);
+    $('crucRecipe').innerHTML = 'Blend: <b>' + bp.recipe.name + '</b>';
+    $('crucAroma').innerHTML = 'Aroma leans: <b>' + bp.majority.toUpperCase() + '</b>';
+    const host = $('crucPool');
+    if (bp.rows.length) {
+      const sorted = bp.rows.slice().sort((a, b) => b.p - a.p);
+      let html = '';
+      sorted.slice(0, 6).forEach(r => {
+        html += '<div class="poolRow"><span class="dot" style="background:' + r.sp.palette.primary + '"></span>' +
+          r.sp.name + '<b>' + (r.p * 100).toFixed(1) + '%</b></div>';
+      });
+      if (sorted.length > 6) html += '<div class="poolMore">…and ' + (sorted.length - 6) + ' more kin</div>';
+      host.innerHTML = html;
+    } else {
+      $('crucPool').innerHTML = '<div class="poolHint">The blend is too thin — rarer provisions attract rarer kin.</div>';
+    }
+  } else {
+    $('crucRecipe').textContent = 'Blend: —';
+    $('crucAroma').textContent = 'Aroma leans: —';
+    $('crucPool').innerHTML = '<div class="poolHint">Load at least 3 provisions to see which kin this blend attracts.</div>';
+  }
+  // Booster chips
+  const boost = $('crucBoost');
+  let chips = '';
+  if ((SAVE.boosters.swift || 0) > 0)
+    chips += '<span class="bChip">⚡ Swift Brew ×' + SAVE.boosters.swift + ' — next brew instant</span>';
+  if ((SAVE.boosters.prism || 0) > 0)
+    chips += '<span class="bChip">✨ Prism Dust ×' + SAVE.boosters.prism + ' — ×20 prismatic</span>';
+  if ((SAVE.deco.shrine))
+    chips += '<span class="bChip" style="border-color:#9a6fd8;color:#d8b8ff">🞄 Luck Shrine — +50% prismatic</span>';
+  boost.innerHTML = chips;
+}
+function ignite() {
+  if (brewing || crucibleLoad.length < DB_X.minIngredients) return;
+  brewing = true;
+  const useSwift = (SAVE.boosters.swift || 0) > 0;
+  if (useSwift) SAVE.boosters.swift--;
+  const secs = useSwift ? 0.25 : DB_X.brewSeconds;
+  const load = crucibleLoad.slice();
+  crucibleLoad.length = 0;
+  refreshCrucible();
+  Sound.brew();
+  if (useSwift) toast('Swift Brew consumed — instant brew!');
+  $('brewWrap').classList.remove('hidden');
+  $('cauldronArt').classList.add('steaming', 'bubbling');
+  const bf = $('brewFill');
+  bf.style.transition = 'none'; bf.style.width = '0%';
+  void bf.offsetWidth;
+  bf.style.transition = 'width ' + secs + 's linear';
+  bf.style.width = '100%';
+  let left = secs;
+  $('brewCount').textContent = 'Brewing… ' + left.toFixed(1) + 's';
+  if (brewInterval) clearInterval(brewInterval);
+  brewInterval = setInterval(() => {
+    left -= 0.1;
+    $('brewCount').textContent = left > 0 ? 'Brewing… ' + Math.max(0, left).toFixed(1) + 's' : 'Attraction complete!';
+  }, 100);
+  setTimeout(() => {
+    brewing = false;
+    clearInterval(brewInterval);
+    $('cauldronArt').classList.remove('steaming', 'bubbling');
+    completeBrew(load);
+  }, secs * 1000 + 60);
+}
+function completeBrew(load) {
+  const usePrism = (SAVE.boosters.prism || 0) > 0;
+  if (usePrism) SAVE.boosters.prism--;
+  const res = computeAttraction(load, usePrism ? 20 : 1);
+  if (SAVE.deco.prism_fountain)                                   // Prism Fountain: +2 levels
+    res.level = Math.min(LEVEL_CAP, res.level + 2);
+  res.entry = makeEntry(res.pick.sp.id, res.level, res.prismatic ? 1.15 : undefined);
+  res.entry.uid = ++uidCounter;
+  let joined = false, toSquad = false;
+  if (SAVE.squad.length < 3) { SAVE.squad.push(res.entry); joined = true; toSquad = true; }
+  else if (SAVE.collection.length < COLLECTION_MAX) { SAVE.collection.push(res.entry); joined = true; }
+  if (joined) {
+    if (!SAVE.discovered.includes(res.pick.sp.id)) SAVE.discovered.push(res.pick.sp.id);
+    questEvent('attracted', 1);
+  }
+  questEvent('brewDone', 1);                                      // NEW quest hook
+  if (res.prismatic) questEvent('prismaticAttract', 1);           // NEW quest hook
+  if (usePrism) toast('Prism Dust consumed — ×20 prismatic chance!');
+  save();
+  refreshCrucible();
+  startCookingReveal(res, joined, toSquad);
+}
+
+/* =====================================================================
+   SHOP — 5 tabs: Vigor / Provisions / Core Cubes / Decorations / Boosters
+   ===================================================================== */
+const SHOP = {
+  vigor: [
+    { id:'v1', name:'Vigor ×1', desc:'Restores 1 Vigor for Expeditions.', price:30, amt:1, glyph:'#FFC107' },
+    { id:'v3', name:'Vigor ×3', desc:'Restores 3 Vigor — save 5 Embers.', price:85, amt:3, glyph:'#FFC107' },
+    { id:'v5', name:'Vigor ×5', desc:'Restores 5 Vigor — save 15 Embers.', price:135, amt:5, glyph:'#FFC107' },
+  ],
+  provisions: DB_X.ingredients.map(ing => ({
+    id: ing.id, name: ing.name,
+    desc: RARITY_NAME[ing.rarity] + ' provision · quality ' + ing.quality,
+    price: ING_PRICE[ing.rarity], glyph: ing.color })),
+  cores: CORE_TYPES.map(t => ({ id: t, name: CORE[t].name, desc: CORE[t].desc, price: CORE_PRICE[t], glyph: CORE[t].color })),
+  decos: [
+    { id:'parasol',       name:'Sun Parasol',     price:40,  desc:'+25% Provisions from Incursions', glyph:'#e8c14d' },
+    { id:'totem',         name:'Ember Totem',     price:60,  desc:'+15% Aether Core Cube drops', glyph:'#ff7a33' },
+    { id:'shrine',        name:'Luck Shrine',     price:80,  desc:'+50% Prismatic chance at the Cauldron', glyph:'#d8b8ff' },
+    { id:'wind_chime',    name:'Wind Chime',      price:120, desc:'Vigor regenerates 13% faster', glyph:'#b8e0f5' },
+    { id:'berry_trellis', name:'Berry Trellis',   price:100, desc:'+1 Crimson Berries on every victory', glyph:'#e85a6a' },
+    { id:'ember_brazier', name:'Ember Brazier',   price:150, desc:'+10% Embers from Incursions', glyph:'#ff9c5f' },
+    { id:'spring',        name:'Bathing Spring',  price:90,  desc:'Camp kin socialize more often', glyph:'#57a0ff' },
+    { id:'trail_beacon',  name:'Trail Beacon',    price:180, desc:'+1 provision drop budget per Incursion', glyph:'#ffd44d' },
+    { id:'prism_fountain',name:'Prism Fountain',  price:250, desc:'Brewed kin arrive +2 levels', glyph:'#d8b8ff' },
+  ],
+  boosters: [
+    { id:'bounty', name:'Bounty Charm', price:100, desc:'Next Incursion victory: ×2 Embers', glyph:'#ffd44d' },
+    { id:'swift',  name:'Swift Brew',   price:60,  desc:'Next Cauldron brew completes instantly', glyph:'#8fe07a' },
+    { id:'prism',  name:'Prism Dust',   price:150, desc:'Next attraction: ×20 Prismatic chance', glyph:'#b05fd8' },
+  ],
+};
+const SHOP_TABS = [
+  ['vigor', '⚡', 'Vigor'], ['provisions', '❀', 'Provisions'], ['cores', '◆', 'Core Cubes'],
+  ['decos', '⌂', 'Decorations'], ['boosters', '✨', 'Boosters']
+];
+let shopTab = 'vigor';
+function shopGlyph(kind, item) {
+  if (kind === 'vigor')
+    return '<svg viewBox="0 0 24 24" width="28" height="28"><path d="M13 2L4 14h6l-1 8 9-12h-6z" fill="' + item.glyph + '"/></svg>';
+  if (kind === 'cores')
+    return '<svg viewBox="0 0 24 24" width="28" height="28"><path d="M12 2l7 7-7 13L5 9z" fill="' + item.glyph + '"/></svg>';
+  if (kind === 'boosters')
+    return '<svg viewBox="0 0 24 24" width="28" height="28"><path d="M12 2l2.2 6.3L21 11l-6.8 2.7L12 20l-2.2-6.3L3 11l6.8-2.7z" fill="' + item.glyph + '"/></svg>';
+  return '<span class="dot" style="background:' + item.glyph + '; width:26px; height:26px; border-radius:8px;"></span>';
+}
+function openShop(tab) {
+  if (tab) shopTab = tab;
+  renderShop();
+  $('shopOverlay').classList.remove('hidden');
+  refreshHeader();
+}
+function renderShop() {
+  setTxt('shopEmbers', String(SAVE.embers));
+  // Tabs
+  const tabsHost = $('shopTabs');
+  tabsHost.innerHTML = '';
+  SHOP_TABS.forEach(([id, glyph, label]) => {
+    const b = document.createElement('button');
+    b.className = 'btn gray shopTab' + (shopTab === id ? ' active' : '');
+    b.innerHTML = glyph + '&nbsp; ' + label;
+    b.addEventListener('click', () => { shopTab = id; renderShop(); });
+    tabsHost.appendChild(b);
+  });
+  // Grid
+  const grid = $('shopGrid');
+  grid.innerHTML = '';
+  SHOP[shopTab].forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'shopCard';
+    let meta = '', buy = '';
+    if (shopTab === 'vigor') {
+      const full = SAVE.energy + item.amt > ENERGY_MAX;
+      card.classList.toggle('owned', full);
+      meta = 'Energy <b>' + SAVE.energy + '/' + ENERGY_MAX + '</b>';
+      buy = '<button class="btn green shopBuy" data-buy="vigor" data-idx="' + idx + '"' +
+        (full || SAVE.embers < item.price ? ' disabled' : '') + '><b>' + item.price + '</b> ✦' +
+        (full ? '<br><small style="font-size:9px">FULL</small>' : '') + '</button>';
+    } else if (shopTab === 'provisions') {
+      meta = 'Owned ×<b>' + (SAVE.provisions[item.id] || 0) + '</b>';
+      buy = '<button class="btn green shopBuy" data-buy="provisions" data-idx="' + idx + '"' +
+        (SAVE.embers < item.price ? ' disabled' : '') + '><b>' + item.price + '</b> ✦</button>';
+    } else if (shopTab === 'cores') {
+      meta = 'Owned ×<b>' + (SAVE.coresInv[item.id] || 0) + '</b>';
+      buy = '<button class="btn blue shopBuy" data-buy="cores" data-idx="' + idx + '"' +
+        (SAVE.embers < item.price ? ' disabled' : '') + '><b>' + item.price + '</b> ✦</button>';
+    } else if (shopTab === 'decos') {
+      const owned = !!SAVE.deco[item.id];
+      card.classList.toggle('owned', owned);
+      meta = owned ? '<span class="shopOwn">✓ PLACED IN CAMP</span>' : 'One-time purchase';
+      buy = owned
+        ? '<button class="btn gray shopBuy" disabled>OWNED</button>'
+        : '<button class="btn orange shopBuy" data-buy="decos" data-idx="' + idx + '"' +
+          (SAVE.embers < item.price ? ' disabled' : '') + '><b>' + item.price + '</b> ✦</button>';
+    } else if (shopTab === 'boosters') {
+      meta = 'Owned ×<b>' + (SAVE.boosters[item.id] || 0) + '</b> · auto-consumed';
+      buy = '<button class="btn deep shopBuy" data-buy="boosters" data-idx="' + idx + '"' +
+        (SAVE.embers < item.price ? ' disabled' : '') + '><b>' + item.price + '</b> ✦</button>';
+    }
+    card.innerHTML =
+      '<div class="shopIcon">' + shopGlyph(shopTab, item) + '</div>' +
+      '<div class="shopInfo"><div class="shopName">' + item.name + '</div>' +
+      '<div class="shopDesc">' + item.desc + '</div>' +
+      '<div class="shopMeta">' + meta + '</div></div>' + buy;
+    grid.appendChild(card);
+  });
+}
+function shopBuy(item, kind) {
+  if (SAVE.embers < item.price) { toast('Not enough Embers.'); return; }
+  if (kind === 'vigor') {
+    if (SAVE.energy + item.amt > ENERGY_MAX) { toast('Vigor is already full.'); return; }
+    SAVE.energy += item.amt;
+  } else if (kind === 'provisions') {
+    SAVE.provisions[item.id] = (SAVE.provisions[item.id] || 0) + 1;
+  } else if (kind === 'cores') {
+    SAVE.coresInv[item.id] = (SAVE.coresInv[item.id] || 0) + 1;
+  } else if (kind === 'decos') {
+    if (SAVE.deco[item.id]) return;
+    SAVE.deco[item.id] = true;
+    applyDecoProps();
+    questEvent('decoOwned', Object.keys(SAVE.deco).filter(k => SAVE.deco[k]).length); // absolute
+  } else if (kind === 'boosters') {
+    SAVE.boosters[item.id] = (SAVE.boosters[item.id] || 0) + 1;
+  }
+  SAVE.embers -= item.price;
+  questEvent('shopBuy', 1);
+  Sound.coin();
+  refreshHeader(); renderShop(); save();
+  toast(item.name + ' purchased!');
+}
+ $('shopGrid').addEventListener('click', e => {
+  const b = e.target.closest('[data-buy]');
+  if (!b) return;
+  const kind = b.dataset.buy, idx = +b.dataset.idx;
+  const item = SHOP[kind] && SHOP[kind][idx];
+  if (item) shopBuy(item, kind);
+});
+
+/* ---------- quests (13) ---------- */
 const QUESTS = [
-  { id:'first', name:'First Incursion', desc:'Clear any Zone Incursion.', goal:1, reward:20, event:'stageCleared' },
-  { id:'equip3', name:'Core Harmonics', desc:'Install 3 Aether Core Cubes.', goal:3, reward:15, event:'coreEquipped' },
-  { id:'attract', name:'New Kin', desc:'Attract a Scentkin at the Essence Cauldron.', goal:1, reward:25, event:'attracted' },
-  { id:'allClear', name:'Trailblazer', desc:'Clear all 12 stages of the Wildroot Trail.', goal:12, reward:100, event:'allClear' },
-  { id:'dex10', name:'Field Notes', desc:'Discover 10 species.', goal:10, reward:30, event:'discover' }
+  { id:'first',     name:'First Incursion',     desc:'Clear any Zone Incursion.', goal:1, reward:20, event:'stageCleared' },
+  { id:'equip3',    name:'Core Harmonics',      desc:'Install 3 Aether Core Cubes.', goal:3, reward:15, event:'coreEquipped' },
+  { id:'attract',   name:'New Kin',             desc:'Attract a Scentkin at the Essence Cauldron.', goal:1, reward:25, event:'attracted' },
+  { id:'full3',     name:'Full Squad',          desc:'Field a full squad of 3 Scentkin.', goal:1, reward:30, event:'fullSquad' },
+  { id:'dex10',     name:'Field Notes',         desc:'Discover 10 species.', goal:10, reward:30, event:'discover' },
+  { id:'shop5',     name:'Provisioner',         desc:'Buy 5 items from the Shop.', goal:5, reward:40, event:'shopBuy' },
+  { id:'brew10',    name:'Brew Adept',          desc:'Complete 10 brews at the Cauldron.', goal:10, reward:50, event:'brewDone' },
+  { id:'deco4',     name:'Homesteader',         desc:'Own 4 Homestead Decorations.', goal:4, reward:60, absolute:true, event:'decoOwned' },
+  { id:'veteran30', name:'Veteran Kin',         desc:'Raise a squad member to Lv 30.', goal:30, reward:60, absolute:true, event:'levelCheck' },
+  { id:'power5k',   name:'Rising Stars',        desc:'Reach 5000 Team Power.', goal:5000, reward:80, absolute:true, event:'powerCheck' },
+  { id:'allClear',  name:'Trailblazer',         desc:'Clear all 12 stages of the Wildroot Trail.', goal:12, reward:100, absolute:true, event:'allClear' },
+  { id:'prism1',    name:'Prismatic Fortune',   desc:'Attract a Prismatic Scentkin.', goal:1, reward:120, event:'prismaticAttract' },
+  { id:'boss5',     name:'Boss Slayer',         desc:'Defeat 5 Boss Wave elders.', goal:5, reward:150, event:'bossKill' },
 ];
 function questEvent(event, n) {
   for (const q of QUESTS) {
     if (q.event !== event) continue;
-    const st = SAVE.quests[q.id] || (SAVE.quests[q.id] = { p:0, claimed:false });
-    if (st.claimed || st.p >= q.goal) continue;
+    let st = SAVE.quests[q.id];
+    if (!st) st = SAVE.quests[q.id] = { p: 0, claimed: false };
+    if (st.claimed) continue;
     const before = st.p;
-    st.p = Math.min(q.goal, st.p + n);
+    st.p = q.absolute ? Math.min(q.goal, Math.max(st.p, n)) : Math.min(q.goal, st.p + n);
     if (before < q.goal && st.p >= q.goal) { toast('Quest complete: ' + q.name + ' — claim your reward!'); Sound.chime(); }
   }
   save();
@@ -3531,8 +3892,9 @@ function renderQuests() {
     if (st.claimed) action = '<b style="color:#a8c49c">CLAIMED</b>';
     else if (st.p >= q.goal) action = '<button class="btn green" data-claim="' + q.id + '">Claim ' + q.reward + '</button>';
     else action = '<b style="color:#ffd98a">' + q.reward + ' Embers</b>';
-    row.innerHTML = '<div class="qn">' + q.name + '</div><div class="qd">' + q.desc + ' — ' + st.p + '/' + q.goal + '</div>' +
-      '<div class="qbar"><i style="width:' + (st.p / q.goal * 100) + '%"></i></div>' +
+    row.innerHTML = '<div class="qn">' + q.name + '</div><div class="qd">' + q.desc + ' — ' +
+      Math.min(st.p, q.goal) + '/' + q.goal + '</div>' +
+      '<div class="qbar"><i style="width:' + (Math.min(st.p, q.goal) / q.goal * 100) + '%"></i></div>' +
       '<div style="display:flex;justify-content:flex-end">' + action + '</div>';
     list.appendChild(row);
   });
@@ -3568,35 +3930,27 @@ function renderCodex() {
     g.appendChild(el);
   }
 }
-const DECOS = [
-  { id:'parasol', name:'Sun Parasol', cost:40, desc:'+25% Provisions from Incursions' },
-  { id:'totem', name:'Ember Totem', cost:60, desc:'+15% Aether Core Cube drops' },
-  { id:'shrine', name:'Luck Shrine', cost:80, desc:'+50% Prismatic chance at the Crucible' }
-];
-function renderDecos() {
-  const list = $('decoList');
-  list.innerHTML = '';
-  DECOS.forEach(d => {
-    const owned = !!SAVE.deco[d.id];
-    const row = document.createElement('div');
-    row.className = 'qRow';
-    row.innerHTML = '<div class="qn">' + d.name + '</div><div class="qd">' + d.desc + '</div>' +
-      '<div style="display:flex;justify-content:flex-end">' +
-      (owned ? '<b style="color:#8fe07a">PLACED IN CAMP</b>'
-             : '<button class="btn orange" data-buy="' + d.id + '" ' + (SAVE.embers < d.cost ? 'disabled' : '') + '>Buy · ' + d.cost + '</button>') +
-      '</div>';
-    list.appendChild(row);
+function renderBag() {
+  let h = '<div class="cruc-label" style="margin-top:0">Provisions</div><div class="bagGrid">';
+  DB_X.ingredients.forEach(ing => {
+    h += '<div class="bagItem"><span class="dot" style="background:' + ing.color + '"></span>' +
+      '<div><b>' + ing.name + '</b><br><small>' + RARITY_NAME[ing.rarity] + '</small></div>' +
+      '<span class="bx">' + (SAVE.provisions[ing.id] || 0) + '</span></div>';
   });
-  list.querySelectorAll('[data-buy]').forEach(b => {
-    b.addEventListener('click', () => {
-      const d = DECOS.find(x => x.id === b.dataset.buy);
-      if (SAVE.embers < d.cost || SAVE.deco[d.id]) return;
-      SAVE.embers -= d.cost; SAVE.deco[d.id] = true;
-      save(); refreshHeader(); applyDecoProps(); renderDecos();
-      Sound.chime();
-      toast(d.name + ' placed in camp — ' + d.desc);
-    });
+  h += '</div><div class="cruc-label">Aether Core Cubes</div><div class="bagGrid">';
+  CORE_TYPES.forEach(t => {
+    h += '<div class="bagItem">' + coreDiamond(t, 18) +
+      '<div><b>' + CORE[t].name + '</b><br><small>' + CORE[t].desc + '</small></div>' +
+      '<span class="bx">' + (SAVE.coresInv[t] || 0) + '</span></div>';
   });
+  h += '</div><div class="cruc-label">Boosters</div><div class="bagGrid">';
+  SHOP.boosters.forEach(b => {
+    h += '<div class="bagItem"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 2l2.2 6.3L21 11l-6.8 2.7L12 20l-2.2-6.3L3 11l6.8-2.7z" fill="' + b.glyph + '"/></svg>' +
+      '<div><b>' + b.name + '</b><br><small>' + b.desc + '</small></div>' +
+      '<span class="bx">' + (SAVE.boosters[b.id] || 0) + '</span></div>';
+  });
+  h += '</div>';
+  $('bagBody').innerHTML = h;
 }
 
 function refreshHeader() {
@@ -3606,8 +3960,9 @@ function refreshHeader() {
   setTxt('bonusPct', SAVE.expeditionBonus + '%' + (SAVE.expeditionBonus >= 100 ? ' ⚡' : ''));
 }
 setInterval(() => {
-  if (SAVE.energy < ENERGY_MAX && Date.now() - SAVE.lastEnergyTs >= ENERGY_REGEN_MS) {
-    SAVE.energy++; SAVE.lastEnergyTs += ENERGY_REGEN_MS;
+  const R = ENERGY_REGEN_MS * (SAVE.deco.wind_chime ? 0.87 : 1);   // Wind Chime
+  if (SAVE.energy < ENERGY_MAX && Date.now() - SAVE.lastEnergyTs >= R) {
+    SAVE.energy++; SAVE.lastEnergyTs += R;
     refreshHeader(); save();
     Sound.coin();
     toast('Vigor regenerated: ' + SAVE.energy + '/' + ENERGY_MAX);
@@ -3636,9 +3991,14 @@ function refreshTeamBar() {
     add.addEventListener('click', openCrucible);
     tc.appendChild(add);
   }
+  // Quest progress hooks (absolute quests take the current value)
+  questEvent('powerCheck', teamPower());
+  let maxLv = 0; SAVE.squad.forEach(e => { if (e.level > maxLv) maxLv = e.level; });
+  questEvent('levelCheck', maxLv);
+  if (SAVE.squad.length >= 3) questEvent('fullSquad', 1);
 }
 
-/* ---------- music / sfx toggles ---------- */
+/* ---------- music/sfx toggles ---------- */
 function updateMusicIcons() {
   for (const id of ['btnMusicCamp', 'btnMusicBattle']) {
     const b = $(id); if (!b) continue;
@@ -3710,7 +4070,7 @@ addEventListener('pointerup', e => {
     if (o.userData.tag === 'cauldron') openCrucible();
     else if (o.userData.tag === 'critter') openStone(o.userData.idx);
     else if (o.userData.tag === 'deco') {
-      const d = DECOS.find(x => x.id === o.userData.id);
+      const d = SHOP.decos.find(x => x.id === o.userData.id);
       if (d) toast(d.name + ': ' + d.desc);
     }
   } else if (appState === 'map') {
@@ -3734,7 +4094,7 @@ function mapHover(e) {
 /* ---------- wiring ---------- */
 function hideAllScreens() { document.querySelectorAll('.screen,.modal').forEach(el => el.classList.add('hidden')); }
  $('btnPlay').addEventListener('click', () => {
-  Sound.init();                 // unlock audio on the first user gesture
+  Sound.init();
   Sound.play('title');
   fadeTo(startIntro);
 });
@@ -3742,13 +4102,16 @@ function hideAllScreens() { document.querySelectorAll('.screen,.modal').forEach(
  $('mapBack').addEventListener('click', () => fadeTo(closeMapNow));
  $('btnEditTeam').addEventListener('click', openTeam);
  $('teamBack').addEventListener('click', () => { closeQuickStat(); $('teamOverlay').classList.add('hidden'); });
+ $('shopBack').addEventListener('click', () => $('shopOverlay').classList.add('hidden'));
+ $('btnShop').addEventListener('click', () => openShop());
+ $('buyEnergy').addEventListener('click', () => openShop('vigor'));
+ $('toShop').addEventListener('click', () => openShop('decos'));
  $('stoneBack').addEventListener('click', () => { $('stoneOverlay').classList.add('hidden'); stoneIdx = -1; });
-document.querySelectorAll('#navGrid .btn').forEach(b => {
+document.querySelectorAll('#navGrid .btn[data-modal]').forEach(b => {
   b.addEventListener('click', () => {
     const m = b.dataset.modal;
     if (m === 'questsModal') renderQuests();
     if (m === 'codexModal') renderCodex();
-    if (m === 'decoModal') renderDecos();
     if (m === 'bagModal') renderBag();
     if (m === 'crucibleModal') refreshCrucible();
     if (m === 'optionsModal') updateMusicIcons();
@@ -3757,7 +4120,6 @@ document.querySelectorAll('#navGrid .btn').forEach(b => {
 });
  $('closeQuests').addEventListener('click', () => $('questsModal').classList.add('hidden'));
  $('closeCodex').addEventListener('click', () => $('codexModal').classList.add('hidden'));
- $('closeDeco').addEventListener('click', () => $('decoModal').classList.add('hidden'));
  $('closeBag').addEventListener('click', () => $('bagModal').classList.add('hidden'));
  $('closeOptions').addEventListener('click', () => $('optionsModal').classList.add('hidden'));
  $('closeCrucible').addEventListener('click', () => {
@@ -3767,15 +4129,6 @@ document.querySelectorAll('#navGrid .btn').forEach(b => {
   refreshHeader(); save();
 });
  $('igniteBtn').addEventListener('click', ignite);
- $('buyEnergy').addEventListener('click', () => {
-  if (SAVE.energy >= ENERGY_MAX) { toast('Vigor is already full.'); return; }
-  if (SAVE.embers < 30) { toast('Need 30 Embers for 1 Vigor.'); return; }
-  SAVE.embers -= 30; SAVE.energy++;
-  refreshHeader(); save();
-  Sound.coin();
-  toast('+1 Vigor purchased for 30 Embers.');
-});
- $('toShop').addEventListener('click', () => { renderDecos(); $('decoModal').classList.remove('hidden'); });
  $('optAuto').addEventListener('click', () => { SAVE.autoDefault = !SAVE.autoDefault; save(); $('optAuto').classList.toggle('on', SAVE.autoDefault); });
  $('optReset').addEventListener('click', () => {
   try { localStorage.removeItem(SAVE_KEY); } catch (err) {}
@@ -3886,6 +4239,7 @@ buildMap();
 spawnMenuCritters();
 refreshTeamBar();
 refreshHeader();
+questEvent('decoOwned', Object.keys(SAVE.deco).filter(k => SAVE.deco[k]).length);  // back-fill absolute quest
 autoMode = SAVE.autoDefault;
 updateAutoIcon();
 requestAnimationFrame(frame);
